@@ -3,168 +3,2236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSRS Fantasy PVM League</title>
-    <!-- Tailwind CSS CDN -->
+
+    <title>Fantasy PvM League | Vintage OSRS</title>
+
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- PapaParse CDN for CSV parsing -->
+
+    <!-- PapaParse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/Papa.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=RuneScape+Plain:wght@700&display=swap" rel="stylesheet">
+
     <style>
-        .rs-font { font-family: 'Runescape Plain', sans-serif; letter-spacing: 0.5px; }
-    </style>
-</head>
-<body class="bg-[#0b0e14] text-gray-200 min-h-screen font-sans">
-
-    <!-- Top Navigation Bar -->
-    <nav class="bg-[#131822] border-b border-gray-800 px-6 py-4 flex flex-col md:flex-row justify-between items-center shadow-md">
-        <div class="flex items-center space-x-3 mb-4 md:mb-0">
-            <span class="text-2xl">⚔️</span>
-            <span class="text-xl font-bold tracking-wider text-amber-400 rs-font">OSRS FANTASY PVM LEAGUE</span>
-        </div>
-        <div class="flex flex-wrap gap-2">
-            <button onclick="switchTab('home')" class="px-4 py-2 rounded bg-gray-800 hover:bg-gray-700 text-sm font-semibold transition">Home</button>
-            <button onclick="switchTab('team-leaderboard')" class="px-4 py-2 rounded bg-gray-800 hover:bg-gray-700 text-sm font-semibold transition">Team Leaderboard</button>
-            <button onclick="switchTab('pvm-leaderboard')" class="px-4 py-2 rounded bg-gray-800 hover:bg-gray-700 text-sm font-semibold transition">Player Leaderboard</button>
-            <button onclick="switchTab('view-team')" class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-500 text-sm font-semibold transition text-white">View Team</button>
-        </div>
-    </nav>
-
-    <div class="max-w-7xl mx-auto p-6">
-        
-        <!-- Team Search / Selector Bar -->
-        <div class="bg-[#131822] border border-gray-800 rounded-lg p-4 mb-8 flex flex-col md:flex-row justify-between items-center shadow-lg">
-            <div class="mb-4 md:mb-0">
-                <h2 class="text-amber-400 font-bold tracking-wide text-lg rs-font uppercase">Select Fantasy Team</h2>
-                <p class="text-xs text-gray-400">Search or choose a registered clan team roster</p>
-            </div>
-            <div class="flex items-center space-x-2 w-full md:w-auto">
-                <input type="text" id="team-search-input" placeholder="Enter Team Name (e.g. Skrull)" value="Skrull" class="bg-[#1b2230] border border-gray-700 text-white rounded px-4 py-2 focus:outline-none focus:border-amber-500 w-full md:w-64">
-                <button onclick="handleSearch()" class="bg-amber-600 hover:bg-amber-500 text-gray-900 font-bold px-5 py-2 rounded transition shadow">View</button>
-            </div>
-        </div>
-
-        <!-- Main Team Display Section -->
-        <div id="team-view-container" class="bg-[#131822] border border-gray-800 rounded-xl p-6 shadow-xl">
-            
-            <!-- Manager Header -->
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-800 pb-4 mb-6">
-                <div>
-                    <h1 id="current-team-title" class="text-2xl font-bold text-amber-400 rs-font tracking-wide">MANAGER: SKRULL</h1>
-                    <p class="text-xs text-gray-400 uppercase tracking-widest mt-1">Active 5-Player Raid Party Roster</p>
-                </div>
-                <div class="mt-4 md:mt-0 bg-[#1b2230] border border-gray-700 px-4 py-2 rounded-lg text-right">
-                    <span class="text-xs text-gray-400 block uppercase">Total Party Points</span>
-                    <span id="total-team-points" class="text-2xl font-black text-green-400">0.00</span>
-                </div>
-            </div>
-
-            <!-- Roster Raid Party Grid -->
-            <div id="roster-cards" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                <!-- Player cards dynamically injected here -->
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Script Logic -->
-    <script>
-        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=2004919509&single=true&output=csv';
-
-        function switchTab(tab) {
-            alert("Switched to " + tab + " view (Tab routing can be customized next!)");
+        html {
+            scroll-behavior: smooth;
         }
 
-        function handleSearch() {
-            let inputVal = document.getElementById('team-search-input').value;
-            if (inputVal) {
-                fetchAndRenderTeam(inputVal);
+        body {
+            background:
+                radial-gradient(circle at top, rgba(70, 80, 100, 0.18), transparent 35%),
+                linear-gradient(rgba(7, 10, 15, 0.88), rgba(7, 10, 15, 0.97)),
+                #070a0f;
+        }
+
+        .glass {
+            background: rgba(15, 19, 27, 0.78);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .boss-glow {
+            box-shadow:
+                0 0 30px rgba(96, 165, 250, 0.12),
+                inset 0 0 30px rgba(96, 165, 250, 0.04);
+        }
+
+        .player-card {
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .player-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(96, 165, 250, 0.65);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .rank-number {
+            min-width: 28px;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.45s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        function fetchAndRenderTeam(teamName) {
-            Papa.parse(csvUrl, {
-                download: true,
-                header: false,
-                complete: function(results) {
-                    const data = results.data;
-                    let query = teamName.toLowerCase().trim();
-                    let teamStartRow = -1;
-
-                    // Scan Column A for the team name
-                    for (let r = 0; r < data.length; r++) {
-                        let cellValue = data[r][0] ? data[r][0].toString().trim().toLowerCase() : '';
-                        if (cellValue === query) {
-                            teamStartRow = r;
-                            break;
-                        }
-                    }
-
-                    const rosterContainer = document.getElementById('roster-cards');
-                    rosterContainer.innerHTML = '';
-
-                    if (teamStartRow !== -1) {
-                        document.getElementById('current-team-title').innerText = `MANAGER: ${teamName.toUpperCase()}`;
-                        let totalTeamPoints = 0;
-                        let playerRowsFound = 0;
-
-                        // Loop through the 5 player rows below the team header
-                        for (let i = 1; i <= 5; i++) {
-                            let currentRow = teamStartRow + 1 + i; 
-                            
-                            if (data[currentRow]) {
-                                let playerName = data[currentRow][0] ? data[currentRow][0].toString().trim() : '';
-                                let playerValue = data[currentRow][1] ? data[currentRow][1] : '0';
-                                let playerPoints = parseFloat(data[currentRow][2]) || 0;
-
-                                // Filter out blank slots or header labels like "Players"
-                                if (playerName !== '' && playerName.toLowerCase() !== 'players' && playerName.toLowerCase() !== 'total points') {
-                                    playerRowsFound++;
-                                    totalTeamPoints += playerPoints;
-
-                                    rosterContainer.innerHTML += `
-                                        <div class="bg-[#1b2230] border border-gray-700/60 rounded-lg p-4 flex flex-col justify-between hover:border-amber-500/50 transition shadow-md">
-                                            <div>
-                                                <div class="flex justify-between items-center mb-3">
-                                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 border border-blue-700/50 uppercase">Raider 0${playerRowsFound}</span>
-                                                    <span class="text-[10px] text-amber-400 font-semibold">OSRS PvM</span>
-                                                </div>
-                                                <h3 class="text-lg font-bold text-white mb-3 truncate tracking-wide">${playerName}</h3>
-                                            </div>
-                                            <div class="space-y-2 border-t border-gray-700/60 pt-3 text-xs">
-                                                <div class="flex justify-between items-center">
-                                                    <span class="text-gray-400">Item Value:</span> 
-                                                    <span class="text-amber-300 font-semibold">${playerValue}</span>
-                                                </div>
-                                                <div class="flex justify-between items-center">
-                                                    <span class="text-gray-400">PVM Points:</span> 
-                                                    <span class="text-green-400 font-bold">${playerPoints.toFixed(2)}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    `;
-                                }
-                            }
-                        }
-
-                        document.getElementById('total-team-points').innerText = totalTeamPoints.toFixed(2);
-
-                    } else {
-                        rosterContainer.innerHTML = `<div class="col-span-full text-center text-red-400 py-8 bg-[#1b2230] rounded-lg border border-gray-700">Team "${teamName}" not found in sheet. Check spelling or check your Teams tab.</div>`;
-                        document.getElementById('current-team-title').innerText = `MANAGER: NOT FOUND`;
-                        document.getElementById('total-team-points').innerText = "0.00";
-                    }
-                },
-                error: function(error) {
-                    console.error("Error parsing CSV data:", error);
-                }
-            });
+        .countdown-number {
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.04em;
         }
 
-        // Load default team on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchAndRenderTeam("Skrull");
+        .boss-name {
+            text-shadow: 0 0 20px rgba(96, 165, 250, 0.18);
+        }
+
+        select {
+            color-scheme: dark;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="text-white min-h-screen">
+
+    <!-- ========================================================= -->
+    <!-- HEADER -->
+    <!-- ========================================================= -->
+
+    <header class="sticky top-0 z-50 border-b border-gray-800/80 glass">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+
+                <div>
+                    <div class="text-xs uppercase tracking-[0.3em] text-blue-400 font-bold">
+                        Vintage OSRS
+                    </div>
+
+                    <h1 class="text-2xl sm:text-3xl font-black tracking-tight">
+                        Fantasy PvM League
+                    </h1>
+                </div>
+
+                <div class="flex items-center gap-3">
+
+                    <label
+                        for="team-select"
+                        class="text-sm text-gray-400 hidden sm:block">
+                        View Team
+                    </label>
+
+                    <select
+                        id="team-select"
+                        class="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-sm font-semibold focus:outline-none focus:border-blue-500 min-w-[180px]">
+                        <option value="">Loading teams...</option>
+                    </select>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- ========================================================= -->
+    <!-- MAIN -->
+    <!-- ========================================================= -->
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+
+        <!-- ===================================================== -->
+        <!-- CURRENT EVENT / BOSS HERO -->
+        <!-- ===================================================== -->
+
+        <section
+            id="event-hero"
+            class="relative overflow-hidden rounded-2xl border border-gray-800 boss-glow min-h-[360px] flex items-center justify-center mb-8">
+
+            <!-- Background -->
+            <div
+                class="absolute inset-0 opacity-25"
+                style="
+                    background:
+                    radial-gradient(circle at center, rgba(60,110,160,0.45), transparent 45%),
+                    linear-gradient(135deg, rgba(30,40,60,0.7), rgba(5,8,12,0.95));
+                ">
+            </div>
+
+            <!-- Content -->
+            <div class="relative z-10 text-center px-6 py-12 w-full">
+
+                <div
+                    id="event-status"
+                    class="inline-flex items-center px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-300 text-xs font-bold uppercase tracking-widest mb-5">
+                    Loading Event
+                </div>
+
+                <div
+                    id="event-day-label"
+                    class="text-sm uppercase tracking-[0.35em] text-gray-400 font-bold mb-3">
+                    DAY --
+                </div>
+
+                <h2
+                    id="current-boss"
+                    class="boss-name text-5xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight mb-6">
+                    Loading...
+                </h2>
+
+                <div
+                    id="boss-subtitle"
+                    class="text-gray-400 mb-8">
+                    Current event information
+                </div>
+
+                <div class="flex justify-center gap-3 sm:gap-5">
+
+                    <div class="bg-black/40 border border-gray-800 rounded-xl px-4 sm:px-7 py-4">
+                        <div
+                            id="countdown-days"
+                            class="countdown-number text-3xl sm:text-4xl font-black text-white">
+                            00
+                        </div>
+                        <div class="text-[10px] uppercase tracking-widest text-gray-500 mt-1">
+                            Days
+                        </div>
+                    </div>
+
+                    <div class="bg-black/40 border border-gray-800 rounded-xl px-4 sm:px-7 py-4">
+                        <div
+                            id="countdown-hours"
+                            class="countdown-number text-3xl sm:text-4xl font-black text-white">
+                            00
+                        </div>
+                        <div class="text-[10px] uppercase tracking-widest text-gray-500 mt-1">
+                            Hours
+                        </div>
+                    </div>
+
+                    <div class="bg-black/40 border border-gray-800 rounded-xl px-4 sm:px-7 py-4">
+                        <div
+                            id="countdown-minutes"
+                            class="countdown-number text-3xl sm:text-4xl font-black text-white">
+                            00
+                        </div>
+                        <div class="text-[10px] uppercase tracking-widest text-gray-500 mt-1">
+                            Minutes
+                        </div>
+                    </div>
+
+                    <div class="bg-black/40 border border-gray-800 rounded-xl px-4 sm:px-7 py-4">
+                        <div
+                            id="countdown-seconds"
+                            class="countdown-number text-3xl sm:text-4xl font-black text-white">
+                            00
+                        </div>
+                        <div class="text-[10px] uppercase tracking-widest text-gray-500 mt-1">
+                            Seconds
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ===================================================== -->
+        <!-- SELECTED TEAM -->
+        <!-- ===================================================== -->
+
+        <section class="mb-8">
+
+            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
+
+                <div>
+                    <div class="text-xs uppercase tracking-widest text-blue-400 font-bold">
+                        Fantasy Team
+                    </div>
+
+                    <h2
+                        id="team-title"
+                        class="text-3xl sm:text-4xl font-black">
+                        Loading...
+                    </h2>
+                </div>
+
+                <div class="text-right">
+                    <div class="text-xs uppercase tracking-wider text-gray-500">
+                        Team Points
+                    </div>
+
+                    <div
+                        id="team-total-points"
+                        class="text-3xl font-black text-green-400">
+                        0.00
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Team Stats -->
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+
+                <div class="glass border border-gray-800 rounded-xl p-4">
+                    <div class="text-xs text-gray-500 uppercase tracking-wider">
+                        Rank
+                    </div>
+
+                    <div
+                        id="team-rank"
+                        class="text-2xl font-black mt-1">
+                        -
+                    </div>
+                </div>
+
+                <div class="glass border border-gray-800 rounded-xl p-4">
+                    <div class="text-xs text-gray-500 uppercase tracking-wider">
+                        Squad Value
+                    </div>
+
+                    <div
+                        id="team-value"
+                        class="text-2xl font-black mt-1">
+                        0m
+                    </div>
+                </div>
+
+                <div class="glass border border-gray-800 rounded-xl p-4">
+                    <div class="text-xs text-gray-500 uppercase tracking-wider">
+                        Players
+                    </div>
+
+                    <div class="text-2xl font-black mt-1">
+                        5
+                    </div>
+                </div>
+
+                <div class="glass border border-gray-800 rounded-xl p-4">
+                    <div class="text-xs text-gray-500 uppercase tracking-wider">
+                        Data Status
+                    </div>
+
+                    <div class="text-2xl font-black mt-1 text-blue-400">
+                        LIVE
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Player Cards -->
+
+            <div
+                id="roster-cards"
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+
+                <div class="text-gray-500">
+                    Loading roster...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================== -->
+        <!-- LEADERBOARDS -->
+        <!-- ===================================================== -->
+
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+
+            <!-- TEAM LEADERBOARD -->
+
+            <div class="glass border border-gray-800 rounded-2xl overflow-hidden">
+
+                <div class="px-5 py-4 border-b border-gray-800 flex items-center justify-between">
+
+                    <div>
+                        <div class="text-xs uppercase tracking-widest text-blue-400 font-bold">
+                            League
+                        </div>
+
+                        <h3 class="text-xl font-black">
+                            Team Leaderboard
+                        </h3>
+                    </div>
+
+                    <div class="text-xs text-gray-500">
+                        LIVE
+                    </div>
+
+                </div>
+
+                <div
+                    id="team-leaderboard"
+                    class="divide-y divide-gray-800">
+                    <div class="p-5 text-gray-500">
+                        Loading...
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- PVM LEADERBOARD -->
+
+            <div class="glass border border-gray-800 rounded-2xl overflow-hidden">
+
+                <div class="px-5 py-4 border-b border-gray-800 flex items-center justify-between">
+
+                    <div>
+                        <div class="text-xs uppercase tracking-widest text-purple-400 font-bold">
+                            Players
+                        </div>
+
+                        <h3 class="text-xl font-black">
+                            PvM Leaderboard
+                        </h3>
+                    </div>
+
+                    <div class="text-xs text-gray-500">
+                        LIVE
+                    </div>
+
+                </div>
+
+                <div
+                    id="pvm-leaderboard"
+                    class="divide-y divide-gray-800">
+                    <div class="p-5 text-gray-500">
+                        Loading...
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================== -->
+        <!-- DAILY SCORES -->
+        <!-- ===================================================== -->
+
+        <section class="glass border border-gray-800 rounded-2xl overflow-hidden mb-8">
+
+            <div class="px-5 py-5 border-b border-gray-800">
+
+                <div class="text-xs uppercase tracking-widest text-blue-400 font-bold">
+                    Event Progress
+                </div>
+
+                <h3 class="text-2xl font-black">
+                    Daily Scores
+                </h3>
+
+            </div>
+
+            <div
+                id="daily-score-table"
+                class="overflow-x-auto scrollbar-hide">
+
+                <div class="p-5 text-gray-500">
+                    Loading daily scores...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================== -->
+        <!-- FOOTER -->
+        <!-- ===================================================== -->
+
+        <footer class="text-center text-gray-600 text-xs py-8">
+            Fantasy PvM League • Vintage OSRS
+            <br>
+            Data synced from Google Sheets
+        </footer>
+
+    </main>
+
+
+<script>
+
+    /* ============================================================
+       CONFIGURATION
+       ============================================================ */
+
+    const CONFIG = {
+
+        /*
+         * IMPORTANT:
+         *
+         * Put the exact time your event starts here.
+         *
+         * Example:
+         *
+         * "2026-09-10T19:00:00+01:00"
+         *
+         * This is the ONLY thing the website needs that currently
+         * isn't present in your Google Sheet.
+         */
+
+        EVENT_START_ISO: "2026-09-10T19:00:00+01:00",
+
+        /*
+         * Each boss lasts exactly 24 hours.
+         */
+
+        DAY_LENGTH_MS: 24 * 60 * 60 * 1000,
+
+        /*
+         * Your seven boss columns:
+         *
+         * F = index 5
+         * G = index 6
+         * H = index 7
+         * I = index 8
+         * J = index 9
+         * K = index 10
+         * L = index 11
+         */
+
+        BOSS_START_COLUMN: 5,
+        BOSS_COUNT: 7,
+
+        CSV_URLS: {
+
+            fantasy:
+                "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=1220418834&single=true&output=csv",
+
+            teams:
+                "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=2004919509&single=true&output=csv",
+
+            teamLeaderboard:
+                "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=1417622882&single=true&output=csv",
+
+            pvmLeaderboard:
+                "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=752592411&single=true&output=csv"
+        }
+
+    };
+
+
+    /* ============================================================
+       GLOBAL DATA
+       ============================================================ */
+
+    let fantasyRows = [];
+    let fantasyHeaders = [];
+
+    let teamData = {};
+
+    let teamLeaderboard = [];
+    let pvmLeaderboard = [];
+
+    let currentTeam = "";
+
+    let bossNames = [];
+
+
+    /* ============================================================
+       BASIC HELPERS
+       ============================================================ */
+
+    function clean(value) {
+
+        return value
+            ?.toString()
+            .trim();
+
+    }
+
+
+    function normalise(value) {
+
+        return clean(value)
+            ?.toLowerCase()
+            .replace(/\s+/g, " ");
+
+    }
+
+
+    function number(value) {
+
+        if (value === undefined || value === null) {
+            return 0;
+        }
+
+        const cleaned = value
+            .toString()
+            .replace(/,/g, "")
+            .replace(/£/g, "")
+            .replace(/m$/i, "")
+            .trim();
+
+        const parsed = parseFloat(cleaned);
+
+        return Number.isFinite(parsed)
+            ? parsed
+            : 0;
+
+    }
+
+
+    function escapeHtml(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    function formatPoints(value) {
+
+        return number(value).toFixed(2);
+
+    }
+
+
+    /* ============================================================
+       LOAD CSV
+       ============================================================ */
+
+    function loadCSV(url) {
+
+        return new Promise((resolve, reject) => {
+
+            Papa.parse(url, {
+
+                download: true,
+
+                skipEmptyLines: false,
+
+                complete: results => {
+
+                    resolve(results.data);
+
+                },
+
+                error: error => {
+
+                    reject(error);
+
+                }
+
+            });
+
         });
-    </script>
+
+    }
+
+
+    /* ============================================================
+       LOAD EVERYTHING
+       ============================================================ */
+
+    async function loadAllData() {
+
+        try {
+
+            const [
+                fantasy,
+                teams,
+                teamLB,
+                pvmLB
+            ] = await Promise.all([
+
+                loadCSV(CONFIG.CSV_URLS.fantasy),
+
+                loadCSV(CONFIG.CSV_URLS.teams),
+
+                loadCSV(CONFIG.CSV_URLS.teamLeaderboard),
+
+                loadCSV(CONFIG.CSV_URLS.pvmLeaderboard)
+
+            ]);
+
+
+            parseFantasyData(fantasy);
+
+            parseTeamsData(teams);
+
+            parseTeamLeaderboard(teamLB);
+
+            parsePvmLeaderboard(pvmLB);
+
+            populateTeamSelector();
+
+            initialiseCurrentTeam();
+
+            renderCurrentTeam();
+
+            renderTeamLeaderboard();
+
+            renderPvmLeaderboard();
+
+            renderDailyScores();
+
+            updateEventDisplay();
+
+
+        } catch (error) {
+
+            console.error("Failed to load Google Sheet data:", error);
+
+            document.getElementById("event-status").innerText =
+                "DATA ERROR";
+
+            document.getElementById("current-boss").innerText =
+                "Unable to Load Data";
+
+        }
+
+    }
+
+
+    /* ============================================================
+       FANTASY PVM SHEET
+       ============================================================ */
+
+    function parseFantasyData(data) {
+
+        if (!data || data.length === 0) {
+            return;
+        }
+
+
+        fantasyHeaders = data[0] || [];
+
+        fantasyRows = [];
+
+
+        for (let i = 1; i < data.length; i++) {
+
+            const row = data[i];
+
+            if (!row || !row.length) {
+                continue;
+            }
+
+            const playerName = clean(row[0]);
+
+            if (!playerName) {
+                continue;
+            }
+
+            /*
+             * Ignore obvious non-player rows.
+             */
+
+            const lowered = normalise(playerName);
+
+            if (
+                lowered === "player" ||
+                lowered === "total" ||
+                lowered === "players"
+            ) {
+                continue;
+            }
+
+
+            fantasyRows.push(row);
+
+        }
+
+
+        /*
+         * F1:L1
+         *
+         * These are your Day 1 -> Day 7 boss names.
+         */
+
+        bossNames = [];
+
+        for (
+            let i = 0;
+            i < CONFIG.BOSS_COUNT;
+            i++
+        ) {
+
+            const boss =
+                clean(
+                    fantasyHeaders[
+                        CONFIG.BOSS_START_COLUMN + i
+                    ]
+                );
+
+            bossNames.push(
+                boss || `Day ${i + 1}`
+            );
+
+        }
+
+        console.log("Bosses:", bossNames);
+
+    }
+
+
+    /* ============================================================
+       FIND PLAYER
+       ============================================================ */
+
+    function findFantasyPlayer(playerName) {
+
+        const target = normalise(playerName);
+
+        return fantasyRows.find(row =>
+
+            normalise(row[0]) === target
+
+        );
+
+    }
+
+
+    /* ============================================================
+       PLAYER DATA
+       ============================================================ */
+
+    function getPlayerData(playerName) {
+
+        const row = findFantasyPlayer(playerName);
+
+        if (!row) {
+
+            return {
+
+                name: playerName,
+
+                ehb: 0,
+
+                value: 0,
+
+                monthlyEhb: 0,
+
+                dailyPoints: [],
+
+                totalPoints: 0
+
+            };
+
+        }
+
+
+        const dailyPoints = bossNames.map((_, index) => {
+
+            /*
+             * Your fantasy sheet has the daily scores in
+             * the columns after the player information.
+             *
+             * Based on your existing layout:
+             *
+             * F-L = daily scores
+             *
+             * Which are indexes 5-11.
+             */
+
+            return number(
+                row[
+                    CONFIG.BOSS_START_COLUMN + index
+                ]
+            );
+
+        });
+
+
+        /*
+         * Based on the layout you showed:
+         *
+         * B = Total EHB
+         * C = Value
+         * E = Monthly EHB
+         * M = Total
+         *
+         * We don't hard-code the total when rendering the
+         * daily values because the daily values are what the
+         * website needs for the event.
+         */
+
+        const totalPoints =
+            dailyPoints.reduce(
+                (sum, value) => sum + value,
+                0
+            );
+
+
+        return {
+
+            name: clean(row[0]),
+
+            ehb: number(row[1]),
+
+            value: number(row[2]),
+
+            monthlyEhb: number(row[4]),
+
+            dailyPoints,
+
+            totalPoints
+
+        };
+
+    }
+
+
+    /* ============================================================
+       TEAMS SHEET
+       ============================================================ */
+
+    function parseTeamsData(data) {
+
+        teamData = {};
+
+        if (!data || !data.length) {
+            return;
+        }
+
+
+        /*
+         * Expected structure:
+         *
+         * Row 1:
+         * Team Name
+         *
+         * Row 2:
+         * Players | Value | Points
+         *
+         * Rows 3-7:
+         * Five players
+         *
+         * Row 8:
+         * Total | Value | Points
+         */
+
+
+        for (let r = 0; r < data.length; r++) {
+
+            const row = data[r];
+
+            if (!row || !row.length) {
+                continue;
+            }
+
+
+            const firstCell = clean(row[0]);
+
+            if (!firstCell) {
+                continue;
+            }
+
+
+            const nextRow = data[r + 1];
+
+            if (!nextRow) {
+                continue;
+            }
+
+
+            const nextFirst =
+                normalise(nextRow[0]);
+
+
+            /*
+             * This identifies a team header.
+             */
+
+            if (nextFirst !== "players") {
+                continue;
+            }
+
+
+            const teamName = firstCell;
+
+            const players = [];
+
+
+            /*
+             * Exactly five roster slots.
+             */
+
+            for (let i = 1; i <= 5; i++) {
+
+                const playerRow =
+                    data[r + 1 + i];
+
+                if (!playerRow) {
+                    continue;
+                }
+
+
+                const playerName =
+                    clean(playerRow[0]);
+
+                if (!playerName) {
+                    continue;
+                }
+
+
+                players.push({
+
+                    name: playerName,
+
+                    value: number(playerRow[1]),
+
+                    points: number(playerRow[2])
+
+                });
+
+            }
+
+
+            /*
+             * Total row is seven rows below the team name.
+             */
+
+            const totalRow =
+                data[r + 7] || [];
+
+
+            const totalValue =
+                number(totalRow[1]);
+
+
+            const totalPoints =
+                number(totalRow[2]);
+
+
+            teamData[normalise(teamName)] = {
+
+                name: teamName,
+
+                players,
+
+                totalValue,
+
+                totalPoints
+
+            };
+
+        }
+
+
+        console.log("Teams loaded:", teamData);
+
+    }
+
+
+    /* ============================================================
+       TEAM LEADERBOARD
+       ============================================================ */
+
+    function parseTeamLeaderboard(data) {
+
+        teamLeaderboard = [];
+
+        if (!data || !data.length) {
+            return;
+        }
+
+
+        for (let i = 1; i < data.length; i++) {
+
+            const row = data[i];
+
+            if (!row) {
+                continue;
+            }
+
+
+            const name = clean(row[0]);
+
+            if (!name) {
+                continue;
+            }
+
+
+            teamLeaderboard.push({
+
+                rank: number(row[0]) || i,
+
+                name: clean(row[1]) || name,
+
+                points: number(row[row.length - 1])
+
+            });
+
+        }
+
+
+        /*
+         * Sort by points in case the sheet isn't sorted.
+         */
+
+        teamLeaderboard.sort(
+            (a, b) => b.points - a.points
+        );
+
+
+        teamLeaderboard.forEach((team, index) => {
+
+            team.rank = index + 1;
+
+        });
+
+    }
+
+
+    /* ============================================================
+       PVM LEADERBOARD
+       ============================================================ */
+
+    function parsePvmLeaderboard(data) {
+
+        pvmLeaderboard = [];
+
+        if (!data || !data.length) {
+            return;
+        }
+
+
+        for (let i = 1; i < data.length; i++) {
+
+            const row = data[i];
+
+            if (!row) {
+                continue;
+            }
+
+
+            /*
+             * This intentionally tries to handle either:
+             *
+             * Rank | Player | Points
+             *
+             * or:
+             *
+             * Player | Points
+             */
+
+            let name = "";
+
+            let points = 0;
+
+
+            if (
+                row.length >= 3 &&
+                !isNaN(parseFloat(row[0]))
+            ) {
+
+                name = clean(row[1]);
+
+                points =
+                    number(row[row.length - 1]);
+
+            } else {
+
+                name = clean(row[0]);
+
+                points =
+                    number(row[row.length - 1]);
+
+            }
+
+
+            if (!name) {
+                continue;
+            }
+
+
+            pvmLeaderboard.push({
+
+                name,
+
+                points,
+
+                rank: i
+
+            });
+
+        }
+
+
+        pvmLeaderboard.sort(
+            (a, b) => b.points - a.points
+        );
+
+
+        pvmLeaderboard.forEach(
+            (player, index) => {
+
+                player.rank = index + 1;
+
+            }
+        );
+
+    }
+
+
+    /* ============================================================
+       TEAM SELECTOR
+       ============================================================ */
+
+    function populateTeamSelector() {
+
+        const select =
+            document.getElementById("team-select");
+
+
+        select.innerHTML = "";
+
+
+        const teams =
+            Object.values(teamData)
+                .sort(
+                    (a, b) =>
+                        a.name.localeCompare(b.name)
+                );
+
+
+        teams.forEach(team => {
+
+            const option =
+                document.createElement("option");
+
+            option.value =
+                team.name;
+
+            option.textContent =
+                team.name;
+
+            select.appendChild(option);
+
+        });
+
+
+        select.addEventListener(
+            "change",
+            event => {
+
+                currentTeam =
+                    event.target.value;
+
+                renderCurrentTeam();
+
+            }
+        );
+
+    }
+
+
+    /* ============================================================
+       INITIAL TEAM
+       ============================================================ */
+
+    function initialiseCurrentTeam() {
+
+        const keys =
+            Object.keys(teamData);
+
+
+        if (!keys.length) {
+
+            currentTeam = "";
+
+            return;
+
+        }
+
+
+        /*
+         * First team in the sheet.
+         */
+
+        currentTeam =
+            teamData[keys[0]].name;
+
+
+        const select =
+            document.getElementById(
+                "team-select"
+            );
+
+
+        select.value =
+            currentTeam;
+
+    }
+
+
+    /* ============================================================
+       TEAM RANK
+       ============================================================ */
+
+    function getTeamRank(teamName) {
+
+        const target =
+            normalise(teamName);
+
+
+        const found =
+            teamLeaderboard.find(
+                team =>
+                    normalise(team.name) === target
+            );
+
+
+        return found
+            ? found.rank
+            : "-";
+
+    }
+
+
+    /* ============================================================
+       RENDER CURRENT TEAM
+       ============================================================ */
+
+    function renderCurrentTeam() {
+
+        if (!currentTeam) {
+            return;
+        }
+
+
+        const team =
+            teamData[
+                normalise(currentTeam)
+            ];
+
+
+        if (!team) {
+
+            document.getElementById(
+                "team-title"
+            ).innerText =
+                "Team Not Found";
+
+            return;
+
+        }
+
+
+        document.getElementById(
+            "team-title"
+        ).innerText =
+            team.name;
+
+
+        document.getElementById(
+            "team-total-points"
+        ).innerText =
+            formatPoints(team.totalPoints);
+
+
+        document.getElementById(
+            "team-rank"
+        ).innerText =
+            getTeamRank(team.name);
+
+
+        document.getElementById(
+            "team-value"
+        ).innerText =
+            `${team.totalValue}m`;
+
+
+        renderRoster(team);
+
+        renderDailyScores();
+
+    }
+
+
+    /* ============================================================
+       RENDER ROSTER
+       ============================================================ */
+
+    function renderRoster(team) {
+
+        const container =
+            document.getElementById(
+                "roster-cards"
+            );
+
+
+        container.innerHTML = "";
+
+
+        team.players.forEach(
+            (teamPlayer, index) => {
+
+                const player =
+                    getPlayerData(
+                        teamPlayer.name
+                    );
+
+
+                const dailyHtml =
+                    bossNames.map(
+                        (boss, dayIndex) => {
+
+                            const value =
+                                player.dailyPoints[dayIndex] || 0;
+
+
+                            return `
+
+                                <div class="flex justify-between text-xs">
+
+                                    <span class="text-gray-500">
+                                        D${dayIndex + 1}
+                                    </span>
+
+                                    <span class="${
+                                        value > 0
+                                            ? "text-green-400"
+                                            : "text-gray-600"
+                                    } font-semibold">
+
+                                        ${formatPoints(value)}
+
+                                    </span>
+
+                                </div>
+
+                            `;
+
+                        }
+                    ).join("");
+
+
+                container.innerHTML += `
+
+                    <article
+                        class="player-card glass border border-gray-800 rounded-2xl p-4 flex flex-col fade-in">
+
+                        <div class="flex items-center justify-between mb-4">
+
+                            <div class="text-[10px] uppercase tracking-widest text-blue-400 font-bold">
+
+                                Player ${index + 1}
+
+                            </div>
+
+                            <div class="text-[10px] uppercase tracking-widest text-gray-600">
+
+                                ${index + 1}/5
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="min-h-[64px]">
+
+                            <h3
+                                class="text-lg font-black truncate"
+                                title="${escapeHtml(player.name)}">
+
+                                ${escapeHtml(player.name)}
+
+                            </h3>
+
+                            <p class="text-xs text-gray-500 mt-1">
+
+                                ${formatPoints(player.ehb)}
+                                EHB
+
+                            </p>
+
+                        </div>
+
+
+                        <div class="my-4">
+
+                            <div class="text-[10px] uppercase tracking-widest text-gray-500">
+                                Total Points
+                            </div>
+
+                            <div class="text-3xl font-black text-green-400">
+
+                                ${formatPoints(player.totalPoints)}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="border-t border-gray-800 pt-3 mb-4 space-y-1">
+
+                            <div class="flex justify-between text-xs">
+
+                                <span class="text-gray-500">
+                                    Value
+                                </span>
+
+                                <span class="font-bold text-yellow-400">
+                                    ${player.value}m
+                                </span>
+
+                            </div>
+
+                            <div class="flex justify-between text-xs">
+
+                                <span class="text-gray-500">
+                                    Monthly EHB
+                                </span>
+
+                                <span class="font-semibold text-gray-300">
+                                    ${formatPoints(player.monthlyEhb)}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="border-t border-gray-800 pt-3 mt-auto">
+
+                            <div class="text-[10px] uppercase tracking-widest text-gray-600 mb-2">
+                                Daily Scores
+                            </div>
+
+                            <div class="space-y-1">
+
+                                ${dailyHtml}
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                `;
+
+            }
+        );
+
+    }
+
+
+    /* ============================================================
+       TEAM LEADERBOARD RENDER
+       ============================================================ */
+
+    function renderTeamLeaderboard() {
+
+        const container =
+            document.getElementById(
+                "team-leaderboard"
+            );
+
+
+        if (!teamLeaderboard.length) {
+
+            container.innerHTML = `
+                <div class="p-5 text-gray-500">
+                    No leaderboard data.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        /*
+         * Show top 10.
+         */
+
+        container.innerHTML =
+            teamLeaderboard
+                .slice(0, 10)
+                .map(team => {
+
+                    const isCurrent =
+                        normalise(team.name) ===
+                        normalise(currentTeam);
+
+
+                    return `
+
+                        <button
+                            onclick="selectTeam('${escapeHtml(team.name).replace(/'/g, "\\'")}')"
+                            class="w-full px-5 py-3 flex items-center gap-3 text-left hover:bg-white/[0.03] transition
+                            ${isCurrent ? "bg-blue-500/5" : ""}">
+
+                            <div class="rank-number text-center">
+
+                                <span class="text-xs font-black ${
+                                    team.rank <= 3
+                                        ? "text-yellow-400"
+                                        : "text-gray-500"
+                                }">
+
+                                    ${team.rank}
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="flex-1 min-w-0">
+
+                                <div class="font-bold truncate">
+
+                                    ${escapeHtml(team.name)}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="text-right">
+
+                                <div class="font-black text-green-400">
+
+                                    ${formatPoints(team.points)}
+
+                                </div>
+
+                                <div class="text-[10px] text-gray-600 uppercase">
+                                    points
+                                </div>
+
+                            </div>
+
+                        </button>
+
+                    `;
+
+                })
+                .join("");
+
+    }
+
+
+    /* ============================================================
+       PVM LEADERBOARD RENDER
+       ============================================================ */
+
+    function renderPvmLeaderboard() {
+
+        const container =
+            document.getElementById(
+                "pvm-leaderboard"
+            );
+
+
+        if (!pvmLeaderboard.length) {
+
+            container.innerHTML = `
+                <div class="p-5 text-gray-500">
+                    No leaderboard data.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            pvmLeaderboard
+                .slice(0, 10)
+                .map(player => {
+
+                    return `
+
+                        <div class="px-5 py-3 flex items-center gap-3">
+
+                            <div class="rank-number text-center">
+
+                                <span class="text-xs font-black ${
+                                    player.rank <= 3
+                                        ? "text-yellow-400"
+                                        : "text-gray-500"
+                                }">
+
+                                    ${player.rank}
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="flex-1 min-w-0">
+
+                                <div class="font-bold truncate">
+
+                                    ${escapeHtml(player.name)}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="text-right">
+
+                                <div class="font-black text-purple-400">
+
+                                    ${formatPoints(player.points)}
+
+                                </div>
+
+                                <div class="text-[10px] text-gray-600 uppercase">
+                                    points
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                })
+                .join("");
+
+    }
+
+
+    /* ============================================================
+       DAILY SCORE TABLE
+       ============================================================ */
+
+    function renderDailyScores() {
+
+        const container =
+            document.getElementById(
+                "daily-score-table"
+            );
+
+
+        if (!currentTeam) {
+
+            container.innerHTML = "";
+
+            return;
+
+        }
+
+
+        const team =
+            teamData[
+                normalise(currentTeam)
+            ];
+
+
+        if (!team) {
+            return;
+        }
+
+
+        let html = `
+
+            <table class="w-full text-sm">
+
+                <thead class="bg-black/20">
+
+                    <tr>
+
+                        <th class="text-left px-5 py-4 text-xs uppercase tracking-wider text-gray-500">
+                            Player
+                        </th>
+
+        `;
+
+
+        bossNames.forEach(
+            (boss, index) => {
+
+                html += `
+
+                    <th class="text-right px-4 py-4 text-xs uppercase tracking-wider text-gray-500 whitespace-nowrap">
+
+                        <div>
+                            D${index + 1}
+                        </div>
+
+                        <div class="text-[9px] text-gray-700 normal-case mt-1">
+                            ${escapeHtml(boss)}
+                        </div>
+
+                    </th>
+
+                `;
+
+            }
+        );
+
+
+        html += `
+
+                        <th class="text-right px-5 py-4 text-xs uppercase tracking-wider text-gray-500">
+                            Total
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody class="divide-y divide-gray-800">
+
+        `;
+
+
+        team.players.forEach(teamPlayer => {
+
+            const player =
+                getPlayerData(
+                    teamPlayer.name
+                );
+
+
+            html += `
+
+                <tr class="hover:bg-white/[0.02]">
+
+                    <td class="px-5 py-4 font-bold whitespace-nowrap">
+
+                        ${escapeHtml(player.name)}
+
+                    </td>
+
+            `;
+
+
+            player.dailyPoints.forEach(value => {
+
+                html += `
+
+                    <td class="px-4 py-4 text-right font-semibold
+                        ${
+                            value > 0
+                                ? "text-green-400"
+                                : "text-gray-600"
+                        }">
+
+                        ${formatPoints(value)}
+
+                    </td>
+
+                `;
+
+            });
+
+
+            html += `
+
+                    <td class="px-5 py-4 text-right font-black text-white">
+
+                        ${formatPoints(player.totalPoints)}
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+
+        html += `
+
+                </tbody>
+
+            </table>
+
+        `;
+
+
+        container.innerHTML = html;
+
+    }
+
+
+    /* ============================================================
+       TEAM SELECTOR PUBLIC FUNCTION
+       ============================================================ */
+
+    function selectTeam(teamName) {
+
+        currentTeam = teamName;
+
+
+        const select =
+            document.getElementById(
+                "team-select"
+            );
+
+
+        select.value =
+            teamName;
+
+
+        renderCurrentTeam();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
+
+    /* ============================================================
+       EVENT / BOSS SYSTEM
+       ============================================================ */
+
+    function getEventState() {
+
+        const start =
+            new Date(
+                CONFIG.EVENT_START_ISO
+            ).getTime();
+
+
+        const now =
+            Date.now();
+
+
+        const elapsed =
+            now - start;
+
+
+        /*
+         * BEFORE EVENT
+         */
+
+        if (elapsed < 0) {
+
+            return {
+
+                status: "BEFORE",
+
+                day: 0,
+
+                boss: bossNames[0] || "TBD",
+
+                remaining:
+                    Math.abs(elapsed)
+
+            };
+
+        }
+
+
+        /*
+         * WHICH 24 HOUR DAY?
+         */
+
+        const day =
+            Math.floor(
+                elapsed /
+                CONFIG.DAY_LENGTH_MS
+            ) + 1;
+
+
+        /*
+         * AFTER EVENT
+         */
+
+        if (
+            day > CONFIG.BOSS_COUNT
+        ) {
+
+            return {
+
+                status: "FINISHED",
+
+                day: CONFIG.BOSS_COUNT,
+
+                boss:
+                    bossNames[
+                        CONFIG.BOSS_COUNT - 1
+                    ] ||
+                    "Finished",
+
+                remaining: 0
+
+            };
+
+        }
+
+
+        /*
+         * CURRENT DAY
+         */
+
+        const dayStart =
+            start +
+            (
+                day - 1
+            ) *
+            CONFIG.DAY_LENGTH_MS;
+
+
+        const dayEnd =
+            dayStart +
+            CONFIG.DAY_LENGTH_MS;
+
+
+        return {
+
+            status: "LIVE",
+
+            day,
+
+            boss:
+                bossNames[
+                    day - 1
+                ] ||
+                `Day ${day}`,
+
+            remaining:
+                Math.max(
+                    0,
+                    dayEnd - now
+                )
+
+        };
+
+    }
+
+
+    /* ============================================================
+       COUNTDOWN
+       ============================================================ */
+
+    function updateEventDisplay() {
+
+        const event =
+            getEventState();
+
+
+        const status =
+            document.getElementById(
+                "event-status"
+            );
+
+
+        const dayLabel =
+            document.getElementById(
+                "event-day-label"
+            );
+
+
+        const boss =
+            document.getElementById(
+                "current-boss"
+            );
+
+
+        const subtitle =
+            document.getElementById(
+                "boss-subtitle"
+            );
+
+
+        status.className =
+            "inline-flex items-center px-3 py-1 rounded-full border text-xs font-bold uppercase tracking-widest mb-5";
+
+
+        if (
+            event.status === "BEFORE"
+        ) {
+
+            status.innerText =
+                "Event Starting Soon";
+
+            status.classList.add(
+                "border-yellow-500/30",
+                "bg-yellow-500/10",
+                "text-yellow-300"
+            );
+
+
+            dayLabel.innerText =
+                "DAY 1";
+
+            boss.innerText =
+                event.boss;
+
+
+            subtitle.innerText =
+                "The Hunt begins in";
+
+
+        } else if (
+            event.status === "LIVE"
+        ) {
+
+            status.innerText =
+                "Live Event";
+
+            status.classList.add(
+                "border-green-500/30",
+                "bg-green-500/10",
+                "text-green-300"
+            );
+
+
+            dayLabel.innerText =
+                `DAY ${event.day} / ${CONFIG.BOSS_COUNT}`;
+
+
+            boss.innerText =
+                event.boss;
+
+
+            subtitle.innerText =
+                "Time remaining";
+
+
+        } else {
+
+            status.innerText =
+                "Event Complete";
+
+            status.classList.add(
+                "border-purple-500/30",
+                "bg-purple-500/10",
+                "text-purple-300"
+            );
+
+
+            dayLabel.innerText =
+                "FINAL RESULTS";
+
+
+            boss.innerText =
+                "Fantasy PvM League";
+
+
+            subtitle.innerText =
+                "The Hunt is complete";
+
+
+        }
+
+
+        updateCountdown(
+            event
+        );
+
+    }
+
+
+    function updateCountdown(event) {
+
+        let remaining =
+            event.remaining;
+
+
+        if (
+            event.status === "FINISHED"
+        ) {
+
+            remaining = 0;
+
+        }
+
+
+        const seconds =
+            Math.floor(
+                remaining / 1000
+            );
+
+
+        const days =
+            Math.floor(
+                seconds / 86400
+            );
+
+
+        const hours =
+            Math.floor(
+                (seconds % 86400) / 3600
+            );
+
+
+        const minutes =
+            Math.floor(
+                (seconds % 3600) / 60
+            );
+
+
+        const secs =
+            seconds % 60;
+
+
+        document.getElementById(
+            "countdown-days"
+        ).innerText =
+            String(days).padStart(2, "0");
+
+
+        document.getElementById(
+            "countdown-hours"
+        ).innerText =
+            String(hours).padStart(2, "0");
+
+
+        document.getElementById(
+            "countdown-minutes"
+        ).innerText =
+            String(minutes).padStart(2, "0");
+
+
+        document.getElementById(
+            "countdown-seconds"
+        ).innerText =
+            String(secs).padStart(2, "0");
+
+    }
+
+
+    /* ============================================================
+       AUTOMATIC EVENT REFRESH
+       ============================================================ */
+
+    setInterval(() => {
+
+        updateEventDisplay();
+
+    }, 1000);
+
+
+    /*
+     * Refresh Google Sheet data every 60 seconds.
+     *
+     * This means when you update the spreadsheet,
+     * the website will eventually see the new values.
+     */
+
+    setInterval(() => {
+
+        loadAllData();
+
+    }, 60000);
+
+
+    /* ============================================================
+       START
+       ============================================================ */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        () => {
+
+            loadAllData();
+
+        }
+    );
+
+</script>
+
 </body>
 </html>
