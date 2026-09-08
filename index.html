@@ -2597,21 +2597,26 @@ function renderDailyScores() {
 function getTeamLeaderboard() {
 
     return availableTeams
-
-        .map(
-            team =>
-                getTeam(team.name)
-        )
-
+        .map(team => getTeam(team.name))
         .filter(Boolean)
+        .sort((a, b) => {
 
-        .sort(
-            (a, b) =>
-                b.totalPoints -
-                a.totalPoints
-        );
+            // 1. Highest points first
+            if (b.totalPoints !== a.totalPoints) {
+                return b.totalPoints - a.totalPoints;
+            }
+
+            // 2. If tied, alphabetical team name
+            return a.name.localeCompare(
+                b.name,
+                undefined,
+                {
+                    numeric: true,
+                    sensitivity: "base"
+                }
+            );
+        });
 }
-
 
 function renderHomeLeaderboard() {
 
