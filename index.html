@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSRS Fantasy PvM League</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        osrs: {
+                            dark: '#0f172a',
+                            card: '#1e293b',
+                            border: '#334155',
+                            gold: '#f59e0b',
+                            accent: '#3b82f6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .osrs-title { font-family: 'Cinzel', serif; }
+    </style>
+</head>
+<body class="bg-osrs-dark text-slate-100 min-h-screen flex flex-col">
+
+    <!-- Header Navigation -->
+    <header class="bg-osrs-card border-b border-osrs-border sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl">⚔️</span>
+                <h1 class="osrs-title text-xl font-bold tracking-wider text-osrs-gold">OSRS FANTASY PVM LEAGUE</h1>
+            </div>
+            <nav class="flex flex-wrap gap-2 justify-center">
+                <button onclick="switchTab('home')" class="tab-btn px-4 py-2 rounded bg-blue-600 font-medium text-sm transition hover:bg-blue-500">Home</button>
+                <button onclick="switchTab('teams')" class="tab-btn px-4 py-2 rounded bg-osrs-border font-medium text-sm transition hover:bg-slate-700">Team Leaderboard</button>
+                <button onclick="switchTab('players')" class="tab-btn px-4 py-2 rounded bg-osrs-border font-medium text-sm transition hover:bg-slate-700">Player Leaderboard</button>
+                <button onclick="switchTab('myteam')" class="tab-btn px-4 py-2 rounded bg-osrs-border font-medium text-sm transition hover:bg-slate-700">View Team</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-8">
+
+        <!-- HOME TAB -->
+        <div id="tab-home" class="space-y-6">
+            <div class="bg-gradient-to-r from-slate-900 to-slate-800 border border-osrs-border rounded-xl p-6 shadow-xl relative overflow-hidden">
+                <div class="absolute right-0 top-0 translate-x-4 -translate-y-4 opacity-10 text-9xl">🛡️</div>
+                <h2 class="osrs-title text-2xl font-bold text-osrs-gold mb-2">Event Live Dashboard</h2>
+                <p class="text-slate-400 mb-4">Welcome to the Vintage Clan Fantasy PvM League. Track daily boss kills, points (1M GP = 1 Point), and fantasy team standings below.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+                    <div class="bg-osrs-card/80 border border-osrs-border p-4 rounded-lg">
+                        <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Conversion Rate</span>
+                        <p class="text-xl font-bold text-osrs-gold mt-1">1,000,000 GP = 1 Pt</p>
+                    </div>
+                    <div class="bg-osrs-card/80 border border-osrs-border p-4 rounded-lg">
+                        <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Active Teams</span>
+                        <p class="text-xl font-bold text-white mt-1">50+ Registered</p>
+                    </div>
+                    <div class="bg-osrs-card/80 border border-osrs-border p-4 rounded-lg">
+                        <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Event Duration</span>
+                        <p class="text-xl font-bold text-white mt-1">7 Days</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TEAM LEADERBOARD TAB -->
+        <div id="tab-teams" class="hidden space-y-6">
+            <h2 class="osrs-title text-2xl font-bold text-osrs-gold">Team Standings</h2>
+            <div class="bg-osrs-card border border-osrs-border rounded-xl overflow-hidden shadow-xl">
+                <div class="p-4 border-b border-osrs-border font-semibold text-slate-300">Top Fantasy Teams</div>
+                <div class="p-6 text-slate-400 text-center">
+                    Team leaderboard data will link here once your Google Sheet CSV links are plugged in.
+                </div>
+            </div>
+        </div>
+
+        <!-- PLAYER LEADERBOARD TAB -->
+        <div id="tab-players" class="hidden space-y-6">
+            <h2 class="osrs-title text-2xl font-bold text-osrs-gold">Individual PvMr Standings</h2>
+            <div class="bg-osrs-card border border-osrs-border rounded-xl overflow-hidden shadow-xl">
+                <div class="p-4 border-b border-osrs-border font-semibold text-slate-300">All Registered PvMers</div>
+                <div class="p-6 text-slate-400 text-center">
+                    Player leaderboard data will load here dynamically.
+                </div>
+            </div>
+        </div>
+
+        <!-- MY TEAM TAB (Dynamic Team View) -->
+        <div id="tab-myteam" class="hidden space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-osrs-card border border-osrs-border p-4 rounded-xl">
+                <h2 class="osrs-title text-xl font-bold text-osrs-gold">Select Fantasy Team</h2>
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <input type="text" id="teamSearchInput" placeholder="Enter team name (e.g. Skrull)..." class="bg-osrs-dark border border-osrs-border rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500 flex-grow">
+                    <button onclick="loadTeam()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded text-sm font-medium transition">View</button>
+                </div>
+            </div>
+
+            <div id="teamDisplayArea" class="bg-osrs-card border border-osrs-border rounded-xl p-6 text-center text-slate-400">
+                Type a team manager name above to view their 5-player roster and lineup arena.
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-osrs-card border-t border-osrs-border py-6 text-center text-xs text-slate-500">
+        OSRS Fantasy PvM League &bull; Powered by Google Sheets & GitHub Pages
+    </footer>
+
+    <!-- Simple Tab Switching Script -->
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('main > div').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'hover:bg-blue-500');
+                btn.classList.add('bg-osrs-border', 'hover:bg-slate-700');
+            });
+            event.target.classList.remove('bg-osrs-border', 'hover:bg-slate-700');
+            event.target.classList.add('bg-blue-600', 'hover:bg-blue-500');
+        }
+
+        function loadTeam() {
+            const teamName = document.getElementById('teamSearchInput').value.trim();
+            const area = document.getElementById('teamDisplayArea');
+            if(!teamName) {
+                area.innerHTML = `<p class="text-red-400">Please enter a valid team name.</p>`;
+                return;
+            }
+            area.innerHTML = `
+                <h3 class="osrs-title text-xl font-bold text-white mb-4">Team: ${teamName}</h3>
+                <p class="text-slate-400">Roster cards for this team will render here once connected to your Google Sheet backend data!</p>
+            `;
+        }
+    </script>
+</body>
+</html>
