@@ -1,281 +1,142 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSRS Fantasy PvM League</title>
-    <!-- Tailwind CSS -->
+    <title>Vintage OSRS - Fantasy PvM League</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- PapaParse for reading published Google Sheet CSVs -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        osrs: {
-                            dark: '#0f172a',
-                            card: '#1e293b',
-                            border: '#334155',
-                            gold: '#f59e0b',
-                            accent: '#3b82f6'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .osrs-title { font-family: 'Cinzel', serif; }
-    </style>
+    <!-- PapaParse CDN for CSV parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/Papa.min.js"></script>
 </head>
-<body class="bg-osrs-dark text-slate-100 min-h-screen flex flex-col">
+<body class="bg-gray-900 text-white min-h-screen p-6">
 
-    <!-- Header Navigation -->
-    <header class="bg-osrs-card border-b border-osrs-border sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex items-center space-x-3">
-                <span class="text-2xl">⚔️</span>
-                <h1 class="osrs-title text-xl font-bold tracking-wider text-osrs-gold">OSRS FANTASY PVM LEAGUE</h1>
-            </div>
-            <nav class="flex flex-wrap gap-2 justify-center">
-                <button onclick="switchTab('home')" class="tab-btn px-4 py-2 rounded bg-blue-600 font-medium text-sm transition hover:bg-blue-500">Home</button>
-                <button onclick="switchTab('teams')" class="tab-btn px-4 py-2 rounded bg-osrs-border font-medium text-sm transition hover:bg-slate-700">Team Leaderboard</button>
-                <button onclick="switchTab('players')" class="tab-btn px-4 py-2 rounded bg-osrs-border font-medium text-sm transition hover:bg-slate-700">Player Leaderboard</button>
-                <button onclick="switchTab('myteam')" class="tab-btn px-4 py-2 rounded bg-osrs-border font-medium text-sm transition hover:bg-slate-700">View Team</button>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Main Content Area -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-8">
-
-        <!-- HOME TAB -->
-        <div id="tab-home" class="space-y-6">
-            <div class="bg-gradient-to-r from-slate-900 to-slate-800 border border-osrs-border rounded-xl p-6 shadow-xl relative overflow-hidden">
-                <div class="absolute right-0 top-0 translate-x-4 -translate-y-4 opacity-10 text-9xl">🛡️</div>
-                <h2 class="osrs-title text-2xl font-bold text-osrs-gold mb-2">Event Live Dashboard</h2>
-                <p class="text-slate-400 mb-4">Vintage Clan Fantasy PvM League &bull; Automated live sync with Google Sheets.</p>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-                    <div class="bg-osrs-card/80 border border-osrs-border p-4 rounded-lg">
-                        <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Conversion Rate</span>
-                        <p class="text-xl font-bold text-osrs-gold mt-1">1,000,000 GP = 1 Pt</p>
-                    </div>
-                    <div class="bg-osrs-card/80 border border-osrs-border p-4 rounded-lg">
-                        <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Event Status</span>
-                        <p class="text-xl font-bold text-emerald-400 mt-1">Active League</p>
-                    </div>
-                    <div class="bg-osrs-card/80 border border-osrs-border p-4 rounded-lg">
-                        <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Data Sync</span>
-                        <p class="text-xl font-bold text-white mt-1">Live CSV Feed</p>
-                    </div>
-                </div>
+    <div class="max-w-6xl mx-auto">
+        <!-- Header / Controls -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-gray-800 pb-4">
+            <h1 id="current-team-title" class="text-3xl font-extrabold tracking-wide text-blue-400">Team 1</h1>
+            
+            <!-- Optional team selector dropdown if you want to switch teams on the fly -->
+            <div class="mt-4 md:mt-0 flex items-center space-x-3">
+                <label for="team-select" class="text-sm text-gray-400">Select Team:</label>
+                <select id="team-select" onchange="changeTeam(this.value)" class="bg-gray-800 border border-gray-700 text-white rounded px-3 py-1.5 focus:outline-none focus:border-blue-500">
+                    <option value="Team 1">Team 1</option>
+                    <option value="Team 2">Team 2</option>
+                    <!-- Add more teams here as they get created -->
+                </select>
             </div>
         </div>
 
-        <!-- TEAM LEADERBOARD TAB -->
-        <div id="tab-teams" class="hidden space-y-6">
-            <h2 class="osrs-title text-2xl font-bold text-osrs-gold">Team Standings</h2>
-            <div class="bg-osrs-card border border-osrs-border rounded-xl overflow-hidden shadow-xl">
-                <div class="p-4 border-b border-osrs-border font-semibold text-slate-300">Top Fantasy Teams</div>
-                <div id="teamLbContainer" class="p-4 overflow-x-auto">
-                    <p class="text-slate-400 text-center py-4">Loading team standings...</p>
-                </div>
-            </div>
+        <!-- Roster Cards Container -->
+        <div id="roster-cards" class="flex flex-wrap -mx-2 mb-8">
+            <!-- Player cards will be injected here dynamically -->
         </div>
 
-        <!-- PLAYER LEADERBOARD TAB -->
-        <div id="tab-players" class="hidden space-y-6">
-            <h2 class="osrs-title text-2xl font-bold text-osrs-gold">Individual PvMr Standings</h2>
-            <div class="bg-osrs-card border border-osrs-border rounded-xl overflow-hidden shadow-xl">
-                <div class="p-4 border-b border-osrs-border font-semibold text-slate-300">All Registered PvMers</div>
-                <div id="pvmLbContainer" class="p-4 overflow-x-auto">
-                    <p class="text-slate-400 text-center py-4">Loading player standings...</p>
-                </div>
-            </div>
+        <!-- Total Team Points Footer -->
+        <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 flex justify-between items-center shadow-lg">
+            <span class="text-xl font-semibold text-gray-300">Total Team Points</span>
+            <span id="total-team-points" class="text-3xl font-black text-green-400">0.00</span>
         </div>
+    </div>
 
-        <!-- MY TEAM TAB (Dynamic Team View) -->
-        <div id="tab-myteam" class="hidden space-y-6">
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-osrs-card border border-osrs-border p-4 rounded-xl">
-                <h2 class="osrs-title text-xl font-bold text-osrs-gold">Select Fantasy Team</h2>
-                <div class="flex gap-2 w-full sm:w-auto">
-                    <input type="text" id="teamSearchInput" placeholder="Enter manager name (e.g. Skrull)..." class="bg-osrs-dark border border-osrs-border rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500 flex-grow">
-                    <button onclick="loadTeamRoster()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded text-sm font-medium transition">View</button>
-                </div>
-            </div>
-
-            <div id="teamDisplayArea" class="bg-osrs-card border border-osrs-border rounded-xl p-6 text-center text-slate-400">
-                Type a team manager name above to view their 5-player roster and lineup arena.
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-osrs-card border-t border-osrs-border py-6 text-center text-xs text-slate-500">
-        OSRS Fantasy PvM League &bull; Powered by Google Sheets & GitHub Pages
-    </footer>
-
-    <!-- Script to Fetch CSVs and Render UI -->
+    <!-- Frontend Script Logic -->
     <script>
-        const CONFIG = {
-            fantasyPvm: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=1220418834&single=true&output=csv',
-            teams: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=2004919509&single=true&output=csv',
-            teamLb: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=1417622882&single=true&output=csv',
-            pvmLb: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=752592411&single=true&output=csv'
-        };
+        // Teams tab CSV URL linked automatically
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=2004919509&single=true&output=csv';
 
-        let globalTeamLb = [];
-        let globalPvmLb = [];
+        let currentTeam = "Team 1";
 
-        window.addEventListener('DOMContentLoaded', () => {
-            fetchTeamLeaderboard();
-            fetchPvmLeaderboard();
-        });
-
-        function switchTab(tabId) {
-            document.querySelectorAll('main > div').forEach(el => el.classList.add('hidden'));
-            document.getElementById('tab-' + tabId).classList.remove('hidden');
-
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-blue-600', 'hover:bg-blue-500');
-                btn.classList.add('bg-osrs-border', 'hover:bg-slate-700');
-            });
-            event.target.classList.remove('bg-osrs-border', 'hover:bg-slate-700');
-            event.target.classList.add('bg-blue-600', 'hover:bg-blue-500');
+        function changeTeam(selectedTeam) {
+            currentTeam = selectedTeam;
+            document.getElementById('current-team-title').innerText = currentTeam;
+            fetchAndRenderTeam();
         }
 
-        function fetchTeamLeaderboard() {
-            Papa.parse(CONFIG.teamLb, {
-                download: true,
-                header: true,
-                complete: function(results) {
-                    globalTeamLb = results.data.filter(row => row.Team && row.Team.trim() !== "");
-                    let html = `<table class="w-full text-left border-collapse">
-                        <thead><tr class="border-b border-osrs-border text-slate-400 text-sm">
-                            <th class="p-3">Rank</th><th class="p-3">Team Name</th><th class="p-3 text-right">Total Points</th>
-                        </tr></thead><tbody>`;
-                    
-                    globalTeamLb.forEach(row => {
-                        html += `<tr class="border-b border-osrs-border/50 hover:bg-slate-800/50 transition">
-                            <td class="p-3 font-bold text-osrs-gold">${row.Rank || '-'}</td>
-                            <td class="p-3 font-medium text-white cursor-pointer hover:text-blue-400" onclick="quickViewTeam('${row.Team}')">${row.Team}</td>
-                            <td class="p-3 text-right font-bold text-white">${row['Total Points'] || 0}</td>
-                        </tr>`;
-                    });
-                    html += `</tbody></table>`;
-                    document.getElementById('teamLbContainer').innerHTML = html;
-                }
-            });
-        }
-
-        function fetchPvmLeaderboard() {
-            Papa.parse(CONFIG.pvmLb, {
-                download: true,
-                header: true,
-                complete: function(results) {
-                    globalPvmLb = results.data.filter(row => row.Player && row.Player.trim() !== "");
-                    let html = `<table class="w-full text-left border-collapse">
-                        <thead><tr class="border-b border-osrs-border text-slate-400 text-sm">
-                            <th class="p-3">Rank</th><th class="p-3">Player</th><th class="p-3 text-right">Points</th>
-                        </tr></thead><tbody>`;
-                    
-                    globalPvmLb.forEach(row => {
-                        html += `<tr class="border-b border-osrs-border/50 hover:bg-slate-800/50 transition">
-                            <td class="p-3 font-bold text-osrs-gold">${row.Rank || '-'}</td>
-                            <td class="p-3 font-medium text-white">${row.Player}</td>
-                            <td class="p-3 text-right font-bold text-white">${row.Points || 0}</td>
-                        </tr>`;
-                    });
-                    html += `</tbody></table>`;
-                    document.getElementById('pvmLbContainer').innerHTML = html;
-                }
-            });
-        }
-
-        function quickViewTeam(teamName) {
-            document.getElementById('teamSearchInput').value = teamName;
-            switchTab('myteam');
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                if(btn.textContent.includes('View Team')) {
-                    btn.classList.remove('bg-osrs-border', 'hover:bg-slate-700');
-                    btn.classList.add('bg-blue-600', 'hover:bg-blue-500');
-                } else {
-                    btn.classList.remove('bg-blue-600', 'hover:bg-blue-500');
-                    btn.classList.add('bg-osrs-border', 'hover:bg-slate-700');
-                }
-            });
-            loadTeamRoster();
-        }
-
-        function loadTeamRoster() {
-            const query = document.getElementById('teamSearchInput').value.trim().toLowerCase();
-            const area = document.getElementById('teamDisplayArea');
-            if(!query) {
-                area.innerHTML = `<p class="text-red-400">Please enter a valid team manager name.</p>`;
-                return;
-            }
-
-            Papa.parse(CONFIG.teams, {
+        function fetchAndRenderTeam() {
+            Papa.parse(csvUrl, {
                 download: true,
                 header: false,
                 complete: function(results) {
-                    const rows = results.data;
-                    let foundRoster = [];
+                    const data = results.data;
+                    let query = currentTeam.toLowerCase().trim();
+                    let teamStartRow = -1;
 
-                    // Scan for the team name row, then grab the next 5 rows downward in column 0
-                    for(let r = 0; r < rows.length; r++) {
-                        let row = rows[r];
-                        if(row[0] && row[0].toString().trim().toLowerCase() === query) {
-                            for(let i = 1; i <= 5; i++) {
-                                if(rows[r + i] && rows[r + i][0]) {
-                                    let val = rows[r + i][0].toString().trim();
-                                    if(val !== '' && !val.toLowerCase().startsWith('total')) {
-                                        foundRoster.push(val);
-                                    }
-                                }
-                            }
+                    // 1. Scan Column A (index 0) to find the row where the team name appears
+                    for (let r = 0; r < data.length; r++) {
+                        let cellValue = data[r][0] ? data[r][0].toString().trim().toLowerCase() : '';
+                        if (cellValue === query) {
+                            teamStartRow = r;
                             break;
                         }
                     }
 
-                    if(foundRoster.length === 0) {
-                        area.innerHTML = `<p class="text-amber-400">Team "${query}" not found in current spreadsheet data.</p>`;
-                        return;
+                    const rosterContainer = document.getElementById('roster-cards');
+                    rosterContainer.innerHTML = '';
+
+                    if (teamStartRow !== -1) {
+                        let totalTeamPoints = 0;
+                        let playerRowsFound = 0;
+
+                        // 2. Loop through the 5 player rows sitting below the team header and column labels
+                        for (let i = 1; i <= 5; i++) {
+                            let currentRow = teamStartRow + 1 + i; 
+                            
+                            if (data[currentRow]) {
+                                let playerName = data[currentRow][0] ? data[currentRow][0].toString().trim() : '';
+                                let playerValue = data[currentRow][1] ? data[currentRow][1] : '0';
+                                let playerPoints = parseFloat(data[currentRow][2]) || 0;
+
+                                // Only render if a player name is present and it's not a totals row
+                                if (playerName !== '' && playerName.toLowerCase() !== 'total points') {
+                                    playerRowsFound++;
+                                    totalTeamPoints += playerPoints;
+
+                                    rosterContainer.innerHTML += `
+                                        <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/5 p-2">
+                                            <div class="bg-gray-800 border border-gray-700 rounded-lg p-4 text-white shadow-md flex flex-col justify-between h-full">
+                                                <div>
+                                                    <div class="flex justify-between items-center mb-2">
+                                                        <span class="text-xs font-semibold text-blue-400 uppercase tracking-wider">Player ${playerRowsFound}</span>
+                                                        <span class="text-xs text-yellow-500">Synced</span>
+                                                    </div>
+                                                    <h5 class="text-lg font-bold mb-3 truncate">${playerName}</h5>
+                                                </div>
+                                                <div class="space-y-1 text-sm border-t border-gray-700 pt-3">
+                                                    <p class="text-gray-400 flex justify-between">
+                                                        <span>Value:</span> 
+                                                        <span class="text-white font-medium">${playerValue}</span>
+                                                    </p>
+                                                    <p class="text-gray-400 flex justify-between">
+                                                        <span>Points:</span> 
+                                                        <span class="text-green-400 font-bold">${playerPoints.toFixed(2)}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }
+                            }
+                        }
+
+                        // 3. Output overall team total points to your UI element
+                        document.getElementById('total-team-points').innerText = totalTeamPoints.toFixed(2);
+
+                    } else {
+                        rosterContainer.innerHTML = `<div class="col-span-full text-center text-red-400 py-6 bg-gray-800 rounded-lg border border-gray-700">Team "${currentTeam}" not found in sheet.</div>`;
+                        document.getElementById('total-team-points').innerText = "0.00";
                     }
-
-                    let html = `
-                        <div class="mb-6 text-left">
-                            <h3 class="osrs-title text-2xl font-bold text-osrs-gold">Manager: ${query.toUpperCase()}</h3>
-                            <p class="text-sm text-slate-400 mt-1">Active 5-Player Fantasy Roster</p>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                    `;
-
-                    foundRoster.slice(0, 5).forEach(player => {
-                        html += `
-                            <div class="bg-slate-900 border border-osrs-border rounded-lg p-4 text-left flex flex-col justify-between shadow-md">
-                                <div>
-                                    <span class="text-xs font-semibold text-blue-400 uppercase tracking-wider">PvMr</span>
-                                    <h4 class="text-lg font-bold text-white mt-1">${player}</h4>
-                                </div>
-                                <div class="mt-4 pt-3 border-t border-osrs-border/60 text-xs text-slate-400 flex justify-between">
-                                    <span>Status: Active</span>
-                                    <span class="text-osrs-gold font-semibold">Synced</span>
-                                </div>
-                            </div>
-                        `;
-                    });
-
-                    html += `</div>`;
-                    area.innerHTML = html;
+                },
+                error: function(error) {
+                    console.error("Error parsing CSV data:", error);
+                    document.getElementById('roster-cards').innerHTML = `<div class="col-span-full text-center text-red-400 py-6">Failed to load team data from Google Sheets.</div>`;
                 }
             });
         }
+
+        // Run on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchAndRenderTeam();
+        });
     </script>
 </body>
 </html>
