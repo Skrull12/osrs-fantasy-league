@@ -1,28 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Fantasy PvM League | Vintage OSRS</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <!-- Tailwind CSS -->
+    <meta
+        name="theme-color"
+        content="#080b10"
+    >
+
+    <title>
+        Fantasy PvM League | Vintage OSRS
+    </title>
+
+
+    <!-- =====================================================
+         TAILWIND
+    ====================================================== -->
+
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- PapaParse -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
     <style>
+
+        /* =================================================
+           GLOBAL
+        ================================================= */
 
         html {
             scroll-behavior: smooth;
         }
 
         body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
             background:
                 radial-gradient(
                     circle at 50% -10%,
-                    rgba(55, 100, 160, 0.20),
+                    rgba(55, 100, 160, 0.22),
                     transparent 35%
                 ),
                 linear-gradient(
@@ -31,34 +55,61 @@
                     #05070a 100%
                 );
 
-            color: white;
+            color: #ffffff;
+
         }
+
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        /* =================================================
+           GLASS PANELS
+        ================================================= */
 
         .glass {
-            background: rgba(15, 20, 28, 0.86);
 
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background:
+                rgba(15, 20, 28, 0.86);
+
+            backdrop-filter:
+                blur(12px);
+
+            -webkit-backdrop-filter:
+                blur(12px);
+
         }
 
+
+        /* =================================================
+           HERO
+        ================================================= */
+
         .hero {
+
             position: relative;
+
             overflow: hidden;
 
             background:
                 linear-gradient(
-                    rgba(4, 7, 12, 0.38),
+                    rgba(4, 7, 12, 0.30),
                     rgba(4, 7, 12, 0.90)
                 ),
                 radial-gradient(
                     circle at center,
-                    rgba(70, 120, 180, 0.25),
+                    rgba(70, 120, 180, 0.28),
                     transparent 55%
                 ),
                 #0a0f16;
+
         }
 
+
         .hero::before {
+
             content: "";
 
             position: absolute;
@@ -73,36 +124,127 @@
                     transparent 100%
                 );
 
-            pointer-events: none;
+            pointer-events:
+                none;
+
         }
 
+
+        .hero::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 500px;
+            height: 500px;
+
+            left: 50%;
+            top: 50%;
+
+            transform:
+                translate(-50%, -50%);
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(70, 130, 210, 0.08),
+                    transparent 70%
+                );
+
+            pointer-events:
+                none;
+
+        }
+
+
+        .boss-title {
+
+            text-shadow:
+                0 0 25px
+                rgba(96,165,250,0.20);
+
+        }
+
+
+        /* =================================================
+           CARDS
+        ================================================= */
+
         .player-card {
+
             transition:
                 transform 0.20s ease,
                 border-color 0.20s ease,
                 box-shadow 0.20s ease;
+
         }
+
 
         .player-card:hover {
-            transform: translateY(-4px);
+
+            transform:
+                translateY(-4px);
 
             border-color:
-                rgba(96, 165, 250, 0.50);
+                rgba(96,165,250,0.50);
 
             box-shadow:
-                0 15px 35px rgba(0,0,0,0.30);
+                0 16px 35px
+                rgba(0,0,0,0.30);
+
         }
+
+
+        .team-card {
+
+            transition:
+                transform 0.20s ease,
+                border-color 0.20s ease,
+                box-shadow 0.20s ease;
+
+        }
+
+
+        .team-card:hover {
+
+            transform:
+                translateY(-3px);
+
+            border-color:
+                rgba(96,165,250,0.42);
+
+            box-shadow:
+                0 14px 30px
+                rgba(0,0,0,0.25);
+
+        }
+
+
+        /* =================================================
+           NAV
+        ================================================= */
 
         .nav-button {
-            transition: 0.18s ease;
+
+            transition:
+                background 0.18s ease,
+                color 0.18s ease,
+                border-color 0.18s ease;
+
         }
+
 
         .nav-button:hover {
+
             background:
                 rgba(255,255,255,0.04);
+
         }
 
+
         .nav-button.active {
+
             background:
                 rgba(96,165,250,0.12);
 
@@ -110,57 +252,212 @@
                 #93c5fd;
 
             border-color:
-                rgba(96,165,250,0.30);
+                rgba(96,165,250,0.28);
+
         }
 
+
+        /* =================================================
+           TABLE
+        ================================================= */
+
+        .table-row {
+
+            transition:
+                background 0.15s ease;
+
+        }
+
+
+        .table-row:hover {
+
+            background:
+                rgba(255,255,255,0.025);
+
+        }
+
+
+        .sticky-table-header th {
+
+            position:
+                sticky;
+
+            top:
+                0;
+
+            z-index:
+                5;
+
+            background:
+                #0c1118;
+
+        }
+
+
+        /* =================================================
+           SCROLL
+        ================================================= */
+
+        .scroll-x {
+
+            overflow-x:
+                auto;
+
+        }
+
+
+        .scroll-y {
+
+            overflow-y:
+                auto;
+
+        }
+
+
+        /* =================================================
+           NUMBERS
+        ================================================= */
+
+        .number {
+
+            font-variant-numeric:
+                tabular-nums;
+
+        }
+
+
+        /* =================================================
+           ANIMATION
+        ================================================= */
+
         .fade-in {
+
             animation:
                 fadeIn 0.25s ease;
+
         }
+
 
         @keyframes fadeIn {
 
             from {
+
                 opacity: 0;
+
                 transform:
-                    translateY(8px);
+                    translateY(7px);
+
             }
 
             to {
+
                 opacity: 1;
+
                 transform:
                     translateY(0);
+
             }
 
         }
 
-        .number {
-            font-variant-numeric:
-                tabular-nums;
-        }
 
-        .leader-row {
-            transition:
-                background 0.15s ease;
-        }
+        /* =================================================
+           MODAL
+        ================================================= */
 
-        .leader-row:hover {
+        .modal-backdrop {
+
             background:
-                rgba(255,255,255,0.025);
+                rgba(0,0,0,0.72);
+
+            backdrop-filter:
+                blur(7px);
+
+            -webkit-backdrop-filter:
+                blur(7px);
+
         }
 
-        .scroll-x {
-            overflow-x: auto;
+
+        /* =================================================
+           PROGRESS BAR
+        ================================================= */
+
+        .progress-track {
+
+            height:
+                8px;
+
+            background:
+                rgba(255,255,255,0.06);
+
+            border-radius:
+                999px;
+
+            overflow:
+                hidden;
+
         }
 
-        .boss-title {
-            text-shadow:
-                0 0 25px
-                rgba(96,165,250,0.18);
+
+        .progress-fill {
+
+            height:
+                100%;
+
+            border-radius:
+                inherit;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #2563eb,
+                    #60a5fa
+                );
+
+        }
+
+
+        /* =================================================
+           STATUS DOT
+        ================================================= */
+
+        .status-dot {
+
+            width:
+                8px;
+
+            height:
+                8px;
+
+            border-radius:
+                999px;
+
+            display:
+                inline-block;
+
+        }
+
+
+        /* =================================================
+           MOBILE TABLE TWEAKS
+        ================================================= */
+
+        @media (
+            max-width: 640px
+        ) {
+
+            .mobile-hide {
+                display:
+                    none;
+            }
+
         }
 
     </style>
+
 </head>
+
 
 
 <body class="min-h-screen">
@@ -171,22 +468,45 @@
 ========================================================= -->
 
 <header
-    class="sticky top-0 z-50 border-b border-gray-800 glass">
+    class="
+    sticky
+    top-0
+    z-50
+    border-b
+    border-gray-800
+    glass">
 
     <div
-        class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+        class="
+        max-w-7xl
+        mx-auto
+        px-4
+        sm:px-6
+        py-4">
 
         <div
-            class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            class="
+            flex
+            flex-col
+            xl:flex-row
+            xl:items-center
+            xl:justify-between
+            gap-4">
 
 
-            <!-- LOGO -->
+            <!-- BRAND -->
 
-            <div>
+            <button
+                onclick="showPage('home')"
+                class="text-left">
 
                 <div
-                    class="text-xs uppercase tracking-[0.35em]
-                    text-blue-400 font-bold">
+                    class="
+                    text-xs
+                    uppercase
+                    tracking-[0.35em]
+                    text-blue-400
+                    font-bold">
 
                     Vintage OSRS
 
@@ -194,26 +514,39 @@
 
 
                 <div
-                    class="text-2xl sm:text-3xl font-black">
+                    class="
+                    text-2xl
+                    sm:text-3xl
+                    font-black">
 
                     Fantasy PvM League
 
                 </div>
 
-            </div>
+            </button>
 
 
-            <!-- NAVIGATION -->
 
-            <nav
-                class="flex flex-wrap gap-2">
+            <!-- NAV -->
+
+            <div
+                class="
+                flex
+                flex-wrap
+                gap-2">
 
                 <button
                     data-page="home"
-                    class="nav-button active
-                    px-4 py-2 rounded-lg
-                    border border-transparent
-                    text-sm font-bold">
+                    class="
+                    nav-button
+                    active
+                    px-4
+                    py-2
+                    rounded-lg
+                    border
+                    border-transparent
+                    text-sm
+                    font-bold">
 
                     Home
 
@@ -222,10 +555,15 @@
 
                 <button
                     data-page="teams"
-                    class="nav-button
-                    px-4 py-2 rounded-lg
-                    border border-transparent
-                    text-sm font-bold
+                    class="
+                    nav-button
+                    px-4
+                    py-2
+                    rounded-lg
+                    border
+                    border-transparent
+                    text-sm
+                    font-bold
                     text-gray-400">
 
                     Teams
@@ -235,10 +573,15 @@
 
                 <button
                     data-page="teamLeaderboard"
-                    class="nav-button
-                    px-4 py-2 rounded-lg
-                    border border-transparent
-                    text-sm font-bold
+                    class="
+                    nav-button
+                    px-4
+                    py-2
+                    rounded-lg
+                    border
+                    border-transparent
+                    text-sm
+                    font-bold
                     text-gray-400">
 
                     Team Leaderboard
@@ -248,17 +591,65 @@
 
                 <button
                     data-page="pvmLeaderboard"
-                    class="nav-button
-                    px-4 py-2 rounded-lg
-                    border border-transparent
-                    text-sm font-bold
+                    class="
+                    nav-button
+                    px-4
+                    py-2
+                    rounded-lg
+                    border
+                    border-transparent
+                    text-sm
+                    font-bold
                     text-gray-400">
 
                     PvM Leaderboard
 
                 </button>
 
-            </nav>
+            </div>
+
+
+
+            <!-- REFRESH -->
+
+            <div
+                class="
+                flex
+                items-center
+                gap-3">
+
+                <div
+                    id="data-status"
+                    class="
+                    text-xs
+                    text-gray-500
+                    whitespace-nowrap">
+
+                    Loading data...
+
+                </div>
+
+
+                <button
+                    id="refresh-button"
+                    onclick="manualRefresh()"
+                    class="
+                    px-3
+                    py-2
+                    rounded-lg
+                    border
+                    border-gray-700
+                    bg-gray-900
+                    text-xs
+                    font-bold
+                    hover:border-blue-500
+                    transition">
+
+                    Refresh
+
+                </button>
+
+            </div>
 
         </div>
 
@@ -273,7 +664,13 @@
 ========================================================= -->
 
 <main
-    class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+    class="
+    max-w-7xl
+    mx-auto
+    px-4
+    sm:px-6
+    py-8">
+
 
 
 <!-- =========================================================
@@ -290,29 +687,36 @@
     ====================================================== -->
 
     <div
-        class="hero
-        border border-gray-800
+        class="
+        hero
+        border
+        border-gray-800
         rounded-3xl
         min-h-[430px]
-        flex items-center
-        justify-center
-        mb-8">
+        flex
+        items-center
+        justify-center">
+
 
         <div
-            class="relative z-10
+            class="
+            relative
+            z-10
             text-center
-            px-6 py-12
+            px-6
+            py-12
             w-full">
 
 
-            <!-- EVENT STATUS -->
+            <!-- STATUS -->
 
             <div
                 id="event-status"
                 class="
                 inline-flex
                 items-center
-                px-4 py-2
+                px-4
+                py-2
                 rounded-full
                 border
                 border-yellow-500/20
@@ -324,7 +728,7 @@
                 font-black
                 mb-5">
 
-                Event Starting Soon
+                EVENT LOADING
 
             </div>
 
@@ -341,7 +745,7 @@
                 font-bold
                 mb-3">
 
-                THE HUNT BEGINS SOON
+                FANTASY PvM LEAGUE
 
             </div>
 
@@ -388,12 +792,11 @@
                 sm:gap-4">
 
 
-                <!-- DAYS -->
-
                 <div
                     class="
                     bg-black/40
-                    border border-gray-800
+                    border
+                    border-gray-800
                     rounded-xl
                     px-4
                     sm:px-7
@@ -425,12 +828,11 @@
                 </div>
 
 
-                <!-- HOURS -->
-
                 <div
                     class="
                     bg-black/40
-                    border border-gray-800
+                    border
+                    border-gray-800
                     rounded-xl
                     px-4
                     sm:px-7
@@ -462,12 +864,11 @@
                 </div>
 
 
-                <!-- MINUTES -->
-
                 <div
                     class="
                     bg-black/40
-                    border border-gray-800
+                    border
+                    border-gray-800
                     rounded-xl
                     px-4
                     sm:px-7
@@ -499,12 +900,11 @@
                 </div>
 
 
-                <!-- SECONDS -->
-
                 <div
                     class="
                     bg-black/40
-                    border border-gray-800
+                    border
+                    border-gray-800
                     rounded-xl
                     px-4
                     sm:px-7
@@ -544,16 +944,18 @@
 
 
     <!-- =====================================================
-         TEAM AREA
+         CURRENT TEAM
     ====================================================== -->
 
     <div
         class="
-        flex flex-col
+        flex
+        flex-col
         sm:flex-row
         sm:items-end
         sm:justify-between
         gap-4
+        mt-8
         mb-5">
 
 
@@ -567,7 +969,7 @@
                 text-blue-400
                 font-bold">
 
-                Selected Team
+                Fantasy Team
 
             </div>
 
@@ -590,13 +992,21 @@
             id="home-team-select"
             class="
             bg-gray-900
-            border border-gray-700
+            border
+            border-gray-700
             rounded-xl
-            px-4 py-3
+            px-4
+            py-3
             text-sm
             font-bold
             focus:outline-none
-            focus:border-blue-500">
+            focus:border-blue-500
+            max-w-full
+            sm:min-w-[240px]">
+
+            <option>
+                Loading teams...
+            </option>
 
         </select>
 
@@ -610,14 +1020,14 @@
         class="
         grid
         grid-cols-1
-        lg:grid-cols-4
+        xl:grid-cols-4
         gap-5">
 
 
-        <!-- PLAYER CARDS -->
+        <!-- ROSTER -->
 
         <div
-            class="lg:col-span-3">
+            class="xl:col-span-3">
 
             <div
                 id="home-roster"
@@ -625,20 +1035,29 @@
                 grid
                 grid-cols-1
                 sm:grid-cols-2
+                lg:grid-cols-3
                 xl:grid-cols-5
                 gap-4">
+
+                <div
+                    class="text-gray-500">
+
+                    Loading roster...
+
+                </div>
 
             </div>
 
         </div>
 
 
-        <!-- SUMMARY -->
+        <!-- TEAM SUMMARY -->
 
         <div
             class="
             glass
-            border border-gray-800
+            border
+            border-gray-800
             rounded-2xl
             p-5
             h-fit">
@@ -702,6 +1121,7 @@
 
                 </span>
 
+
                 <span
                     id="home-team-rank"
                     class="font-black">
@@ -726,6 +1146,7 @@
 
                 </span>
 
+
                 <span
                     id="home-team-value"
                     class="
@@ -742,7 +1163,8 @@
             <div
                 class="
                 flex
-                justify-between">
+                justify-between
+                mb-3">
 
                 <span
                     class="text-gray-500 text-sm">
@@ -750,6 +1172,7 @@
                     Players
 
                 </span>
+
 
                 <span
                     class="font-black">
@@ -759,6 +1182,194 @@
                 </span>
 
             </div>
+
+
+            <div
+                class="
+                flex
+                justify-between">
+
+                <span
+                    class="text-gray-500 text-sm">
+
+                    Budget Remaining
+
+                </span>
+
+
+                <span
+                    id="home-budget-remaining"
+                    class="
+                    font-black
+                    text-blue-400">
+
+                    0m
+
+                </span>
+
+            </div>
+
+
+            <div
+                class="
+                mt-4">
+
+                <div
+                    class="
+                    flex
+                    justify-between
+                    text-[10px]
+                    uppercase
+                    tracking-wider
+                    text-gray-600
+                    mb-2">
+
+                    <span>
+                        Budget Used
+                    </span>
+
+                    <span
+                        id="budget-percent">
+                        0%
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="progress-track">
+
+                    <div
+                        id="budget-bar"
+                        class="progress-fill"
+                        style="width:0%">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         EVENT PROGRESS
+    ====================================================== -->
+
+    <div
+        class="
+        glass
+        border
+        border-gray-800
+        rounded-2xl
+        overflow-hidden
+        mt-8">
+
+
+        <div
+            class="
+            px-5
+            py-5
+            border-b
+            border-gray-800">
+
+
+            <div
+                class="
+                text-xs
+                uppercase
+                tracking-widest
+                text-blue-400
+                font-bold">
+
+                Event Progress
+
+            </div>
+
+
+            <h3
+                class="
+                text-2xl
+                font-black">
+
+                The 7-Day Hunt
+
+            </h3>
+
+        </div>
+
+
+        <div
+            id="event-progress"
+            class="
+            grid
+            grid-cols-1
+            sm:grid-cols-2
+            lg:grid-cols-4
+            xl:grid-cols-7
+            gap-3
+            p-5">
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         DAILY SCORES
+    ====================================================== -->
+
+    <div
+        class="
+        glass
+        border
+        border-gray-800
+        rounded-2xl
+        overflow-hidden
+        mt-8">
+
+
+        <div
+            class="
+            px-5
+            py-5
+            border-b
+            border-gray-800">
+
+            <div
+                class="
+                text-xs
+                uppercase
+                tracking-widest
+                text-purple-400
+                font-bold">
+
+                Selected Team
+
+            </div>
+
+
+            <h3
+                class="
+                text-2xl
+                font-black">
+
+                Daily Performance
+
+            </h3>
+
+        </div>
+
+
+        <div
+            id="daily-score-table"
+            class="scroll-x">
+
+            Loading...
 
         </div>
 
@@ -777,40 +1388,83 @@
     class="hidden fade-in">
 
 
-    <div class="mb-6">
+    <div
+        class="
+        flex
+        flex-col
+        md:flex-row
+        md:items-end
+        md:justify-between
+        gap-4
+        mb-6">
 
-        <div
-            class="
-            text-xs
-            uppercase
-            tracking-[0.25em]
-            text-blue-400
-            font-bold">
 
-            Fantasy Teams
+        <div>
+
+            <div
+                class="
+                text-xs
+                uppercase
+                tracking-[0.25em]
+                text-blue-400
+                font-bold">
+
+                Fantasy Teams
+
+            </div>
+
+
+            <h2
+                class="
+                text-4xl
+                font-black
+                mt-1">
+
+                Teams
+
+            </h2>
+
+
+            <p
+                class="
+                text-gray-500
+                mt-2">
+
+                Browse every fantasy roster in the league.
+
+            </p>
 
         </div>
 
 
-        <h2
+        <input
+            id="teams-search"
+            type="search"
+            placeholder="Search teams..."
             class="
-            text-4xl
-            font-black
-            mt-1">
+            bg-gray-900
+            border
+            border-gray-700
+            rounded-xl
+            px-4
+            py-3
+            text-sm
+            focus:outline-none
+            focus:border-blue-500
+            w-full
+            md:w-[280px]">
 
-            Teams
-
-        </h2>
+    </div>
 
 
-        <p
-            class="
-            text-gray-500
-            mt-2">
+    <div
+        id="teams-count"
+        class="
+        text-xs
+        text-gray-600
+        mb-4">
 
-            Browse every fantasy roster in the league.
-
-        </p>
+        0 teams
 
     </div>
 
@@ -839,30 +1493,94 @@
     class="hidden fade-in">
 
 
-    <div class="mb-6">
+    <div
+        class="
+        flex
+        flex-col
+        md:flex-row
+        md:items-end
+        md:justify-between
+        gap-4
+        mb-6">
 
-        <div
-            class="
-            text-xs
-            uppercase
-            tracking-[0.25em]
-            text-blue-400
-            font-bold">
 
-            League
+        <div>
+
+            <div
+                class="
+                text-xs
+                uppercase
+                tracking-[0.25em]
+                text-blue-400
+                font-bold">
+
+                League
+
+            </div>
+
+
+            <h2
+                class="
+                text-4xl
+                font-black
+                mt-1">
+
+                Team Leaderboard
+
+            </h2>
 
         </div>
 
 
-        <h2
+        <input
+            id="team-leader-search"
+            type="search"
+            placeholder="Search teams..."
             class="
-            text-4xl
-            font-black
-            mt-1">
+            bg-gray-900
+            border
+            border-gray-700
+            rounded-xl
+            px-4
+            py-3
+            text-sm
+            focus:outline-none
+            focus:border-blue-500
+            w-full
+            md:w-[280px]">
 
-            Team Leaderboard
+    </div>
 
-        </h2>
+
+    <div
+        class="
+        flex
+        flex-wrap
+        items-center
+        justify-between
+        gap-3
+        mb-4">
+
+
+        <div
+            id="team-leader-count"
+            class="
+            text-xs
+            text-gray-600">
+
+            0 teams
+
+        </div>
+
+
+        <div
+            class="
+            text-xs
+            text-gray-600">
+
+            Click a team to view it
+
+        </div>
 
     </div>
 
@@ -870,24 +1588,28 @@
     <div
         class="
         glass
-        border border-gray-800
+        border
+        border-gray-800
         rounded-2xl
         overflow-hidden">
 
 
-        <div class="scroll-x">
+        <div
+            class="scroll-x">
+
 
             <table
                 class="
                 w-full
-                min-w-[600px]">
+                min-w-[700px]">
 
 
                 <thead
                     class="
                     bg-black/20
                     border-b
-                    border-gray-800">
+                    border-gray-800
+                    sticky-table-header">
 
 
                     <tr>
@@ -895,7 +1617,8 @@
                         <th
                             class="
                             text-left
-                            px-5 py-4
+                            px-5
+                            py-4
                             text-xs
                             uppercase
                             tracking-wider
@@ -909,7 +1632,8 @@
                         <th
                             class="
                             text-left
-                            px-5 py-4
+                            px-5
+                            py-4
                             text-xs
                             uppercase
                             tracking-wider
@@ -923,7 +1647,8 @@
                         <th
                             class="
                             text-right
-                            px-5 py-4
+                            px-5
+                            py-4
                             text-xs
                             uppercase
                             tracking-wider
@@ -937,13 +1662,29 @@
                         <th
                             class="
                             text-right
-                            px-5 py-4
+                            px-5
+                            py-4
                             text-xs
                             uppercase
                             tracking-wider
                             text-gray-500">
 
                             Points
+
+                        </th>
+
+
+                        <th
+                            class="
+                            text-right
+                            px-5
+                            py-4
+                            text-xs
+                            uppercase
+                            tracking-wider
+                            text-gray-500">
+
+                            Players
 
                         </th>
 
@@ -979,30 +1720,94 @@
     class="hidden fade-in">
 
 
-    <div class="mb-6">
+    <div
+        class="
+        flex
+        flex-col
+        md:flex-row
+        md:items-end
+        md:justify-between
+        gap-4
+        mb-6">
 
-        <div
-            class="
-            text-xs
-            uppercase
-            tracking-[0.25em]
-            text-purple-400
-            font-bold">
 
-            Individual
+        <div>
+
+            <div
+                class="
+                text-xs
+                uppercase
+                tracking-[0.25em]
+                text-purple-400
+                font-bold">
+
+                Individual
+
+            </div>
+
+
+            <h2
+                class="
+                text-4xl
+                font-black
+                mt-1">
+
+                PvM Leaderboard
+
+            </h2>
 
         </div>
 
 
-        <h2
+        <input
+            id="pvm-search"
+            type="search"
+            placeholder="Search players..."
             class="
-            text-4xl
-            font-black
-            mt-1">
+            bg-gray-900
+            border
+            border-gray-700
+            rounded-xl
+            px-4
+            py-3
+            text-sm
+            focus:outline-none
+            focus:border-purple-500
+            w-full
+            md:w-[280px]">
 
-            PvM Leaderboard
+    </div>
 
-        </h2>
+
+    <div
+        class="
+        flex
+        flex-wrap
+        items-center
+        justify-between
+        gap-3
+        mb-4">
+
+
+        <div
+            id="pvm-count"
+            class="
+            text-xs
+            text-gray-600">
+
+            0 players
+
+        </div>
+
+
+        <div
+            class="
+            text-xs
+            text-gray-600">
+
+            Click a player for details
+
+        </div>
 
     </div>
 
@@ -1010,24 +1815,28 @@
     <div
         class="
         glass
-        border border-gray-800
+        border
+        border-gray-800
         rounded-2xl
         overflow-hidden">
 
 
-        <div class="scroll-x">
+        <div
+            class="scroll-x">
+
 
             <table
                 class="
                 w-full
-                min-w-[650px]">
+                min-w-[750px]">
 
 
                 <thead
                     class="
                     bg-black/20
                     border-b
-                    border-gray-800">
+                    border-gray-800
+                    sticky-table-header">
 
 
                     <tr>
@@ -1035,7 +1844,8 @@
                         <th
                             class="
                             text-left
-                            px-5 py-4
+                            px-5
+                            py-4
                             text-xs
                             uppercase
                             tracking-wider
@@ -1049,7 +1859,8 @@
                         <th
                             class="
                             text-left
-                            px-5 py-4
+                            px-5
+                            py-4
                             text-xs
                             uppercase
                             tracking-wider
@@ -1063,7 +1874,8 @@
                         <th
                             class="
                             text-right
-                            px-5 py-4
+                            px-5
+                            py-4
                             text-xs
                             uppercase
                             tracking-wider
@@ -1077,7 +1889,8 @@
                         <th
                             class="
                             text-right
-                            px-5 py-4
+                            px-5
+                            py-4
                             text-xs
                             uppercase
                             tracking-wider
@@ -1091,7 +1904,8 @@
                         <th
                             class="
                             text-right
-                            px-5 py-4
+                            px-5
+                            py-4
                             text-xs
                             uppercase
                             tracking-wider
@@ -1123,7 +1937,125 @@
 </section>
 
 
+
 </main>
+
+
+
+<!-- =========================================================
+     PLAYER MODAL
+========================================================= -->
+
+<div
+    id="player-modal"
+    class="
+    fixed
+    inset-0
+    z-[100]
+    hidden
+    modal-backdrop
+    items-center
+    justify-center
+    p-4">
+
+
+    <div
+        class="
+        glass
+        border
+        border-gray-700
+        rounded-2xl
+        w-full
+        max-w-2xl
+        max-h-[90vh]
+        overflow-y-auto">
+
+
+        <div
+            class="
+            flex
+            items-start
+            justify-between
+            gap-4
+            px-6
+            py-5
+            border-b
+            border-gray-800">
+
+
+            <div>
+
+                <div
+                    class="
+                    text-xs
+                    uppercase
+                    tracking-widest
+                    text-purple-400
+                    font-bold">
+
+                    PvM Player
+
+                </div>
+
+
+                <h2
+                    id="modal-player-name"
+                    class="
+                    text-3xl
+                    font-black
+                    mt-1">
+
+                    Player
+
+                </h2>
+
+            </div>
+
+
+            <button
+                onclick="closePlayerModal()"
+                class="
+                text-gray-500
+                hover:text-white
+                text-2xl">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="modal-player-content"
+            class="p-6">
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer
+    class="
+    max-w-7xl
+    mx-auto
+    px-4
+    sm:px-6
+    pb-10
+    text-center
+    text-xs
+    text-gray-600">
+
+    Fantasy PvM League • Vintage OSRS
+
+</footer>
 
 
 
@@ -1135,24 +2067,22 @@
 
 
 /* =========================================================
-   CONFIGURATION
+   CONFIG
 ========================================================= */
 
 const CONFIG = {
 
+
     /*
-     ============================================================
+     ========================================================
      EVENT START
-     ============================================================
+     ========================================================
 
-     CHANGE THIS DATE WHEN YOU NEED TO.
+     CURRENT VALUE:
+     20 September 2026 at 19:00 UK time.
 
-     Current setting:
-
-     20 September 2026
-     19:00 UK time
-
-     ============================================================
+     Change ONLY this when your event start changes.
+     ========================================================
     */
 
     EVENT_START:
@@ -1160,32 +2090,23 @@ const CONFIG = {
 
 
     /*
-     Each event day lasts exactly 24 hours.
+     Seven 24-hour days.
     */
 
-    DAY_LENGTH:
-        24 * 60 * 60 * 1000,
-
-
-    /*
-     Seven days.
-    */
-
-    BOSS_COUNT:
+    EVENT_DAYS:
         7,
 
 
+    DAY_LENGTH:
+        24 *
+        60 *
+        60 *
+        1000,
+
+
     /*
-     F:L in Google Sheets.
-
-     A = 0
-     B = 1
-     C = 2
-     D = 3
-     E = 4
-     F = 5
-
-     Therefore F:L = 5 through 11.
+     Fantasy PvM:
+     F:L = indexes 5:11
     */
 
     BOSS_START_INDEX:
@@ -1193,15 +2114,34 @@ const CONFIG = {
 
 
     /*
-     Refresh Google Sheets every 60 seconds.
+     M = total points
     */
 
-    REFRESH_MS:
-        60000,
+    TOTAL_POINTS_INDEX:
+        12,
 
 
     /*
-     Your published CSV sheets.
+     Fantasy budget.
+
+     CHANGE THIS if your budget isn't 250m.
+    */
+
+    FANTASY_BUDGET:
+        250,
+
+
+    /*
+     Refresh Google Sheets every minute.
+    */
+
+    REFRESH_MS:
+        60 *
+        1000,
+
+
+    /*
+     Google Sheets.
     */
 
     CSV: {
@@ -1210,13 +2150,7 @@ const CONFIG = {
             "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=1220418834&single=true&output=csv",
 
         teams:
-            "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=2004919509&single=true&output=csv",
-
-        teamLeaderboard:
-            "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=1417622882&single=true&output=csv",
-
-        pvmLeaderboard:
-            "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=752592411&single=true&output=csv"
+            "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=2004919509&single=true&output=csv"
 
     }
 
@@ -1225,33 +2159,51 @@ const CONFIG = {
 
 
 /* =========================================================
-   GLOBAL DATA
+   GLOBAL STATE
 ========================================================= */
 
-let fantasyRows = [];
+let fantasyHeaders =
+    [];
 
-let fantasyHeaders = [];
+let fantasyRows =
+    [];
 
-let teams = {};
+let teams =
+    {};
 
-let teamLeaderboard = [];
+let teamLeaderboard =
+    [];
 
-let pvmLeaderboard = [];
+let pvmLeaderboard =
+    [];
 
-let bossNames = [];
+let bossNames =
+    [];
 
-let currentTeam = "";
+let currentTeam =
+    "";
+
+let lastDataUpdate =
+    null;
+
+let serverTimeOffset =
+    0;
 
 
 
 /* =========================================================
-   HELPER FUNCTIONS
+   GENERAL HELPERS
 ========================================================= */
 
 function clean(value) {
 
-    return String(value ?? "")
-        .replace(/\uFEFF/g, "")
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /\uFEFF/g,
+            ""
+        )
         .trim();
 
 }
@@ -1261,7 +2213,10 @@ function normalise(value) {
 
     return clean(value)
         .toLowerCase()
-        .replace(/\s+/g, " ");
+        .replace(
+            /\s+/g,
+            " "
+        );
 
 }
 
@@ -1269,8 +2224,14 @@ function normalise(value) {
 function slug(value) {
 
     return normalise(value)
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
+        .replace(
+            /[^a-z0-9]+/g,
+            "-"
+        )
+        .replace(
+            /^-+|-+$/g,
+            ""
+        );
 
 }
 
@@ -1291,13 +2252,21 @@ function num(value) {
     const parsed =
         parseFloat(
             String(value)
-                .replace(/,/g, "")
-                .replace(/m$/i, "")
+                .replace(
+                    /,/g,
+                    ""
+                )
+                .replace(
+                    /m$/i,
+                    ""
+                )
                 .trim()
         );
 
 
-    return Number.isFinite(parsed)
+    return Number.isFinite(
+        parsed
+    )
         ? parsed
         : 0;
 
@@ -1306,14 +2275,17 @@ function num(value) {
 
 function formatPoints(value) {
 
-    return num(value).toFixed(2);
+    return num(value)
+        .toFixed(2);
 
 }
 
 
 function formatValue(value) {
 
-    const n = num(value);
+    const n =
+        num(value);
+
 
     if (
         Number.isInteger(n)
@@ -1323,6 +2295,7 @@ function formatValue(value) {
 
     }
 
+
     return `${n.toFixed(1)}m`;
 
 }
@@ -1330,57 +2303,239 @@ function formatValue(value) {
 
 function escapeHtml(value) {
 
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+function escapeAttribute(value) {
+
+    return escapeHtml(
+        value
+    )
+        .replace(
+            /`/g,
+            "&#096;"
+        );
 
 }
 
 
 
 /* =========================================================
-   CSV LOADER
+   CSV PARSER
 ========================================================= */
 
-function loadCSV(url) {
+function parseCSV(text) {
 
-    return new Promise(
-        (resolve, reject) => {
+    const rows =
+        [];
 
-            Papa.parse(
+    let row =
+        [];
 
-                url +
-                "&cache=" +
-                Date.now(),
+    let cell =
+        "";
 
-                {
+    let quoted =
+        false;
 
-                    download: true,
 
-                    skipEmptyLines: false,
+    for (
+        let i = 0;
+        i < text.length;
+        i++
+    ) {
 
-                    complete(results) {
+        const char =
+            text[i];
 
-                        resolve(
-                            results.data
-                        );
+        const next =
+            text[i + 1];
 
-                    },
 
-                    error(error) {
+        if (
+            char === '"'
+        ) {
 
-                        reject(error);
+            if (
+                quoted &&
+                next === '"'
+            ) {
 
-                    }
+                cell +=
+                    '"';
 
-                }
+                i++;
 
-            );
+                continue;
+
+            }
+
+
+            quoted =
+                !quoted;
+
+            continue;
 
         }
+
+
+        if (
+            char === "," &&
+            !quoted
+        ) {
+
+            row.push(
+                cell
+            );
+
+            cell =
+                "";
+
+            continue;
+
+        }
+
+
+        if (
+            (
+                char === "\n" ||
+                char === "\r"
+            ) &&
+            !quoted
+        ) {
+
+            if (
+                char === "\r" &&
+                next === "\n"
+            ) {
+
+                i++;
+
+            }
+
+
+            row.push(
+                cell
+            );
+
+
+            rows.push(
+                row
+            );
+
+
+            row =
+                [];
+
+            cell =
+                "";
+
+            continue;
+
+        }
+
+
+        cell +=
+            char;
+
+    }
+
+
+    row.push(
+        cell
+    );
+
+
+    if (
+        row.length > 1 ||
+        row[0] !== ""
+    ) {
+
+        rows.push(
+            row
+        );
+
+    }
+
+
+    return rows;
+
+}
+
+
+
+/* =========================================================
+   LOAD CSV
+========================================================= */
+
+async function loadCSV(
+    url
+) {
+
+    const response =
+        await fetch(
+            url +
+            "&cacheBust=" +
+            Date.now(),
+            {
+                cache:
+                    "no-store"
+            }
+        );
+
+
+    if (
+        !response.ok
+    ) {
+
+        throw new Error(
+            `HTTP ${response.status}`
+        );
+
+    }
+
+
+    const text =
+        await response.text();
+
+
+    if (
+        !text.trim()
+    ) {
+
+        throw new Error(
+            "The Google Sheet returned no data."
+        );
+
+    }
+
+
+    return parseCSV(
+        text
     );
 
 }
@@ -1393,9 +2548,17 @@ function loadCSV(url) {
 
 async function loadEverything() {
 
+    setDataStatus(
+        "Refreshing data..."
+    );
+
+
     try {
 
-        const results =
+        const [
+            fantasy,
+            teamsCSV
+        ] =
             await Promise.all([
 
                 loadCSV(
@@ -1404,53 +2567,23 @@ async function loadEverything() {
 
                 loadCSV(
                     CONFIG.CSV.teams
-                ),
-
-                loadCSV(
-                    CONFIG.CSV.teamLeaderboard
-                ),
-
-                loadCSV(
-                    CONFIG.CSV.pvmLeaderboard
                 )
 
             ]);
 
 
         parseFantasy(
-            results[0]
+            fantasy
         );
 
 
         parseTeams(
-            results[1]
+            teamsCSV
         );
 
 
-        /*
-         * We calculate the leaderboards
-         * ourselves from the main data.
-         */
+        buildLeaderboards();
 
-        parseTeamLeaderboard();
-
-
-        parsePvmLeaderboard();
-
-
-        /*
-         * Keep the boss names from F1:L1.
-         */
-
-        console.log(
-            "Bosses:",
-            bossNames
-        );
-
-
-        /*
-         * Choose current team.
-         */
 
         chooseInitialTeam();
 
@@ -1461,18 +2594,35 @@ async function loadEverything() {
         renderAll();
 
 
-        updateEvent();
+        lastDataUpdate =
+            new Date();
 
 
-    } catch (error) {
+        setDataStatus(
+            `Updated ${formatClock(
+                lastDataUpdate
+            )}`
+        );
+
+
+    } catch (
+        error
+    ) {
 
         console.error(
-            "Google Sheet error:",
+            "Data loading error:",
             error
         );
 
 
-        showDataError();
+        setDataStatus(
+            "Data error"
+        );
+
+
+        showDataError(
+            error
+        );
 
     }
 
@@ -1481,47 +2631,40 @@ async function loadEverything() {
 
 
 /* =========================================================
-   FANTASY PvM SHEET
+   FANTASY PvM DATA
 ========================================================= */
 
-function parseFantasy(data) {
+function parseFantasy(
+    data
+) {
 
-    fantasyRows = [];
+    fantasyRows =
+        [];
 
     fantasyHeaders =
-        data[0] || [];
+        data[0] ||
+        [];
 
 
     /*
-     ============================================================
-     BOSS NAMES
-     ============================================================
+     * Read F:L as bosses.
+     */
 
-     F1:L1
-
-     F = index 5
-     G = index 6
-     H = index 7
-     I = index 8
-     J = index 9
-     K = index 10
-     L = index 11
-     ============================================================
-    */
-
-    bossNames = [];
+    bossNames =
+        [];
 
 
     for (
         let i = 0;
-        i < CONFIG.BOSS_COUNT;
+        i < CONFIG.EVENT_DAYS;
         i++
     ) {
 
         const boss =
             clean(
                 fantasyHeaders[
-                    CONFIG.BOSS_START_INDEX + i
+                    CONFIG.BOSS_START_INDEX +
+                    i
                 ]
             );
 
@@ -1535,10 +2678,8 @@ function parseFantasy(data) {
 
 
     /*
-     ============================================================
-     PLAYER DATA
-     ============================================================
-    */
+     * Read players.
+     */
 
     for (
         let i = 1;
@@ -1550,28 +2691,40 @@ function parseFantasy(data) {
             data[i];
 
 
-        if (!row) {
+        if (
+            !row
+        ) {
+
             continue;
+
         }
 
 
         const playerName =
-            clean(row[0]);
+            clean(
+                row[0]
+            );
 
 
-        if (!playerName) {
+        if (
+            !playerName
+        ) {
+
             continue;
+
         }
 
 
         const lower =
-            normalise(playerName);
+            normalise(
+                playerName
+            );
 
 
         if (
             lower === "player" ||
-            lower === "total" ||
-            lower === "players"
+            lower === "players" ||
+            lower === "total"
         ) {
 
             continue;
@@ -1593,49 +2746,56 @@ function parseFantasy(data) {
    GET PLAYER
 ========================================================= */
 
-function getPlayer(playerName) {
+function getPlayer(
+    playerName
+) {
 
     const target =
-        normalise(playerName);
+        normalise(
+            playerName
+        );
 
 
     const row =
         fantasyRows.find(
             item =>
-                normalise(item[0]) === target
+                normalise(
+                    item[0]
+                ) ===
+                target
         );
 
 
-    /*
-     * Player not found.
-     */
-
-    if (!row) {
+    if (
+        !row
+    ) {
 
         return {
 
-            name: playerName,
+            name:
+                playerName,
 
-            ehb: 0,
+            ehb:
+                0,
 
-            value: 0,
+            value:
+                0,
 
-            monthlyEhb: 0,
+            monthlyEhb:
+                0,
 
-            daily: [
-                0,0,0,0,0,0,0
-            ],
+            daily:
+                Array(
+                    CONFIG.EVENT_DAYS
+                ).fill(0),
 
-            total: 0
+            total:
+                0
 
         };
 
     }
 
-
-    /*
-     * F:L = daily scores.
-     */
 
     const daily =
         [];
@@ -1643,42 +2803,50 @@ function getPlayer(playerName) {
 
     for (
         let i = 0;
-        i < CONFIG.BOSS_COUNT;
+        i < CONFIG.EVENT_DAYS;
         i++
     ) {
 
         daily.push(
-
             num(
                 row[
-                    CONFIG.BOSS_START_INDEX + i
+                    CONFIG.BOSS_START_INDEX +
+                    i
                 ]
             )
-
         );
 
     }
 
 
-    /*
-     * M = total points.
-     */
-
-    const officialTotal =
-        num(row[12]);
-
-
     const calculatedTotal =
         daily.reduce(
-            (sum, value) =>
-                sum + value,
+            (
+                total,
+                value
+            ) =>
+                total + value,
             0
         );
 
 
+    const officialTotal =
+        num(
+            row[
+                CONFIG.TOTAL_POINTS_INDEX
+            ]
+        );
+
+
+    /*
+     * If M contains a number, use it.
+     * Otherwise calculate from F:L.
+     */
+
     const total =
-        officialTotal ||
-        calculatedTotal;
+        officialTotal !== 0
+            ? officialTotal
+            : calculatedTotal;
 
 
     return {
@@ -1706,29 +2874,15 @@ function getPlayer(playerName) {
 
 
 /* =========================================================
-   TEAMS SHEET
+   PARSE TEAMS
 ========================================================= */
 
-function parseTeams(data) {
+function parseTeams(
+    data
+) {
 
-    teams = {};
-
-
-    /*
-     Expected structure:
-
-     Row:
-     Skrull
-
-     Row:
-     Players | Value | Points
-
-     Next 5 rows:
-     Player | Value | Points
-
-     Next row:
-     blank | Total Value | Total Points
-    */
+    teams =
+        {};
 
 
     for (
@@ -1741,37 +2895,8 @@ function parseTeams(data) {
             data[r];
 
 
-        if (!row) {
-            continue;
-        }
-
-
-        const teamName =
-            clean(row[0]);
-
-
-        if (!teamName) {
-            continue;
-        }
-
-
-        const headerRow =
-            data[r + 1];
-
-
-        if (!headerRow) {
-            continue;
-        }
-
-
-        /*
-         * A team is identified by
-         * the following row saying "Players".
-         */
-
         if (
-            normalise(headerRow[0]) !==
-            "players"
+            !row
         ) {
 
             continue;
@@ -1779,12 +2904,61 @@ function parseTeams(data) {
         }
 
 
-        const roster = [];
+        const teamName =
+            clean(
+                row[0]
+            );
+
+
+        if (
+            !teamName
+        ) {
+
+            continue;
+
+        }
+
+
+        const headerRow =
+            data[r + 1];
+
+
+        if (
+            !headerRow
+        ) {
+
+            continue;
+
+        }
 
 
         /*
-         * Five players.
+         * Your structure is:
+
+         * Team Name
+         * Players | Value | Points
+         * Player 1
+         * Player 2
+         * Player 3
+         * Player 4
+         * Player 5
+         * blank | total value | total points
          */
+
+        if (
+            normalise(
+                headerRow[0]
+            ) !== "players"
+        ) {
+
+            continue;
+
+        }
+
+
+        const roster =
+            [];
+
 
         for (
             let i = 1;
@@ -1793,20 +2967,32 @@ function parseTeams(data) {
         ) {
 
             const playerRow =
-                data[r + 1 + i];
+                data[
+                    r + 1 + i
+                ];
 
 
-            if (!playerRow) {
+            if (
+                !playerRow
+            ) {
+
                 continue;
+
             }
 
 
             const playerName =
-                clean(playerRow[0]);
+                clean(
+                    playerRow[0]
+                );
 
 
-            if (!playerName) {
+            if (
+                !playerName
+            ) {
+
                 continue;
+
             }
 
 
@@ -1816,34 +3002,42 @@ function parseTeams(data) {
                     playerName,
 
                 value:
-                    num(playerRow[1]),
+                    num(
+                        playerRow[1]
+                    ),
 
                 points:
-                    num(playerRow[2])
+                    num(
+                        playerRow[2]
+                    )
 
             });
 
         }
 
 
-        /*
-         * Total row.
-
-         * Team header
-         * +1 headers
-         * +2 player 1
-         * +3 player 2
-         * +4 player 3
-         * +5 player 4
-         * +6 player 5
-         * +7 totals
-         */
-
         const totalRow =
-            data[r + 7] || [];
+            data[
+                r + 7
+            ] ||
+            [];
 
 
-        teams[slug(teamName)] = {
+        const totalValue =
+            num(
+                totalRow[1]
+            );
+
+
+        const totalPoints =
+            num(
+                totalRow[2]
+            );
+
+
+        teams[
+            slug(teamName)
+        ] = {
 
             name:
                 teamName,
@@ -1852,34 +3046,35 @@ function parseTeams(data) {
                 roster,
 
             value:
-                num(totalRow[1]),
+                totalValue,
 
             points:
-                num(totalRow[2])
+                totalPoints
 
         };
 
     }
-
-
-    console.log(
-        "Teams loaded:",
-        teams
-    );
 
 }
 
 
 
 /* =========================================================
-   TEAM LEADERBOARD
+   BUILD LEADERBOARDS
 ========================================================= */
 
-function parseTeamLeaderboard() {
+function buildLeaderboards() {
+
+    /*
+     * TEAM LEADERBOARD
+     */
 
     teamLeaderboard =
-        Object.values(teams)
-            .map(team => ({
+        Object.values(
+            teams
+        )
+        .map(
+            team => ({
 
                 name:
                     team.name,
@@ -1888,40 +3083,50 @@ function parseTeamLeaderboard() {
                     team.value,
 
                 points:
-                    team.points
+                    team.points,
 
-            }))
-            .sort(
-                (a, b) =>
-                    b.points - a.points
-            );
+                players:
+                    team.players.length
 
-
-    teamLeaderboard.forEach(
-        (team, index) => {
-
-            team.rank =
-                index + 1;
-
-        }
-    );
-
-}
+            })
+        )
+        .sort(
+            (
+                a,
+                b
+            ) =>
+                b.points -
+                a.points
+        );
 
 
+    teamLeaderboard
+        .forEach(
+            (
+                team,
+                index
+            ) => {
 
-/* =========================================================
-   PVM LEADERBOARD
-========================================================= */
+                team.rank =
+                    index + 1;
 
-function parsePvmLeaderboard() {
+            }
+        );
+
+
+    /*
+     * PVM LEADERBOARD
+     */
 
     pvmLeaderboard =
         fantasyRows
-            .map(row => {
+        .map(
+            row => {
 
                 const player =
-                    getPlayer(row[0]);
+                    getPlayer(
+                        row[0]
+                    );
 
 
                 return {
@@ -1936,54 +3141,70 @@ function parsePvmLeaderboard() {
                         player.value,
 
                     points:
-                        player.total
+                        player.total,
+
+                    daily:
+                        player.daily
 
                 };
 
-            })
-            .sort(
-                (a, b) =>
-                    b.points - a.points
-            );
+            }
+        )
+        .sort(
+            (
+                a,
+                b
+            ) =>
+                b.points -
+                a.points
+        );
 
 
-    pvmLeaderboard.forEach(
-        (player, index) => {
+    pvmLeaderboard
+        .forEach(
+            (
+                player,
+                index
+            ) => {
 
-            player.rank =
-                index + 1;
+                player.rank =
+                    index + 1;
 
-        }
-    );
+            }
+        );
 
 }
 
 
 
 /* =========================================================
-   TEAM SELECTION
+   INITIAL TEAM
 ========================================================= */
 
 function chooseInitialTeam() {
 
-    const url =
+    const params =
         new URLSearchParams(
             window.location.search
         );
 
 
-    const requestedTeam =
-        url.get("team");
+    const urlTeam =
+        params.get(
+            "team"
+        );
 
 
     if (
-        requestedTeam &&
-        teams[slug(requestedTeam)]
+        urlTeam &&
+        teams[
+            slug(urlTeam)
+        ]
     ) {
 
         currentTeam =
             teams[
-                slug(requestedTeam)
+                slug(urlTeam)
             ].name;
 
         return;
@@ -1991,30 +3212,68 @@ function chooseInitialTeam() {
     }
 
 
-    const availableTeams =
-        Object.values(teams);
+    /*
+     * Remember the last team selected.
+     */
+
+    const storedTeam =
+        localStorage.getItem(
+            "fantasyPvmTeam"
+        );
 
 
     if (
-        availableTeams.length > 0
+        storedTeam &&
+        teams[
+            slug(storedTeam)
+        ]
     ) {
 
         currentTeam =
-            availableTeams[0].name;
+            teams[
+                slug(storedTeam)
+            ].name;
 
-    } else {
-
-        currentTeam =
-            "";
+        return;
 
     }
+
+
+    /*
+     * Otherwise first alphabetical team.
+     */
+
+    const allTeams =
+        Object.values(
+            teams
+        )
+        .sort(
+            (
+                a,
+                b
+            ) =>
+                a.name.localeCompare(
+                    b.name,
+                    undefined,
+                    {
+                        sensitivity:
+                            "base"
+                    }
+                )
+        );
+
+
+    currentTeam =
+        allTeams.length
+            ? allTeams[0].name
+            : "";
 
 }
 
 
 
 /* =========================================================
-   TEAM SELECT DROPDOWN
+   TEAM SELECTOR
 ========================================================= */
 
 function populateTeamSelector() {
@@ -2025,17 +3284,44 @@ function populateTeamSelector() {
         );
 
 
-    select.innerHTML = "";
+    select.innerHTML =
+        "";
 
 
     const sortedTeams =
-        Object.values(teams)
-            .sort(
-                (a, b) =>
-                    a.name.localeCompare(
-                        b.name
-                    )
-            );
+        Object.values(
+            teams
+        )
+        .sort(
+            (
+                a,
+                b
+            ) =>
+                a.name.localeCompare(
+                    b.name,
+                    undefined,
+                    {
+                        sensitivity:
+                            "base"
+                    }
+                )
+        );
+
+
+    if (
+        !sortedTeams.length
+    ) {
+
+        select.innerHTML =
+            `
+            <option>
+                No teams found
+            </option>
+            `;
+
+        return;
+
+    }
 
 
     sortedTeams.forEach(
@@ -2074,18 +3360,24 @@ function populateTeamSelector() {
    TEAM RANK
 ========================================================= */
 
-function getTeamRank(teamName) {
+function getTeamRank(
+    teamName
+) {
 
-    const found =
+    const team =
         teamLeaderboard.find(
-            team =>
-                normalise(team.name) ===
-                normalise(teamName)
+            item =>
+                normalise(
+                    item.name
+                ) ===
+                normalise(
+                    teamName
+                )
         );
 
 
-    return found
-        ? found.rank
+    return team
+        ? team.rank
         : "-";
 
 }
@@ -2093,7 +3385,7 @@ function getTeamRank(teamName) {
 
 
 /* =========================================================
-   RENDER EVERYTHING
+   RENDER ALL
 ========================================================= */
 
 function renderAll() {
@@ -2106,18 +3398,26 @@ function renderAll() {
 
     renderPvmLeaderboard();
 
+    renderEventProgress();
+
+    renderDailyScores();
+
 }
 
 
 
 /* =========================================================
-   HOME RENDER
+   RENDER HOME
 ========================================================= */
 
 function renderHome() {
 
-    if (!currentTeam) {
+    if (
+        !currentTeam
+    ) {
+
         return;
+
     }
 
 
@@ -2127,8 +3427,12 @@ function renderHome() {
         ];
 
 
-    if (!team) {
+    if (
+        !team
+    ) {
+
         return;
+
     }
 
 
@@ -2162,6 +3466,48 @@ function renderHome() {
         );
 
 
+    const remaining =
+        Math.max(
+            0,
+            CONFIG.FANTASY_BUDGET -
+            team.value
+        );
+
+
+    document.getElementById(
+        "home-budget-remaining"
+    ).innerText =
+        formatValue(
+            remaining
+        );
+
+
+    const percent =
+        Math.min(
+            100,
+            Math.max(
+                0,
+                (
+                    team.value /
+                    CONFIG.FANTASY_BUDGET
+                ) *
+                100
+            )
+        );
+
+
+    document.getElementById(
+        "budget-percent"
+    ).innerText =
+        `${percent.toFixed(0)}%`;
+
+
+    document.getElementById(
+        "budget-bar"
+    ).style.width =
+        `${percent}%`;
+
+
     document.getElementById(
         "home-team-select"
     ).value =
@@ -2180,7 +3526,9 @@ function renderHome() {
    RENDER ROSTER
 ========================================================= */
 
-function renderRoster(team) {
+function renderRoster(
+    team
+) {
 
     const container =
         document.getElementById(
@@ -2188,11 +3536,15 @@ function renderRoster(team) {
         );
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
     team.players.forEach(
-        (teamPlayer, index) => {
+        (
+            teamPlayer,
+            index
+        ) => {
 
             const player =
                 getPlayer(
@@ -2200,55 +3552,59 @@ function renderRoster(team) {
                 );
 
 
-            let dailyHtml =
-                "";
+            const daily =
+                player.daily
+                    .map(
+                        (
+                            value,
+                            day
+                        ) =>
+                            `
+
+                            <div
+                                class="
+                                flex
+                                justify-between
+                                text-[11px]">
+
+                                <span
+                                    class="
+                                    text-gray-600">
+
+                                    D${day + 1}
+
+                                </span>
 
 
-            player.daily.forEach(
-                (value, day) => {
+                                <span
+                                    class="${
+                                        value > 0
+                                            ? "text-green-400"
+                                            : "text-gray-700"
+                                    }">
 
-                    const boss =
-                        bossNames[day] ||
-                        `Day ${day + 1}`;
+                                    ${formatPoints(
+                                        value
+                                    )}
 
+                                </span>
 
-                    dailyHtml += `
+                            </div>
 
-                        <div
-                            class="
-                            flex
-                            justify-between
-                            text-[11px]">
-
-                            <span
-                                class="text-gray-600">
-
-                                D${day + 1}
-
-                            </span>
-
-                            <span
-                                class="${
-                                    value > 0
-                                        ? "text-green-400"
-                                        : "text-gray-700"
-                                }">
-
-                                ${formatPoints(value)}
-
-                            </span>
-
-                        </div>
-
-                    `;
-
-                }
-            );
+                            `
+                    )
+                    .join("");
 
 
             container.innerHTML += `
 
-                <article
+                <button
+                    onclick="openPlayerModal('${escapeAttribute(
+                        player.name
+                    ).replace(
+                        /'/g,
+                        "\\'"
+                    )}')"
                     class="
                     player-card
                     glass
@@ -2256,18 +3612,38 @@ function renderRoster(team) {
                     border-gray-800
                     rounded-2xl
                     p-4
+                    text-left
                     fade-in">
 
 
                     <div
                         class="
-                        text-[10px]
-                        uppercase
-                        tracking-widest
-                        text-blue-400
-                        font-bold">
+                        flex
+                        items-center
+                        justify-between">
 
-                        Player ${index + 1}
+
+                        <div
+                            class="
+                            text-[10px]
+                            uppercase
+                            tracking-widest
+                            text-blue-400
+                            font-bold">
+
+                            Player ${index + 1}
+
+                        </div>
+
+
+                        <div
+                            class="
+                            text-[10px]
+                            text-gray-700">
+
+                            View
+
+                        </div>
 
                     </div>
 
@@ -2277,10 +3653,11 @@ function renderRoster(team) {
                         text-xl
                         font-black
                         mt-2
-                        truncate"
-                        title="${escapeHtml(player.name)}">
+                        truncate">
 
-                        ${escapeHtml(player.name)}
+                        ${escapeHtml(
+                            player.name
+                        )}
 
                     </h3>
 
@@ -2291,7 +3668,9 @@ function renderRoster(team) {
                         text-gray-500
                         mt-1">
 
-                        ${formatPoints(player.ehb)}
+                        ${formatPoints(
+                            player.ehb
+                        )}
                         EHB
 
                     </div>
@@ -2319,7 +3698,9 @@ function renderRoster(team) {
                             font-black
                             text-green-400">
 
-                            ${formatPoints(player.total)}
+                            ${formatPoints(
+                                player.total
+                            )}
 
                         </div>
 
@@ -2341,8 +3722,10 @@ function renderRoster(team) {
                             text-xs
                             mb-2">
 
+
                             <span
-                                class="text-gray-500">
+                                class="
+                                text-gray-500">
 
                                 Value
 
@@ -2354,7 +3737,9 @@ function renderRoster(team) {
                                 text-yellow-400
                                 font-bold">
 
-                                ${formatValue(player.value)}
+                                ${formatValue(
+                                    player.value
+                                )}
 
                             </span>
 
@@ -2365,11 +3750,12 @@ function renderRoster(team) {
                             class="
                             flex
                             justify-between
-                            text-xs
-                            mb-3">
+                            text-xs">
+
 
                             <span
-                                class="text-gray-500">
+                                class="
+                                text-gray-500">
 
                                 Monthly EHB
 
@@ -2379,7 +3765,9 @@ function renderRoster(team) {
                             <span
                                 class="font-semibold">
 
-                                ${formatPoints(player.monthlyEhb)}
+                                ${formatPoints(
+                                    player.monthlyEhb
+                                )}
 
                             </span>
 
@@ -2393,7 +3781,7 @@ function renderRoster(team) {
                         border-t
                         border-gray-800
                         pt-3
-                        mt-1">
+                        mt-3">
 
 
                         <div
@@ -2404,7 +3792,7 @@ function renderRoster(team) {
                             text-gray-600
                             mb-2">
 
-                            Daily Scores
+                            Daily
 
                         </div>
 
@@ -2412,13 +3800,13 @@ function renderRoster(team) {
                         <div
                             class="space-y-1">
 
-                            ${dailyHtml}
+                            ${daily}
 
                         </div>
 
                     </div>
 
-                </article>
+                </button>
 
             `;
 
@@ -2441,40 +3829,119 @@ function renderTeamsPage() {
         );
 
 
-    container.innerHTML = "";
+    const search =
+        normalise(
+            document.getElementById(
+                "teams-search"
+            )?.value ||
+            ""
+        );
 
 
-    const sortedTeams =
-        Object.values(teams)
-            .sort(
-                (a, b) =>
-                    b.points - a.points
-            );
+    const filtered =
+        Object.values(
+            teams
+        )
+        .filter(
+            team =>
+                !search ||
+                normalise(
+                    team.name
+                )
+                .includes(
+                    search
+                )
+        )
+        .sort(
+            (
+                a,
+                b
+            ) =>
+                a.name.localeCompare(
+                    b.name,
+                    undefined,
+                    {
+                        sensitivity:
+                            "base"
+                    }
+                )
+        );
 
 
-    sortedTeams.forEach(
+    document.getElementById(
+        "teams-count"
+    ).innerText =
+        `${filtered.length} team${
+            filtered.length === 1
+                ? ""
+                : "s"
+        }`;
+
+
+    container.innerHTML =
+        "";
+
+
+    if (
+        !filtered.length
+    ) {
+
+        container.innerHTML =
+            `
+            <div
+                class="
+                col-span-full
+                glass
+                border
+                border-gray-800
+                rounded-2xl
+                p-6
+                text-gray-500">
+
+                No teams match your search.
+
+            </div>
+            `;
+
+        return;
+
+    }
+
+
+    filtered.forEach(
         team => {
+
+            const rank =
+                getTeamRank(
+                    team.name
+                );
+
 
             container.innerHTML += `
 
                 <button
-                    onclick="openTeam('${escapeHtml(team.name).replace(/'/g, "\\'")}')"
+                    onclick="openTeam('${escapeAttribute(
+                        team.name
+                    ).replace(
+                        /'/g,
+                        "\\'"
+                    )}')"
                     class="
+                    team-card
                     glass
                     border
                     border-gray-800
                     rounded-2xl
                     p-5
-                    text-left
-                    hover:border-blue-500/40
-                    transition">
+                    text-left">
 
 
                     <div
                         class="
                         flex
+                        items-start
                         justify-between
-                        items-start">
+                        gap-4">
 
 
                         <div>
@@ -2487,7 +3954,7 @@ function renderTeamsPage() {
                                 text-blue-400
                                 font-bold">
 
-                                Team
+                                Fantasy Team
 
                             </div>
 
@@ -2498,7 +3965,9 @@ function renderTeamsPage() {
                                 font-black
                                 mt-1">
 
-                                ${escapeHtml(team.name)}
+                                ${escapeHtml(
+                                    team.name
+                                )}
 
                             </div>
 
@@ -2507,10 +3976,15 @@ function renderTeamsPage() {
 
                         <div
                             class="
-                            text-xs
-                            text-gray-500">
+                            text-sm
+                            font-black
+                            ${
+                                rank <= 3
+                                    ? "text-yellow-400"
+                                    : "text-gray-500"
+                            }">
 
-                            #${getTeamRank(team.name)}
+                            #${rank}
 
                         </div>
 
@@ -2531,7 +4005,6 @@ function renderTeamsPage() {
                             rounded-xl
                             p-3">
 
-
                             <div
                                 class="
                                 text-[10px]
@@ -2549,7 +4022,9 @@ function renderTeamsPage() {
                                 font-black
                                 text-yellow-400">
 
-                                ${formatValue(team.value)}
+                                ${formatValue(
+                                    team.value
+                                )}
 
                             </div>
 
@@ -2561,7 +4036,6 @@ function renderTeamsPage() {
                             bg-black/20
                             rounded-xl
                             p-3">
-
 
                             <div
                                 class="
@@ -2580,7 +4054,9 @@ function renderTeamsPage() {
                                 font-black
                                 text-green-400">
 
-                                ${formatPoints(team.points)}
+                                ${formatPoints(
+                                    team.points
+                                )}
 
                             </div>
 
@@ -2597,10 +4073,12 @@ function renderTeamsPage() {
                         pt-4
                         space-y-1">
 
+
                         ${
                             team.players
                                 .map(
-                                    player => `
+                                    player =>
+                                        `
 
                                         <div
                                             class="
@@ -2609,23 +4087,34 @@ function renderTeamsPage() {
                                             text-sm">
 
                                             <span
-                                                class="font-semibold">
+                                                class="
+                                                font-semibold
+                                                truncate
+                                                pr-3">
 
-                                                ${escapeHtml(player.name)}
+                                                ${escapeHtml(
+                                                    player.name
+                                                )}
 
                                             </span>
 
 
                                             <span
-                                                class="text-gray-500">
+                                                class="
+                                                text-gray-500
+                                                whitespace-nowrap">
 
-                                                ${formatPoints(player.points)}
+                                                ${formatPoints(
+                                                    getPlayer(
+                                                        player.name
+                                                    ).total
+                                                )}
 
                                             </span>
 
                                         </div>
 
-                                    `
+                                        `
                                 )
                                 .join("")
                         }
@@ -2655,18 +4144,88 @@ function renderTeamLeaderboard() {
         );
 
 
-    body.innerHTML = "";
+    const search =
+        normalise(
+            document.getElementById(
+                "team-leader-search"
+            )?.value ||
+            ""
+        );
 
 
-    teamLeaderboard.forEach(
+    const filtered =
+        teamLeaderboard
+        .filter(
+            team =>
+                !search ||
+                normalise(
+                    team.name
+                )
+                .includes(
+                    search
+                )
+        );
+
+
+    document.getElementById(
+        "team-leader-count"
+    ).innerText =
+        `${filtered.length} team${
+            filtered.length === 1
+                ? ""
+                : "s"
+        }`;
+
+
+    body.innerHTML =
+        "";
+
+
+    if (
+        !filtered.length
+    ) {
+
+        body.innerHTML =
+            `
+            <tr>
+
+                <td
+                    colspan="5"
+                    class="
+                    px-5
+                    py-8
+                    text-gray-500">
+
+                    No teams match your search.
+
+                </td>
+
+            </tr>
+            `;
+
+        return;
+
+    }
+
+
+    filtered.forEach(
         team => {
+
+            const top =
+                team.rank <= 3;
+
 
             body.innerHTML += `
 
                 <tr
-                    onclick="openTeam('${escapeHtml(team.name).replace(/'/g, "\\'")}')"
+                    onclick="openTeam('${escapeAttribute(
+                        team.name
+                    ).replace(
+                        /'/g,
+                        "\\'"
+                    )}')"
                     class="
-                    leader-row
+                    table-row
                     cursor-pointer">
 
 
@@ -2675,9 +4234,11 @@ function renderTeamLeaderboard() {
                         px-5
                         py-4">
 
+
                         <span
-                            class="${
-                                team.rank <= 3
+                            class="
+                            ${
+                                top
                                     ? "text-yellow-400"
                                     : "text-gray-500"
                             }
@@ -2696,7 +4257,9 @@ function renderTeamLeaderboard() {
                         py-4
                         font-bold">
 
-                        ${escapeHtml(team.name)}
+                        ${escapeHtml(
+                            team.name
+                        )}
 
                     </td>
 
@@ -2709,7 +4272,9 @@ function renderTeamLeaderboard() {
                         text-yellow-400
                         font-semibold">
 
-                        ${formatValue(team.value)}
+                        ${formatValue(
+                            team.value
+                        )}
 
                     </td>
 
@@ -2722,7 +4287,21 @@ function renderTeamLeaderboard() {
                         text-green-400
                         font-black">
 
-                        ${formatPoints(team.points)}
+                        ${formatPoints(
+                            team.points
+                        )}
+
+                    </td>
+
+
+                    <td
+                        class="
+                        px-5
+                        py-4
+                        text-right
+                        text-gray-400">
+
+                        ${team.players}
 
                     </td>
 
@@ -2749,17 +4328,89 @@ function renderPvmLeaderboard() {
         );
 
 
-    body.innerHTML = "";
+    const search =
+        normalise(
+            document.getElementById(
+                "pvm-search"
+            )?.value ||
+            ""
+        );
 
 
-    pvmLeaderboard.forEach(
+    const filtered =
+        pvmLeaderboard
+            .filter(
+                player =>
+                    !search ||
+                    normalise(
+                        player.name
+                    )
+                    .includes(
+                        search
+                    )
+            );
+
+
+    document.getElementById(
+        "pvm-count"
+    ).innerText =
+        `${filtered.length} player${
+            filtered.length === 1
+                ? ""
+                : "s"
+        }`;
+
+
+    body.innerHTML =
+        "";
+
+
+    if (
+        !filtered.length
+    ) {
+
+        body.innerHTML =
+            `
+            <tr>
+
+                <td
+                    colspan="5"
+                    class="
+                    px-5
+                    py-8
+                    text-gray-500">
+
+                    No players match your search.
+
+                </td>
+
+            </tr>
+            `;
+
+        return;
+
+    }
+
+
+    filtered.forEach(
         player => {
+
+            const top =
+                player.rank <= 3;
+
 
             body.innerHTML += `
 
                 <tr
+                    onclick="openPlayerModal('${escapeAttribute(
+                        player.name
+                    ).replace(
+                        /'/g,
+                        "\\'"
+                    )}')"
                     class="
-                    leader-row">
+                    table-row
+                    cursor-pointer">
 
 
                     <td
@@ -2767,9 +4418,11 @@ function renderPvmLeaderboard() {
                         px-5
                         py-4">
 
+
                         <span
-                            class="${
-                                player.rank <= 3
+                            class="
+                            ${
+                                top
                                     ? "text-yellow-400"
                                     : "text-gray-500"
                             }
@@ -2788,7 +4441,9 @@ function renderPvmLeaderboard() {
                         py-4
                         font-bold">
 
-                        ${escapeHtml(player.name)}
+                        ${escapeHtml(
+                            player.name
+                        )}
 
                     </td>
 
@@ -2797,9 +4452,12 @@ function renderPvmLeaderboard() {
                         class="
                         px-5
                         py-4
-                        text-right">
+                        text-right
+                        text-gray-300">
 
-                        ${formatPoints(player.ehb)}
+                        ${formatPoints(
+                            player.ehb
+                        )}
 
                     </td>
 
@@ -2811,7 +4469,9 @@ function renderPvmLeaderboard() {
                         text-right
                         text-yellow-400">
 
-                        ${formatValue(player.value)}
+                        ${formatValue(
+                            player.value
+                        )}
 
                     </td>
 
@@ -2824,7 +4484,9 @@ function renderPvmLeaderboard() {
                         text-green-400
                         font-black">
 
-                        ${formatPoints(player.points)}
+                        ${formatPoints(
+                            player.points
+                        )}
 
                     </td>
 
@@ -2840,170 +4502,473 @@ function renderPvmLeaderboard() {
 
 
 /* =========================================================
-   OPEN TEAM
+   DAILY SCORE TABLE
 ========================================================= */
 
-function openTeam(teamName) {
+function renderDailyScores() {
 
-    currentTeam =
-        teamName;
-
-
-    /*
-     * Update URL.
-     */
-
-    const url =
-        new URL(
-            window.location.href
-        );
-
-
-    url.searchParams.set(
-        "team",
-        slug(teamName)
-    );
-
-
-    window.history.pushState(
-        {},
-        "",
-        url
-    );
-
-
-    /*
-     * Go home.
-     */
-
-    showPage(
-        "home"
-    );
-
-
-    renderHome();
-
-}
-
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-document
-    .querySelectorAll(".nav-button")
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    showPage(
-                        button.dataset.page
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-function showPage(page) {
-
-    /*
-     * Hide everything.
-     */
-
-    document
-        .querySelectorAll(
-            "main > section"
-        )
-        .forEach(
-            section => {
-
-                section.classList.add(
-                    "hidden"
-                );
-
-            }
-        );
-
-
-    /*
-     * Show requested page.
-     */
-
-    const selected =
+    const container =
         document.getElementById(
-            "page-" + page
+            "daily-score-table"
         );
 
 
-    if (selected) {
+    if (
+        !currentTeam
+    ) {
 
-        selected.classList.remove(
-            "hidden"
-        );
+        return;
 
     }
 
 
-    /*
-     * Highlight navigation button.
-     */
+    const team =
+        teams[
+            slug(currentTeam)
+        ];
 
-    document
-        .querySelectorAll(
-            ".nav-button"
-        )
-        .forEach(
-            button => {
 
-                button.classList.toggle(
-                    "active",
-                    button.dataset.page === page
+    if (
+        !team
+    ) {
+
+        return;
+
+    }
+
+
+    let html = `
+
+        <table
+            class="
+            w-full
+            min-w-[800px]">
+
+            <thead>
+
+                <tr
+                    class="
+                    border-b
+                    border-gray-800">
+
+                    <th
+                        class="
+                        text-left
+                        px-5
+                        py-4
+                        text-xs
+                        uppercase
+                        tracking-wider
+                        text-gray-500">
+
+                        Player
+
+                    </th>
+
+    `;
+
+
+    bossNames.forEach(
+        (
+            boss,
+            index
+        ) => {
+
+            const current =
+                getEventState();
+
+
+            const isCurrent =
+                current.state === "LIVE" &&
+                current.day ===
+                    index + 1;
+
+
+            html += `
+
+                <th
+                    class="
+                    text-right
+                    px-4
+                    py-4
+                    text-xs
+                    uppercase
+                    tracking-wider
+                    ${
+                        isCurrent
+                            ? "text-blue-400"
+                            : "text-gray-500"
+                    }">
+
+                    <div>
+                        D${index + 1}
+                    </div>
+
+                    <div
+                        class="
+                        text-[9px]
+                        mt-1
+                        normal-case
+                        truncate
+                        max-w-[100px]
+                        ${
+                            isCurrent
+                                ? "text-blue-500"
+                                : "text-gray-700"
+                        }">
+
+                        ${escapeHtml(
+                            boss
+                        )}
+
+                    </div>
+
+                </th>
+
+            `;
+
+        }
+    );
+
+
+    html += `
+
+                    <th
+                        class="
+                        text-right
+                        px-5
+                        py-4
+                        text-xs
+                        uppercase
+                        tracking-wider
+                        text-gray-500">
+
+                        Total
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody
+                class="
+                divide-y
+                divide-gray-800">
+
+    `;
+
+
+    team.players.forEach(
+        teamPlayer => {
+
+            const player =
+                getPlayer(
+                    teamPlayer.name
                 );
 
-            }
-        );
+
+            html += `
+
+                <tr
+                    onclick="openPlayerModal('${escapeAttribute(
+                        player.name
+                    ).replace(
+                        /'/g,
+                        "\\'"
+                    )}')"
+                    class="
+                    table-row
+                    cursor-pointer">
 
 
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
+                    <td
+                        class="
+                        px-5
+                        py-4
+                        font-bold">
+
+                        ${escapeHtml(
+                            player.name
+                        )}
+
+                    </td>
+
+            `;
+
+
+            player.daily.forEach(
+                value => {
+
+                    html += `
+
+                        <td
+                            class="
+                            px-4
+                            py-4
+                            text-right
+                            ${
+                                value > 0
+                                    ? "text-green-400"
+                                    : "text-gray-700"
+                            }">
+
+                            ${formatPoints(
+                                value
+                            )}
+
+                        </td>
+
+                    `;
+
+                }
+            );
+
+
+            html += `
+
+                    <td
+                        class="
+                        px-5
+                        py-4
+                        text-right
+                        text-white
+                        font-black">
+
+                        ${formatPoints(
+                            player.total
+                        )}
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+
+    html += `
+
+            </tbody>
+
+        </table>
+
+    `;
+
+
+    container.innerHTML =
+        html;
 
 }
 
 
 
 /* =========================================================
-   TEAM DROPDOWN
+   EVENT PROGRESS
 ========================================================= */
 
-document
-    .getElementById(
-        "home-team-select"
-    )
-    .addEventListener(
-        "change",
-        event => {
+function renderEventProgress() {
 
-            openTeam(
-                event.target.value
-            );
+    const container =
+        document.getElementById(
+            "event-progress"
+        );
+
+
+    if (
+        !container
+    ) {
+
+        return;
+
+    }
+
+
+    const event =
+        getEventState();
+
+
+    container.innerHTML =
+        "";
+
+
+    for (
+        let i = 0;
+        i < CONFIG.EVENT_DAYS;
+        i++
+    ) {
+
+        let status =
+            "upcoming";
+
+
+        if (
+            event.state === "LIVE" &&
+            i + 1 <
+                event.day
+        ) {
+
+            status =
+                "complete";
 
         }
-    );
+
+
+        if (
+            event.state === "LIVE" &&
+            i + 1 ===
+                event.day
+        ) {
+
+            status =
+                "live";
+
+        }
+
+
+        if (
+            event.state === "FINISHED"
+        ) {
+
+            status =
+                "complete";
+
+        }
+
+
+        let dot =
+            "bg-gray-700";
+
+
+        let text =
+            "text-gray-600";
+
+
+        if (
+            status === "complete"
+        ) {
+
+            dot =
+                "bg-green-400";
+
+            text =
+                "text-green-400";
+
+        }
+
+
+        if (
+            status === "live"
+        ) {
+
+            dot =
+                "bg-blue-400";
+
+            text =
+                "text-blue-400";
+
+        }
+
+
+        container.innerHTML += `
+
+            <div
+                class="
+                bg-black/20
+                border
+                border-gray-800
+                rounded-xl
+                p-4">
+
+
+                <div
+                    class="
+                    flex
+                    items-center
+                    gap-2
+                    mb-2">
+
+
+                    <span
+                        class="
+                        status-dot
+                        ${dot}">
+
+                    </span>
+
+
+                    <span
+                        class="
+                        text-[10px]
+                        uppercase
+                        tracking-widest
+                        font-bold
+                        ${text}">
+
+                        Day ${i + 1}
+
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="
+                    font-black
+                    text-sm
+                    truncate">
+
+                    ${escapeHtml(
+                        bossNames[i]
+                    )}
+
+                </div>
+
+
+                <div
+                    class="
+                    text-[10px]
+                    uppercase
+                    tracking-wider
+                    text-gray-600
+                    mt-1">
+
+                    ${
+                        status === "complete"
+                            ? "Complete"
+                            :
+                        status === "live"
+                            ? "Live Now"
+                            :
+                            "Upcoming"
+                    }
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+}
 
 
 
 /* =========================================================
-   EVENT STATE
+   EVENT TIME
 ========================================================= */
+
+function getCurrentTime() {
+
+    return Date.now() +
+        serverTimeOffset;
+
+}
+
 
 function getEventState() {
 
@@ -3014,15 +4979,13 @@ function getEventState() {
 
 
     const now =
-        Date.now();
+        getCurrentTime();
 
-
-    /*
-     * Invalid date.
-     */
 
     if (
-        Number.isNaN(start)
+        Number.isNaN(
+            start
+        )
     ) {
 
         return {
@@ -3045,11 +5008,12 @@ function getEventState() {
 
 
     /*
-     * BEFORE EVENT
+     * Before event.
      */
 
     if (
-        now < start
+        now <
+        start
     ) {
 
         return {
@@ -3065,19 +5029,17 @@ function getEventState() {
                 "DAY 1",
 
             remaining:
-                start - now
+                start -
+                now
 
         };
 
     }
 
 
-    /*
-     * HOW MANY 24 HOUR DAYS HAVE PASSED?
-     */
-
     const elapsed =
-        now - start;
+        now -
+        start;
 
 
     const day =
@@ -3088,11 +5050,12 @@ function getEventState() {
 
 
     /*
-     * AFTER DAY 7
+     * Finished.
      */
 
     if (
-        day > CONFIG.BOSS_COUNT
+        day >
+        CONFIG.EVENT_DAYS
     ) {
 
         return {
@@ -3101,11 +5064,11 @@ function getEventState() {
                 "FINISHED",
 
             day:
-                CONFIG.BOSS_COUNT,
+                CONFIG.EVENT_DAYS,
 
             boss:
                 bossNames[
-                    CONFIG.BOSS_COUNT - 1
+                    CONFIG.EVENT_DAYS - 1
                 ] ||
                 "FINISHED",
 
@@ -3116,10 +5079,6 @@ function getEventState() {
 
     }
 
-
-    /*
-     * CURRENT DAY
-     */
 
     const dayStart =
         start +
@@ -3145,12 +5104,13 @@ function getEventState() {
             bossNames[
                 day - 1
             ] ||
-            `DAY ${day}`,
+            `Day ${day}`,
 
         remaining:
             Math.max(
                 0,
-                dayEnd - now
+                dayEnd -
+                now
             )
 
     };
@@ -3160,7 +5120,7 @@ function getEventState() {
 
 
 /* =========================================================
-   UPDATE EVENT DISPLAY
+   UPDATE EVENT
 ========================================================= */
 
 function updateEvent() {
@@ -3193,36 +5153,12 @@ function updateEvent() {
         );
 
 
-    /*
-     * BEFORE EVENT
-     */
-
     if (
-        event.state ===
-        "BEFORE"
+        event.state === "BEFORE"
     ) {
 
         status.innerText =
             "Event Starting Soon";
-
-
-        status.className =
-            `
-            inline-flex
-            items-center
-            px-4
-            py-2
-            rounded-full
-            border
-            border-yellow-500/20
-            bg-yellow-500/10
-            text-yellow-300
-            text-xs
-            uppercase
-            tracking-[0.22em]
-            font-black
-            mb-5
-            `;
 
 
         day.innerText =
@@ -3239,40 +5175,16 @@ function updateEvent() {
     }
 
 
-    /*
-     * LIVE
-     */
-
     else if (
-        event.state ===
-        "LIVE"
+        event.state === "LIVE"
     ) {
 
         status.innerText =
             "Live Event";
 
 
-        status.className =
-            `
-            inline-flex
-            items-center
-            px-4
-            py-2
-            rounded-full
-            border
-            border-green-500/20
-            bg-green-500/10
-            text-green-300
-            text-xs
-            uppercase
-            tracking-[0.22em]
-            font-black
-            mb-5
-            `;
-
-
         day.innerText =
-            `DAY ${event.day} / ${CONFIG.BOSS_COUNT}`;
+            `DAY ${event.day} / ${CONFIG.EVENT_DAYS}`;
 
 
         boss.innerText =
@@ -3285,36 +5197,12 @@ function updateEvent() {
     }
 
 
-    /*
-     * FINISHED
-     */
-
     else if (
-        event.state ===
-        "FINISHED"
+        event.state === "FINISHED"
     ) {
 
         status.innerText =
             "Event Complete";
-
-
-        status.className =
-            `
-            inline-flex
-            items-center
-            px-4
-            py-2
-            rounded-full
-            border
-            border-purple-500/20
-            bg-purple-500/10
-            text-purple-300
-            text-xs
-            uppercase
-            tracking-[0.22em]
-            font-black
-            mb-5
-            `;
 
 
         day.innerText =
@@ -3331,14 +5219,14 @@ function updateEvent() {
     }
 
 
-    /*
-     * INVALID
-     */
-
     else {
 
         status.innerText =
             "Configuration Error";
+
+
+        day.innerText =
+            "";
 
 
         boss.innerText =
@@ -3346,7 +5234,7 @@ function updateEvent() {
 
 
         description.innerText =
-            "Check EVENT_START in the script.";
+            "Check EVENT_START.";
 
     }
 
@@ -3354,6 +5242,9 @@ function updateEvent() {
     renderCountdown(
         event.remaining
     );
+
+
+    renderEventProgress();
 
 }
 
@@ -3371,14 +5262,16 @@ function renderCountdown(
         Math.max(
             0,
             Math.floor(
-                milliseconds / 1000
+                milliseconds /
+                1000
             )
         );
 
 
     const days =
         Math.floor(
-            totalSeconds / 86400
+            totalSeconds /
+            86400
         );
 
 
@@ -3403,35 +5296,724 @@ function renderCountdown(
 
 
     const seconds =
-        totalSeconds % 60;
+        totalSeconds %
+        60;
 
 
     document.getElementById(
         "count-days"
     ).innerText =
-        String(days)
-            .padStart(2, "0");
+        String(
+            days
+        )
+        .padStart(
+            2,
+            "0"
+        );
 
 
     document.getElementById(
         "count-hours"
     ).innerText =
-        String(hours)
-            .padStart(2, "0");
+        String(
+            hours
+        )
+        .padStart(
+            2,
+            "0"
+        );
 
 
     document.getElementById(
         "count-minutes"
     ).innerText =
-        String(minutes)
-            .padStart(2, "0");
+        String(
+            minutes
+        )
+        .padStart(
+            2,
+            "0"
+        );
 
 
     document.getElementById(
         "count-seconds"
     ).innerText =
-        String(seconds)
-            .padStart(2, "0");
+        String(
+            seconds
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+}
+
+
+
+/* =========================================================
+   PLAYER MODAL
+========================================================= */
+
+function openPlayerModal(
+    playerName
+) {
+
+    const player =
+        getPlayer(
+            playerName
+        );
+
+
+    document.getElementById(
+        "modal-player-name"
+    ).innerText =
+        player.name;
+
+
+    const modalContent =
+        document.getElementById(
+            "modal-player-content"
+        );
+
+
+    const rank =
+        pvmLeaderboard.find(
+            item =>
+                normalise(
+                    item.name
+                ) ===
+                normalise(
+                    player.name
+                )
+        );
+
+
+    let daily =
+        "";
+
+
+    player.daily.forEach(
+        (
+            value,
+            index
+        ) => {
+
+            const boss =
+                bossNames[index] ||
+                `Day ${index + 1}`;
+
+
+            daily += `
+
+                <div
+                    class="
+                    bg-black/20
+                    border
+                    border-gray-800
+                    rounded-xl
+                    p-4">
+
+
+                    <div
+                        class="
+                        text-[10px]
+                        uppercase
+                        tracking-wider
+                        text-gray-600">
+
+                        Day ${index + 1}
+
+                    </div>
+
+
+                    <div
+                        class="
+                        font-bold
+                        mt-1
+                        truncate">
+
+                        ${escapeHtml(
+                            boss
+                        )}
+
+                    </div>
+
+
+                    <div
+                        class="
+                        text-xl
+                        font-black
+                        text-green-400
+                        mt-2">
+
+                        ${formatPoints(
+                            value
+                        )}
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    modalContent.innerHTML = `
+
+        <div
+            class="
+            grid
+            grid-cols-2
+            sm:grid-cols-4
+            gap-3
+            mb-6">
+
+
+            <div
+                class="
+                bg-black/20
+                border
+                border-gray-800
+                rounded-xl
+                p-4">
+
+                <div
+                    class="
+                    text-[10px]
+                    uppercase
+                    tracking-wider
+                    text-gray-600">
+
+                    Rank
+
+                </div>
+
+
+                <div
+                    class="
+                    text-2xl
+                    font-black
+                    mt-1">
+
+                    #${rank?.rank || "-"}
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="
+                bg-black/20
+                border
+                border-gray-800
+                rounded-xl
+                p-4">
+
+                <div
+                    class="
+                    text-[10px]
+                    uppercase
+                    tracking-wider
+                    text-gray-600">
+
+                    Points
+
+                </div>
+
+
+                <div
+                    class="
+                    text-2xl
+                    font-black
+                    text-green-400
+                    mt-1">
+
+                    ${formatPoints(
+                        player.total
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="
+                bg-black/20
+                border
+                border-gray-800
+                rounded-xl
+                p-4">
+
+                <div
+                    class="
+                    text-[10px]
+                    uppercase
+                    tracking-wider
+                    text-gray-600">
+
+                    Value
+
+                </div>
+
+
+                <div
+                    class="
+                    text-2xl
+                    font-black
+                    text-yellow-400
+                    mt-1">
+
+                    ${formatValue(
+                        player.value
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="
+                bg-black/20
+                border
+                border-gray-800
+                rounded-xl
+                p-4">
+
+                <div
+                    class="
+                    text-[10px]
+                    uppercase
+                    tracking-wider
+                    text-gray-600">
+
+                    EHB
+
+                </div>
+
+
+                <div
+                    class="
+                    text-2xl
+                    font-black
+                    mt-1">
+
+                    ${formatPoints(
+                        player.ehb
+                    )}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="
+            text-xs
+            uppercase
+            tracking-widest
+            text-gray-600
+            mb-3">
+
+            Daily Performance
+
+        </div>
+
+
+        <div
+            class="
+            grid
+            grid-cols-1
+            sm:grid-cols-2
+            gap-3">
+
+            ${daily}
+
+        </div>
+
+    `;
+
+
+    const modal =
+        document.getElementById(
+            "player-modal"
+        );
+
+
+    modal.classList.remove(
+        "hidden"
+    );
+
+
+    modal.classList.add(
+        "flex"
+    );
+
+}
+
+
+function closePlayerModal() {
+
+    const modal =
+        document.getElementById(
+            "player-modal"
+        );
+
+
+    modal.classList.add(
+        "hidden"
+    );
+
+
+    modal.classList.remove(
+        "flex"
+    );
+
+}
+
+
+
+/* =========================================================
+   OPEN TEAM
+========================================================= */
+
+function openTeam(
+    teamName
+) {
+
+    if (
+        !teams[
+            slug(teamName)
+        ]
+    ) {
+
+        return;
+
+    }
+
+
+    currentTeam =
+        teams[
+            slug(teamName)
+        ].name;
+
+
+    localStorage.setItem(
+        "fantasyPvmTeam",
+        currentTeam
+    );
+
+
+    const url =
+        new URL(
+            window.location.href
+        );
+
+
+    url.searchParams.set(
+        "team",
+        slug(currentTeam)
+    );
+
+
+    window.history.pushState(
+        {},
+        "",
+        url
+    );
+
+
+    showPage(
+        "home"
+    );
+
+
+    renderHome();
+
+}
+
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".nav-button"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    showPage(
+                        button.dataset.page
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+function showPage(
+    page
+) {
+
+    document
+        .querySelectorAll(
+            "main > section"
+        )
+        .forEach(
+            section => {
+
+                section.classList.add(
+                    "hidden"
+                );
+
+            }
+        );
+
+
+    const selected =
+        document.getElementById(
+            "page-" + page
+        );
+
+
+    if (
+        selected
+    ) {
+
+        selected.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    document
+        .querySelectorAll(
+            ".nav-button"
+        )
+        .forEach(
+            button => {
+
+                button.classList.toggle(
+                    "active",
+                    button.dataset.page === page
+                );
+
+            }
+        );
+
+
+    window.scrollTo({
+
+        top:
+            0,
+
+        behavior:
+            "smooth"
+
+    );
+
+}
+
+
+
+/* =========================================================
+   TEAM DROPDOWN
+========================================================= */
+
+document
+    .getElementById(
+        "home-team-select"
+    )
+    .addEventListener(
+        "change",
+        event => {
+
+            openTeam(
+                event.target.value
+            );
+
+        }
+    );
+
+
+
+/* =========================================================
+   TEAM SEARCH
+========================================================= */
+
+document
+    .getElementById(
+        "teams-search"
+    )
+    .addEventListener(
+        "input",
+        () => {
+
+            renderTeamsPage();
+
+        }
+    );
+
+
+
+/* =========================================================
+   TEAM LEADERBOARD SEARCH
+========================================================= */
+
+document
+    .getElementById(
+        "team-leader-search"
+    )
+    .addEventListener(
+        "input",
+        () => {
+
+            renderTeamLeaderboard();
+
+        }
+    );
+
+
+
+/* =========================================================
+   PVM SEARCH
+========================================================= */
+
+document
+    .getElementById(
+        "pvm-search"
+    )
+    .addEventListener(
+        "input",
+        () => {
+
+            renderPvmLeaderboard();
+
+        }
+    );
+
+
+
+/* =========================================================
+   CLICK OUTSIDE PLAYER MODAL
+========================================================= */
+
+document
+    .getElementById(
+        "player-modal"
+    )
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id ===
+                "player-modal"
+            ) {
+
+                closePlayerModal();
+
+            }
+
+        }
+    );
+
+
+
+/* =========================================================
+   ESC CLOSE MODAL
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closePlayerModal();
+
+        }
+
+    }
+);
+
+
+
+/* =========================================================
+   MANUAL REFRESH
+========================================================= */
+
+async function manualRefresh() {
+
+    const button =
+        document.getElementById(
+            "refresh-button"
+        );
+
+
+    button.disabled =
+        true;
+
+
+    button.innerText =
+        "Refreshing...";
+
+
+    await loadEverything();
+
+
+    button.disabled =
+        false;
+
+
+    button.innerText =
+        "Refresh";
+
+}
+
+
+
+/* =========================================================
+   DATA STATUS
+========================================================= */
+
+function setDataStatus(
+    message
+) {
+
+    const element =
+        document.getElementById(
+            "data-status"
+        );
+
+
+    if (
+        element
+    ) {
+
+        element.innerText =
+            message;
+
+    }
 
 }
 
@@ -3441,31 +6023,182 @@ function renderCountdown(
    ERROR
 ========================================================= */
 
-function showDataError() {
+function showDataError(
+    error
+) {
 
     document.getElementById(
-        "event-status"
+        "home-team-name"
     ).innerText =
-        "Data Error";
-
-
-    document.getElementById(
-        "hero-boss"
-    ).innerText =
-        "Unable To Load Sheet";
+        "Unable to load teams";
 
 
     document.getElementById(
-        "hero-description"
-    ).innerText =
-        "Check that your Google Sheets are published correctly.";
+        "home-roster"
+    ).innerHTML =
+        `
+
+        <div
+            class="
+            col-span-full
+            glass
+            border
+            border-red-900
+            rounded-2xl
+            p-5">
+
+
+            <div
+                class="
+                text-red-400
+                font-bold">
+
+                Failed to load Google Sheets.
+
+            </div>
+
+
+            <div
+                class="
+                text-xs
+                text-gray-500
+                mt-2">
+
+                ${escapeHtml(
+                    error?.message ||
+                    "Unknown error"
+                )}
+
+            </div>
+
+
+            <button
+                onclick="manualRefresh()"
+                class="
+                mt-4
+                px-4
+                py-2
+                rounded-lg
+                bg-gray-800
+                border
+                border-gray-700
+                text-sm
+                font-bold">
+
+                Try Again
+
+            </button>
+
+        </div>
+
+        `;
 
 }
 
 
 
 /* =========================================================
-   LIVE CLOCK
+   FORMAT CLOCK
+========================================================= */
+
+function formatClock(
+    date
+) {
+
+    if (
+        !date
+    ) {
+
+        return "--:--";
+
+    }
+
+
+    return date.toLocaleTimeString(
+        "en-GB",
+        {
+            hour:
+                "2-digit",
+            minute:
+                "2-digit",
+            second:
+                "2-digit"
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   UK TIME SYNCHRONISATION
+========================================================= */
+
+async function synchroniseClock() {
+
+    try {
+
+        const response =
+            await fetch(
+                "https://timeapi.io/api/time/current/zone?timeZone=Europe%2FLondon",
+                {
+                    cache:
+                        "no-store"
+                }
+            );
+
+
+        if (
+            !response.ok
+        ) {
+
+            throw new Error(
+                "Time service unavailable"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            data?.dateTime
+        ) {
+
+            const official =
+                new Date(
+                    data.dateTime
+                ).getTime();
+
+
+            serverTimeOffset =
+                official -
+                Date.now();
+
+
+            updateEvent();
+
+        }
+
+    } catch (
+        error
+    ) {
+
+        console.warn(
+            "Using local browser clock.",
+            error
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   LIVE EVENT CLOCK
 ========================================================= */
 
 setInterval(
@@ -3476,7 +6209,7 @@ setInterval(
 
 
 /* =========================================================
-   REFRESH GOOGLE SHEETS
+   SHEET REFRESH
 ========================================================= */
 
 setInterval(
@@ -3487,14 +6220,25 @@ setInterval(
 
 
 /* =========================================================
-   START
+   INITIALISE
 ========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
-    () => {
+    async () => {
 
-        loadEverything();
+        /*
+         * Load sheets.
+         */
+
+        await loadEverything();
+
+
+        /*
+         * Synchronise clock.
+         */
+
+        await synchroniseClock();
 
     }
 );
@@ -3502,4 +6246,5 @@ document.addEventListener(
 </script>
 
 </body>
+
 </html>
