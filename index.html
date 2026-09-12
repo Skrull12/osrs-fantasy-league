@@ -1,758 +1,2140 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Fantasy PvM League</title>
 
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
     <style>
+
         * {
             box-sizing: border-box;
         }
 
+
         :root {
+
             --bg: #080a0d;
+
             --panel: #11151a;
+
             --panel-2: #171c22;
+
             --panel-3: #1d232b;
+
             --border: #303842;
+
             --text: #f2f4f7;
+
             --muted: #929aa5;
+
             --orange: #d88932;
+
             --orange-dark: #9c5c1c;
+
             --gold: #e4b552;
+
             --green: #63bd79;
+
             --red: #d85b5b;
+
         }
+
+
+        html,
+        body {
+
+            margin: 0;
+
+            padding: 0;
+
+            min-height: 100%;
+
+        }
+
 
         body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
             color: var(--text);
+
             background:
-                radial-gradient(circle at 50% -10%, rgba(216, 137, 50, 0.16), transparent 35%),
-                radial-gradient(circle at 10% 50%, rgba(80, 100, 120, 0.08), transparent 30%),
-                linear-gradient(180deg, #0b0e12 0%, #080a0d 100%);
+                radial-gradient(
+                    circle at 50% -10%,
+                    rgba(216,137,50,0.16),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 10% 50%,
+                    rgba(80,100,120,0.08),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    180deg,
+                    #0b0e12 0%,
+                    #080a0d 100%
+                );
+
             min-height: 100vh;
+
         }
+
 
         body::before {
+
             content: "";
+
             position: fixed;
+
             inset: 0;
+
             pointer-events: none;
+
             opacity: 0.12;
+
             background-image:
-                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+                linear-gradient(
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                );
+
             background-size: 32px 32px;
+
         }
 
-        button,
-        select,
-        input {
-            font: inherit;
-        }
 
         button,
+        input,
         select {
-            cursor: pointer;
+
+            font: inherit;
+
         }
+
+
+        button {
+
+            cursor: pointer;
+
+        }
+
 
         .topbar {
+
             position: sticky;
+
             top: 0;
-            z-index: 20;
-            background: rgba(8, 10, 13, 0.94);
+
+            z-index: 50;
+
+            background:
+                rgba(8,10,13,0.95);
+
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
+
+            border-bottom:
+                1px solid var(--border);
+
         }
+
 
         .topbar-inner {
+
             max-width: 1500px;
+
             margin: auto;
+
             padding: 14px 20px;
+
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
+
             gap: 20px;
+
         }
+
 
         .brand {
+
             display: flex;
+
             align-items: center;
+
             gap: 12px;
-            font-weight: 900;
-            letter-spacing: 0.5px;
+
         }
+
 
         .brand-icon {
+
             width: 40px;
+
             height: 40px;
+
             border-radius: 10px;
+
             display: grid;
+
             place-items: center;
+
             background:
-                linear-gradient(145deg, #d9953e, #754317);
-            border: 1px solid #e6a552;
-            box-shadow: 0 0 22px rgba(216, 137, 50, 0.2);
+                linear-gradient(
+                    145deg,
+                    #d9953e,
+                    #754317
+                );
+
+            border:
+                1px solid #e6a552;
+
+            box-shadow:
+                0 0 22px
+                rgba(216,137,50,0.2);
+
             font-size: 20px;
+
         }
+
 
         .brand-main {
+
             font-size: 17px;
+
+            font-weight: 900;
+
+            letter-spacing: .5px;
+
         }
+
 
         .brand-sub {
+
             color: var(--muted);
+
             font-size: 11px;
+
             margin-top: 2px;
+
         }
+
 
         .nav {
+
             display: flex;
+
             gap: 6px;
+
             flex-wrap: wrap;
+
+            align-items: center;
+
         }
 
+
         .nav button {
-            border: 1px solid transparent;
+
+            border:
+                1px solid transparent;
+
             color: var(--muted);
+
             background: transparent;
+
             padding: 9px 12px;
+
             border-radius: 8px;
+
         }
+
 
         .nav button:hover,
         .nav button.active {
+
             color: white;
-            background: var(--panel-2);
-            border-color: var(--border);
+
+            background:
+                var(--panel-2);
+
+            border-color:
+                var(--border);
+
         }
+
+
+        .account-area {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+        }
+
+
+        .account-name {
+
+            color: white;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            padding: 9px 10px;
+
+            background:
+                var(--panel-2);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 8px;
+
+        }
+
 
         .page {
+
             position: relative;
+
             z-index: 1;
+
             max-width: 1500px;
+
             margin: auto;
-            padding: 28px 20px 50px;
+
+            padding:
+                28px 20px 50px;
+
         }
+
 
         .toolbar {
+
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 14px;
-            flex-wrap: wrap;
+
+            justify-content:
+                flex-end;
+
             margin-bottom: 20px;
+
         }
 
-        .team-select-wrap {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .team-select-wrap label {
-            color: var(--muted);
-            font-size: 13px;
-        }
-
-        select,
-        input {
-            border: 1px solid var(--border);
-            color: var(--text);
-            background: var(--panel);
-            border-radius: 8px;
-            padding: 10px 12px;
-            outline: none;
-        }
-
-        select:focus,
-        input:focus {
-            border-color: var(--orange);
-        }
-
-        select {
-            min-width: 220px;
-        }
-
-        .actions {
-            display: flex;
-            gap: 8px;
-        }
 
         .btn {
-            border: 1px solid var(--border);
+
+            border:
+                1px solid var(--border);
+
             color: var(--text);
-            background: var(--panel);
-            padding: 10px 13px;
+
+            background:
+                var(--panel);
+
+            padding:
+                10px 13px;
+
             border-radius: 8px;
+
         }
+
 
         .btn:hover {
-            background: var(--panel-2);
-            border-color: #48515c;
+
+            background:
+                var(--panel-2);
+
+            border-color:
+                #48515c;
+
         }
+
 
         .btn.primary {
-            background: linear-gradient(180deg, #d9913c, #a76220);
-            border-color: #e3a052;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #d9913c,
+                    #a76220
+                );
+
+            border-color:
+                #e3a052;
+
             color: #fff;
+
             font-weight: 700;
+
         }
 
-        .hero {
-            display: grid;
-            grid-template-columns: minmax(0, 1.7fr) minmax(300px, 0.8fr);
-            gap: 18px;
-            margin-bottom: 18px;
+
+        .btn.danger {
+
+            background:
+                rgba(216,91,91,0.1);
+
+            border-color:
+                rgba(216,91,91,0.35);
+
+            color:
+                #ffaaaa;
+
         }
+
+
+        .btn:disabled {
+
+            opacity: .5;
+
+            cursor: not-allowed;
+
+        }
+
+
+        .hero {
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0,1.7fr)
+                minmax(300px,.8fr);
+
+            gap: 18px;
+
+            margin-bottom: 18px;
+
+        }
+
 
         .hero-main,
         .hero-side {
+
             background:
-                linear-gradient(145deg, rgba(255,255,255,0.035), rgba(255,255,255,0.01)),
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.035),
+                    rgba(255,255,255,.01)
+                ),
                 var(--panel);
-            border: 1px solid var(--border);
+
+            border:
+                1px solid var(--border);
+
             border-radius: 14px;
+
             overflow: hidden;
+
         }
+
 
         .hero-main {
+
             padding: 28px;
+
             min-height: 245px;
+
             position: relative;
+
         }
+
 
         .hero-main::after {
+
             content: "";
+
             position: absolute;
+
             right: -80px;
+
             bottom: -120px;
+
             width: 340px;
+
             height: 340px;
+
             border-radius: 50%;
-            background: rgba(216, 137, 50, 0.07);
+
+            background:
+                rgba(216,137,50,.07);
+
             filter: blur(20px);
+
         }
+
 
         .eyebrow {
-            color: var(--orange);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 11px;
-            font-weight: 800;
-            margin-bottom: 12px;
+
+            color:
+                var(--orange);
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                2px;
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+            margin-bottom:
+                12px;
+
         }
+
 
         .boss-name {
-            font-size: clamp(32px, 5vw, 60px);
-            line-height: 1;
-            font-weight: 900;
-            margin: 0 0 12px;
+
+            font-size:
+                clamp(32px,5vw,60px);
+
+            line-height:
+                1;
+
+            font-weight:
+                900;
+
+            margin:
+                0 0 12px;
+
         }
+
 
         .day-label {
-            color: var(--muted);
-            font-weight: 700;
-            font-size: 13px;
+
+            color:
+                var(--muted);
+
+            font-weight:
+                700;
+
+            font-size:
+                13px;
+
         }
+
 
         .countdown-label {
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-size: 10px;
-            margin-top: 25px;
+
+            color:
+                var(--muted);
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                1.5px;
+
+            font-size:
+                10px;
+
+            margin-top:
+                25px;
+
         }
+
 
         .countdown {
-            font-size: 26px;
-            font-weight: 900;
-            margin-top: 5px;
-            color: var(--gold);
+
+            font-size:
+                26px;
+
+            font-weight:
+                900;
+
+            margin-top:
+                5px;
+
+            color:
+                var(--gold);
+
         }
+
 
         .hero-side {
-            padding: 22px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+
+            padding:
+                22px;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            justify-content:
+                center;
+
         }
+
 
         .hero-stat {
-            padding: 13px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.07);
+
+            padding:
+                13px 0;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.07);
+
         }
+
 
         .hero-stat:last-child {
-            border-bottom: 0;
+
+            border-bottom:
+                0;
+
         }
+
 
         .hero-stat-label {
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 10px;
+
+            color:
+                var(--muted);
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                1px;
+
+            font-size:
+                10px;
+
         }
+
 
         .hero-stat-value {
-            font-size: 24px;
-            font-weight: 900;
-            margin-top: 4px;
+
+            font-size:
+                24px;
+
+            font-weight:
+                900;
+
+            margin-top:
+                4px;
+
         }
+
 
         .layout {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) 360px;
-            gap: 18px;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                minmax(0,1fr)
+                360px;
+
+            gap:
+                18px;
+
         }
+
 
         .panel {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            overflow: hidden;
+
+            background:
+                var(--panel);
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius:
+                14px;
+
+            overflow:
+                hidden;
+
         }
+
 
         .panel-header {
-            padding: 16px 18px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
+
+            padding:
+                16px 18px;
+
+            border-bottom:
+                1px solid
+                var(--border);
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            gap:
+                10px;
+
         }
+
 
         .panel-title {
-            font-size: 15px;
-            font-weight: 900;
+
+            font-size:
+                15px;
+
+            font-weight:
+                900;
+
         }
+
 
         .panel-subtitle {
-            color: var(--muted);
-            font-size: 11px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
         }
+
 
         .panel-body {
-            padding: 18px;
+
+            padding:
+                18px;
+
         }
+
 
         .team-heading {
-            display: flex;
-            justify-content: space-between;
-            align-items: end;
-            gap: 12px;
-            margin-bottom: 18px;
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                end;
+
+            gap:
+                12px;
+
+            margin-bottom:
+                18px;
+
         }
+
 
         .team-heading h1 {
-            margin: 0;
-            font-size: 28px;
+
+            margin:
+                0;
+
+            font-size:
+                28px;
+
         }
+
 
         .team-meta {
-            color: var(--muted);
-            font-size: 12px;
-            margin-top: 5px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+
+            margin-top:
+                5px;
+
         }
+
 
         .team-total-box {
-            text-align: right;
+
+            text-align:
+                right;
+
         }
+
 
         .team-total-label {
-            color: var(--muted);
-            text-transform: uppercase;
-            font-size: 9px;
-            letter-spacing: 1px;
+
+            color:
+                var(--muted);
+
+            text-transform:
+                uppercase;
+
+            font-size:
+                9px;
+
+            letter-spacing:
+                1px;
+
         }
+
 
         .team-total {
-            color: var(--gold);
-            font-size: 26px;
-            font-weight: 900;
+
+            color:
+                var(--gold);
+
+            font-size:
+                26px;
+
+            font-weight:
+                900;
+
         }
+
 
         .player-grid {
-            display: grid;
-            grid-template-columns: repeat(5, minmax(0, 1fr));
-            gap: 12px;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(5,minmax(0,1fr));
+
+            gap:
+                12px;
+
         }
+
 
         .player-card {
-            background: var(--panel-2);
-            border: 1px solid var(--border);
-            border-radius: 11px;
-            padding: 16px;
-            cursor: pointer;
-            transition: transform .15s ease, border-color .15s ease, background .15s ease;
+
+            background:
+                var(--panel-2);
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius:
+                11px;
+
+            padding:
+                16px;
+
+            cursor:
+                pointer;
+
+            transition:
+                transform .15s ease,
+                border-color .15s ease,
+                background .15s ease;
+
         }
+
 
         .player-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--orange);
-            background: var(--panel-3);
+
+            transform:
+                translateY(-2px);
+
+            border-color:
+                var(--orange);
+
+            background:
+                var(--panel-3);
+
         }
+
 
         .player-name {
-            font-weight: 900;
-            font-size: 15px;
-            margin-bottom: 14px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+
+            font-weight:
+                900;
+
+            font-size:
+                15px;
+
+            margin-bottom:
+                14px;
+
+            overflow:
+                hidden;
+
+            text-overflow:
+                ellipsis;
+
+            white-space:
+                nowrap;
+
         }
+
 
         .player-stat {
-            display: flex;
-            justify-content: space-between;
-            gap: 8px;
-            padding: 7px 0;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            font-size: 12px;
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            gap:
+                8px;
+
+            padding:
+                7px 0;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.06);
+
+            font-size:
+                12px;
+
         }
+
 
         .player-stat span {
-            color: var(--muted);
+
+            color:
+                var(--muted);
+
         }
+
 
         .player-stat strong {
-            color: #fff;
+
+            color:
+                #fff;
+
         }
+
 
         .progress {
-            height: 8px;
-            border-radius: 999px;
-            background: #090b0e;
-            overflow: hidden;
-            border: 1px solid var(--border);
+
+            height:
+                8px;
+
+            border-radius:
+                999px;
+
+            background:
+                #090b0e;
+
+            overflow:
+                hidden;
+
+            border:
+                1px solid
+                var(--border);
+
         }
+
 
         .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #9b5a20, #e0a14b);
-            border-radius: inherit;
-            width: 0;
-            transition: width .3s ease;
+
+            height:
+                100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #9b5a20,
+                    #e0a14b
+                );
+
+            border-radius:
+                inherit;
+
+            width:
+                0;
+
+            transition:
+                width .3s ease;
+
         }
+
 
         .progress-labels {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 7px;
-            color: var(--muted);
-            font-size: 11px;
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            margin-top:
+                7px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
         }
+
 
         .leaderboard {
-            display: flex;
-            flex-direction: column;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
         }
+
 
         .lb-row {
-            display: grid;
-            grid-template-columns: 34px minmax(0, 1fr) auto;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 16px;
-            border-bottom: 1px solid rgba(255,255,255,0.055);
-            cursor: pointer;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                34px
+                minmax(0,1fr)
+                auto;
+
+            align-items:
+                center;
+
+            gap:
+                8px;
+
+            padding:
+                12px 16px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.055);
+
         }
+
 
         .lb-row:last-child {
-            border-bottom: 0;
+
+            border-bottom:
+                0;
+
         }
+
 
         .lb-row:hover {
-            background: rgba(255,255,255,0.025);
+
+            background:
+                rgba(255,255,255,.025);
+
         }
+
 
         .lb-rank {
-            color: var(--muted);
-            font-weight: 800;
-            font-size: 12px;
+
+            color:
+                var(--muted);
+
+            font-weight:
+                800;
+
+            font-size:
+                12px;
+
         }
+
 
         .lb-name {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            font-weight: 700;
+
+            overflow:
+                hidden;
+
+            text-overflow:
+                ellipsis;
+
+            white-space:
+                nowrap;
+
+            font-weight:
+                700;
+
         }
+
 
         .lb-points {
-            color: var(--gold);
-            font-weight: 900;
-            font-size: 12px;
+
+            color:
+                var(--gold);
+
+            font-weight:
+                900;
+
+            font-size:
+                12px;
+
         }
 
-        .search-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 14px;
+
+        .search-wrap {
+
+            padding:
+                12px;
+
         }
 
-        .search-row input {
-            width: 100%;
+
+        .search-wrap input {
+
+            width:
+                100%;
+
         }
+
+
+        input {
+
+            border:
+                1px solid
+                var(--border);
+
+            color:
+                var(--text);
+
+            background:
+                var(--panel);
+
+            border-radius:
+                8px;
+
+            padding:
+                10px 12px;
+
+            outline:
+                none;
+
+        }
+
+
+        input:focus {
+
+            border-color:
+                var(--orange);
+
+        }
+
 
         .daily-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            margin-top: 18px;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(7,1fr);
+
+            gap:
+                10px;
+
+            margin-top:
+                18px;
+
         }
+
 
         .daily-card {
-            background: var(--panel-2);
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            padding: 12px;
+
+            background:
+                var(--panel-2);
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius:
+                9px;
+
+            padding:
+                12px;
+
         }
+
 
         .daily-day {
-            font-size: 10px;
-            color: var(--muted);
-            text-transform: uppercase;
+
+            font-size:
+                10px;
+
+            color:
+                var(--muted);
+
+            text-transform:
+                uppercase;
+
         }
+
 
         .daily-boss {
-            margin-top: 5px;
-            font-weight: 800;
-            font-size: 12px;
-            min-height: 30px;
+
+            margin-top:
+                5px;
+
+            font-weight:
+                800;
+
+            font-size:
+                12px;
+
+            min-height:
+                30px;
+
         }
+
 
         .daily-points {
-            color: var(--gold);
-            margin-top: 7px;
-            font-weight: 900;
-            font-size: 14px;
+
+            color:
+                var(--gold);
+
+            margin-top:
+                7px;
+
+            font-weight:
+                900;
+
+            font-size:
+                14px;
+
         }
+
 
         .status {
-            margin: 0 0 18px;
-            padding: 10px 13px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: rgba(255,255,255,0.025);
-            color: var(--muted);
-            font-size: 12px;
+
+            margin:
+                0 0 18px;
+
+            padding:
+                10px 13px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius:
+                8px;
+
+            background:
+                rgba(255,255,255,.025);
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+
         }
+
 
         .status.error {
-            color: #ff9d9d;
-            border-color: rgba(216, 91, 91, 0.35);
-            background: rgba(216, 91, 91, 0.06);
+
+            color:
+                #ff9d9d;
+
+            border-color:
+                rgba(216,91,91,.35);
+
+            background:
+                rgba(216,91,91,.06);
+
         }
+
 
         .status.success {
-            color: #a7e2b4;
+
+            color:
+                #a7e2b4;
+
         }
+
 
         .page-section {
-            display: none;
+
+            display:
+                none;
+
         }
+
 
         .page-section.active {
-            display: block;
+
+            display:
+                block;
+
         }
+
 
         .table-controls {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
+
+            margin-bottom:
+                15px;
+
         }
+
 
         .table-controls input {
-            min-width: 250px;
+
+            width:
+                min(100%,400px);
+
         }
+
 
         .empty {
-            padding: 30px;
-            text-align: center;
-            color: var(--muted);
+
+            padding:
+                30px;
+
+            text-align:
+                center;
+
+            color:
+                var(--muted);
+
         }
+
+
+        /* Builder */
+
+        .builder-layout {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                minmax(300px,.8fr)
+                minmax(0,1.2fr);
+
+            gap:
+                18px;
+
+        }
+
+
+        .builder-summary {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(3,1fr);
+
+            gap:
+                10px;
+
+            margin-bottom:
+                15px;
+
+        }
+
+
+        .builder-stat {
+
+            padding:
+                13px;
+
+            border:
+                1px solid
+                var(--border);
+
+            background:
+                var(--panel-2);
+
+            border-radius:
+                9px;
+
+        }
+
+
+        .builder-stat-label {
+
+            color:
+                var(--muted);
+
+            font-size:
+                9px;
+
+            letter-spacing:
+                1px;
+
+            text-transform:
+                uppercase;
+
+        }
+
+
+        .builder-stat-value {
+
+            margin-top:
+                4px;
+
+            font-weight:
+                900;
+
+            font-size:
+                19px;
+
+        }
+
+
+        .squad-list {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            gap:
+                10px;
+
+        }
+
+
+        .squad-slot {
+
+            min-height:
+                78px;
+
+            border:
+                1px dashed
+                #3c4651;
+
+            border-radius:
+                10px;
+
+            background:
+                rgba(255,255,255,.015);
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            padding:
+                13px 15px;
+
+            gap:
+                10px;
+
+        }
+
+
+        .squad-empty {
+
+            justify-content:
+                center;
+
+            color:
+                #66707b;
+
+            font-size:
+                12px;
+
+        }
+
+
+        .squad-player-name {
+
+            font-weight:
+                900;
+
+            font-size:
+                14px;
+
+        }
+
+
+        .squad-player-info {
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
+            margin-top:
+                4px;
+
+        }
+
+
+        .available-player {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                minmax(0,1fr)
+                auto
+                auto;
+
+            align-items:
+                center;
+
+            gap:
+                10px;
+
+            padding:
+                11px 13px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.055);
+
+        }
+
+
+        .available-player-name {
+
+            font-weight:
+                800;
+
+        }
+
+
+        .available-player-meta {
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+
+            margin-top:
+                3px;
+
+        }
+
+
+        .player-price {
+
+            color:
+                var(--gold);
+
+            font-weight:
+                900;
+
+            font-size:
+                12px;
+
+        }
+
+
+        .team-name-input {
+
+            width:
+                min(100%,450px);
+
+            margin-top:
+                8px;
+
+            font-size:
+                20px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .builder-actions {
+
+            display:
+                flex;
+
+            justify-content:
+                flex-end;
+
+            gap:
+                8px;
+
+            margin-top:
+                18px;
+
+        }
+
+
+        /* Modals */
 
         .modal-backdrop {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.72);
-            backdrop-filter: blur(7px);
-            z-index: 100;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+
+            position:
+                fixed;
+
+            inset:
+                0;
+
+            background:
+                rgba(0,0,0,.72);
+
+            backdrop-filter:
+                blur(7px);
+
+            z-index:
+                100;
+
+            display:
+                none;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            padding:
+                20px;
+
         }
+
 
         .modal-backdrop.open {
-            display: flex;
+
+            display:
+                flex;
+
         }
+
 
         .modal {
-            width: min(650px, 100%);
-            max-height: 90vh;
-            overflow: auto;
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            box-shadow: 0 20px 70px rgba(0,0,0,0.5);
+
+            width:
+                min(700px,100%);
+
+            max-height:
+                90vh;
+
+            overflow:
+                auto;
+
+            background:
+                var(--panel);
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius:
+                14px;
+
+            box-shadow:
+                0 20px 70px
+                rgba(0,0,0,.5);
+
         }
+
 
         .modal-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            align-items: center;
+
+            padding:
+                20px;
+
+            border-bottom:
+                1px solid
+                var(--border);
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            gap:
+                12px;
+
         }
+
 
         .modal-title {
-            font-size: 22px;
-            font-weight: 900;
+
+            font-size:
+                22px;
+
+            font-weight:
+                900;
+
         }
+
 
         .close-btn {
-            border: 0;
-            background: transparent;
-            color: var(--muted);
-            font-size: 22px;
-            cursor: pointer;
+
+            border:
+                0;
+
+            background:
+                transparent;
+
+            color:
+                var(--muted);
+
+            font-size:
+                22px;
+
         }
+
 
         .modal-body {
-            padding: 20px;
+
+            padding:
+                20px;
+
         }
+
 
         .modal-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 18px;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(4,1fr);
+
+            gap:
+                10px;
+
+            margin-bottom:
+                18px;
+
         }
+
 
         .modal-stat {
-            background: var(--panel-2);
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            padding: 13px;
+
+            background:
+                var(--panel-2);
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius:
+                9px;
+
+            padding:
+                13px;
+
         }
+
 
         .modal-stat-label {
-            color: var(--muted);
-            text-transform: uppercase;
-            font-size: 9px;
+
+            color:
+                var(--muted);
+
+            text-transform:
+                uppercase;
+
+            font-size:
+                9px;
+
         }
+
 
         .modal-stat-value {
-            font-weight: 900;
-            margin-top: 5px;
+
+            font-weight:
+                900;
+
+            margin-top:
+                5px;
+
         }
+
 
         .daily-list {
-            border-top: 1px solid var(--border);
+
+            border-top:
+                1px solid
+                var(--border);
+
         }
+
 
         .daily-row {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) auto;
-            gap: 10px;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            font-size: 12px;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                minmax(0,1fr)
+                auto;
+
+            gap:
+                10px;
+
+            padding:
+                10px 0;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.06);
+
+            font-size:
+                12px;
+
         }
+
 
         .daily-row span {
-            color: var(--muted);
+
+            color:
+                var(--muted);
+
         }
+
+
+        .form-group {
+
+            margin-bottom:
+                14px;
+
+        }
+
+
+        .form-label {
+
+            display:
+                block;
+
+            color:
+                var(--muted);
+
+            text-transform:
+                uppercase;
+
+            font-size:
+                10px;
+
+            letter-spacing:
+                1px;
+
+            margin-bottom:
+                6px;
+
+        }
+
+
+        .form-input {
+
+            width:
+                100%;
+
+        }
+
+
+        .form-help {
+
+            color:
+                #67717b;
+
+            font-size:
+                10px;
+
+            margin-top:
+                5px;
+
+        }
+
+
+        .auth-error,
+        .auth-success {
+
+            padding:
+                10px 12px;
+
+            border-radius:
+                8px;
+
+            font-size:
+                12px;
+
+            margin-bottom:
+                12px;
+
+            display:
+                none;
+
+        }
+
+
+        .auth-error {
+
+            background:
+                rgba(216,91,91,.08);
+
+            border:
+                1px solid
+                rgba(216,91,91,.35);
+
+            color:
+                #ff9d9d;
+
+        }
+
+
+        .auth-success {
+
+            background:
+                rgba(99,189,121,.08);
+
+            border:
+                1px solid
+                rgba(99,189,121,.35);
+
+            color:
+                #a7e2b4;
+
+        }
+
+
+        .switch-auth {
+
+            text-align:
+                center;
+
+            margin-top:
+                15px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
+        }
+
+
+        .switch-auth button {
+
+            border:
+                0;
+
+            background:
+                transparent;
+
+            color:
+                var(--orange);
+
+            font-weight:
+                800;
+
+        }
+
 
         .footer {
-            text-align: center;
-            color: #5e6670;
-            font-size: 10px;
-            margin-top: 35px;
+
+            text-align:
+                center;
+
+            color:
+                #5e6670;
+
+            font-size:
+                10px;
+
+            margin-top:
+                35px;
+
         }
 
-        @media (max-width: 1100px) {
+
+        @media (max-width:1100px) {
+
             .player-grid {
-                grid-template-columns: repeat(3, 1fr);
+
+                grid-template-columns:
+                    repeat(3,1fr);
+
             }
+
 
             .layout {
-                grid-template-columns: 1fr;
+
+                grid-template-columns:
+                    1fr;
+
             }
 
+
             .daily-grid {
-                grid-template-columns: repeat(4, 1fr);
+
+                grid-template-columns:
+                    repeat(4,1fr);
+
             }
+
         }
 
-        @media (max-width: 760px) {
+
+        @media (max-width:800px) {
+
             .hero {
-                grid-template-columns: 1fr;
+
+                grid-template-columns:
+                    1fr;
+
             }
+
 
             .player-grid {
-                grid-template-columns: repeat(2, 1fr);
+
+                grid-template-columns:
+                    repeat(2,1fr);
+
             }
 
-            .daily-grid {
-                grid-template-columns: repeat(2, 1fr);
+
+            .builder-layout {
+
+                grid-template-columns:
+                    1fr;
+
             }
+
 
             .modal-stats {
-                grid-template-columns: repeat(2, 1fr);
+
+                grid-template-columns:
+                    repeat(2,1fr);
+
             }
+
 
             .topbar-inner {
-                align-items: flex-start;
-                flex-direction: column;
+
+                align-items:
+                    flex-start;
+
+                flex-direction:
+                    column;
+
             }
+
+
+            .account-area {
+
+                width:
+                    100%;
+
+            }
+
         }
 
-        @media (max-width: 500px) {
+
+        @media (max-width:520px) {
+
             .player-grid {
-                grid-template-columns: 1fr;
+
+                grid-template-columns:
+                    1fr;
+
             }
 
-            .page {
-                padding-left: 12px;
-                padding-right: 12px;
+
+            .daily-grid {
+
+                grid-template-columns:
+                    repeat(2,1fr);
+
             }
 
-            .toolbar {
-                align-items: stretch;
-                flex-direction: column;
+
+            .builder-summary {
+
+                grid-template-columns:
+                    1fr;
+
             }
 
-            .team-select-wrap {
-                flex-direction: column;
-                align-items: stretch;
+
+            .available-player {
+
+                grid-template-columns:
+                    minmax(0,1fr)
+                    auto;
+
             }
 
-            select {
-                width: 100%;
+
+            .available-player .player-price {
+
+                display:
+                    none;
+
             }
+
+
+            .nav button {
+
+                padding:
+                    8px 9px;
+
+                font-size:
+                    11px;
+
+            }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
+
 <header class="topbar">
+
     <div class="topbar-inner">
 
+
         <div class="brand">
-            <div class="brand-icon">⚔</div>
+
+            <div class="brand-icon">
+                ⚔
+            </div>
+
 
             <div>
+
                 <div class="brand-main">
                     FANTASY PvM LEAGUE
                 </div>
@@ -760,56 +2142,105 @@
                 <div class="brand-sub">
                     OSRS • 7 DAY COMPETITION
                 </div>
+
             </div>
+
         </div>
 
+
         <nav class="nav">
-            <button id="nav-home" class="active" onclick="showPage('home')">
-                HomePage
+
+            <button
+                id="nav-home"
+                class="active"
+                onclick="showPage('home')"
+            >
+                Homepage
             </button>
 
-            <button id="nav-teams" onclick="showPage('teams')">
+
+            <button
+                id="nav-teams"
+                onclick="showPage('teams')"
+            >
                 Team Leaderboard
             </button>
 
-            <button id="nav-pvm" onclick="showPage('pvm')">
+
+            <button
+                id="nav-pvm"
+                onclick="showPage('pvm')"
+            >
                 PvM Leaderboard
             </button>
+
+
+            <button
+                id="nav-myteam"
+                onclick="showPage('myteam')"
+            >
+                My Team
+            </button>
+
         </nav>
 
+
+        <div
+            id="account-area"
+            class="account-area"
+        >
+
+            <button
+                class="btn primary"
+                onclick="openAuth('login')"
+            >
+                Login
+            </button>
+
+        </div>
+
+
     </div>
+
 </header>
+
 
 <main class="page">
 
-    <div id="load-status" class="status">
+
+    <div
+        id="load-status"
+        class="status"
+    >
         Loading Fantasy PvM League data...
     </div>
 
+
     <div class="toolbar">
 
-    <div></div>
-
-    <div class="actions">
         <button
-            class="btn primary"
             id="refresh-button"
+            class="btn primary"
             onclick="manualRefresh()"
         >
             Refresh
         </button>
+
     </div>
 
-</div>
 
+    <!-- ======================================
+         HOMEPAGE
+    ======================================= -->
 
-    <!-- ========================= -->
-    <!-- HOME -->
-    <!-- ========================= -->
+    <section
+        id="page-home"
+        class="page-section active"
+    >
 
-    <section id="page-home" class="page-section active">
 
         <div class="hero">
+
 
             <div class="hero-main">
 
@@ -817,81 +2248,125 @@
                     Current Hunt
                 </div>
 
-                <h1 id="current-boss" class="boss-name">
+
+                <h1
+                    id="current-boss"
+                    class="boss-name"
+                >
                     TBC
                 </h1>
 
-                <div id="current-day" class="day-label">
+
+                <div
+                    id="current-day"
+                    class="day-label"
+                >
                     EVENT STARTS SOON
                 </div>
+
 
                 <div class="countdown-label">
                     Time Remaining
                 </div>
 
-                <div id="countdown" class="countdown">
+
+                <div
+                    id="countdown"
+                    class="countdown"
+                >
                     --
                 </div>
+
 
             </div>
 
 
             <div class="hero-side">
 
+
                 <div class="hero-stat">
+
                     <div class="hero-stat-label">
-                        Selected Team
+                        Your Team
                     </div>
 
-                    <div id="hero-team-name" class="hero-stat-value">
-                        --
+
+                    <div
+                        id="hero-team-name"
+                        class="hero-stat-value"
+                    >
+                        Login to see your team
                     </div>
+
                 </div>
 
+
                 <div class="hero-stat">
+
                     <div class="hero-stat-label">
                         Team Points
                     </div>
 
-                    <div id="hero-team-points" class="hero-stat-value">
+
+                    <div
+                        id="hero-team-points"
+                        class="hero-stat-value"
+                    >
                         0
                     </div>
+
                 </div>
 
+
                 <div class="hero-stat">
+
                     <div class="hero-stat-label">
                         Team Value
                     </div>
 
-                    <div id="hero-team-value" class="hero-stat-value">
+
+                    <div
+                        id="hero-team-value"
+                        class="hero-stat-value"
+                    >
                         0m
                     </div>
+
                 </div>
+
 
             </div>
 
         </div>
 
 
+
         <div class="layout">
+
 
             <div>
 
+
                 <div class="panel">
+
 
                     <div class="panel-header">
 
                         <div>
-                            <div class="panel-title">
-                                <span id="team-title">
-                                    Your Team
-                                </span>
+
+                            <div
+                                id="team-title"
+                                class="panel-title"
+                            >
+                                Your Team
                             </div>
 
                             <div class="panel-subtitle">
-                                Your five selected PvMers
+                                Your selected fantasy team
                             </div>
+
                         </div>
+
 
                         <div class="team-total-box">
 
@@ -899,7 +2374,10 @@
                                 Total Points
                             </div>
 
-                            <div id="team-total" class="team-total">
+                            <div
+                                id="team-total"
+                                class="team-total"
+                            >
                                 0
                             </div>
 
@@ -907,19 +2385,27 @@
 
                     </div>
 
+
                     <div class="panel-body">
+
 
                         <div class="team-heading">
 
                             <div>
+
                                 <h1 id="team-title-large">
                                     Your Team
                                 </h1>
 
-                                <div id="team-meta" class="team-meta">
-                                    5 / 5 players
+                                <div
+                                    id="team-meta"
+                                    class="team-meta"
+                                >
+                                    Login to create your fantasy team
                                 </div>
+
                             </div>
+
 
                             <div class="team-total-box">
 
@@ -927,7 +2413,10 @@
                                     Total Value
                                 </div>
 
-                                <div id="team-value" class="team-total">
+                                <div
+                                    id="team-value"
+                                    class="team-total"
+                                >
                                     0m
                                 </div>
 
@@ -936,27 +2425,31 @@
                         </div>
 
 
-                        <div id="team-players" class="player-grid">
-
-                            <div class="empty">
-                                Loading players...
-                            </div>
-
-                        </div>
+                        <div
+                            id="team-players"
+                            class="player-grid"
+                        ></div>
 
 
                         <div style="margin-top:25px">
+
 
                             <div class="team-total-label">
                                 BUDGET
                             </div>
 
+
                             <div
                                 id="budget-text"
-                                style="font-size:13px;margin:5px 0 8px;color:var(--muted)"
+                                style="
+                                    font-size:13px;
+                                    margin:5px 0 8px;
+                                    color:var(--muted)
+                                "
                             >
-                                --
+                                0m / 250m used
                             </div>
+
 
                             <div class="progress">
 
@@ -967,43 +2460,51 @@
 
                             </div>
 
+
                             <div class="progress-labels">
 
                                 <span>
                                     Spent
                                 </span>
 
-                                <span>
-                                    <span id="budget-remaining">
-                                        --
-                                    </span>
-                                    remaining
+                                <span id="budget-remaining">
+                                    250m remaining
                                 </span>
 
                             </div>
 
+
                         </div>
+
 
                     </div>
 
                 </div>
 
 
-                <div class="panel" style="margin-top:18px">
+
+                <div
+                    class="panel"
+                    style="margin-top:18px"
+                >
+
 
                     <div class="panel-header">
 
                         <div>
+
                             <div class="panel-title">
-                                Event Progress
+                                Daily Team Scores
                             </div>
 
                             <div class="panel-subtitle">
-                                Daily performance across the league
+                                Your team's points from each day
                             </div>
+
                         </div>
 
                     </div>
+
 
                     <div class="panel-body">
 
@@ -1016,66 +2517,86 @@
 
                 </div>
 
+
             </div>
 
 
-            <!-- SIDE LEADERBOARD -->
+
+            <!-- ==================================
+                 HOMEPAGE TEAM LEADERBOARD
+            =================================== -->
 
             <aside>
 
+
                 <div class="panel">
+
 
                     <div class="panel-header">
 
                         <div>
+
                             <div class="panel-title">
                                 Team Leaderboard
                             </div>
 
                             <div class="panel-subtitle">
-                                All teams
+                                All fantasy teams
                             </div>
+
                         </div>
 
                     </div>
 
-                    <div style="padding:12px">
+
+                    <div class="search-wrap">
 
                         <input
                             id="home-team-search"
                             type="text"
                             placeholder="Search teams..."
-                            style="width:100%"
                             oninput="renderHomeLeaderboard()"
                         >
 
                     </div>
+
 
                     <div
                         id="team-leaderboard"
                         class="leaderboard"
                     ></div>
 
+
                 </div>
+
 
             </aside>
 
+
         </div>
+
 
     </section>
 
 
-    <!-- ========================= -->
-    <!-- TEAM LEADERBOARD -->
-    <!-- ========================= -->
 
-    <section id="page-teams" class="page-section">
+    <!-- ======================================
+         TEAM LEADERBOARD
+    ======================================= -->
+
+    <section
+        id="page-teams"
+        class="page-section"
+    >
+
 
         <div class="panel">
+
 
             <div class="panel-header">
 
                 <div>
+
                     <div class="panel-title">
                         Team Leaderboard
                     </div>
@@ -1083,46 +2604,60 @@
                     <div class="panel-subtitle">
                         Every fantasy team
                     </div>
+
                 </div>
 
             </div>
 
+
             <div class="panel-body">
+
 
                 <div class="table-controls">
 
                     <input
                         id="team-search"
                         type="text"
-                        placeholder="Search team..."
+                        placeholder="Search teams..."
                         oninput="renderFullTeamLeaderboard()"
                     >
 
                 </div>
+
 
                 <div
                     id="full-team-leaderboard"
                     class="leaderboard"
                 ></div>
 
+
             </div>
 
+
         </div>
+
 
     </section>
 
 
-    <!-- ========================= -->
-    <!-- PVM LEADERBOARD -->
-    <!-- ========================= -->
 
-    <section id="page-pvm" class="page-section">
+    <!-- ======================================
+         PVM LEADERBOARD
+    ======================================= -->
+
+    <section
+        id="page-pvm"
+        class="page-section"
+    >
+
 
         <div class="panel">
+
 
             <div class="panel-header">
 
                 <div>
+
                     <div class="panel-title">
                         PvM Leaderboard
                     </div>
@@ -1130,46 +2665,510 @@
                     <div class="panel-subtitle">
                         Individual fantasy player performance
                     </div>
+
                 </div>
 
             </div>
 
+
             <div class="panel-body">
+
 
                 <div class="table-controls">
 
                     <input
                         id="pvm-search"
                         type="text"
-                        placeholder="Search player..."
+                        placeholder="Search players..."
                         oninput="renderPvMLeaderboard()"
                     >
 
                 </div>
+
 
                 <div
                     id="pvm-leaderboard"
                     class="leaderboard"
                 ></div>
 
+
             </div>
 
+
         </div>
+
 
     </section>
 
 
+
+    <!-- ======================================
+         MY TEAM
+    ======================================= -->
+
+    <section
+        id="page-myteam"
+        class="page-section"
+    >
+
+
+        <div class="panel">
+
+
+            <div class="panel-header">
+
+                <div>
+
+                    <div class="panel-title">
+                        My Team
+                    </div>
+
+                    <div class="panel-subtitle">
+                        Manage your Fantasy PvM team
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="myteam-content"
+                class="panel-body"
+            >
+
+                <div class="empty">
+                    Loading...
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ======================================
+         TEAM BUILDER
+    ======================================= -->
+
+    <section
+        id="page-builder"
+        class="page-section"
+    >
+
+
+        <div class="panel">
+
+
+            <div class="panel-header">
+
+                <div>
+
+                    <div class="panel-title">
+                        Build Your Fantasy Team
+                    </div>
+
+                    <div class="panel-subtitle">
+                        Pick exactly five PvMers within the budget
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel-body">
+
+
+                <div class="form-group">
+
+                    <label
+                        class="form-label"
+                        for="builder-team-name"
+                    >
+                        Team Name
+                    </label>
+
+
+                    <input
+                        id="builder-team-name"
+                        class="team-name-input"
+                        type="text"
+                        maxlength="30"
+                        placeholder="Enter your team name"
+                    >
+
+
+                    <div class="form-help">
+                        This is the public name shown on the leaderboard.
+                    </div>
+
+                </div>
+
+
+
+                <div class="builder-summary">
+
+
+                    <div class="builder-stat">
+
+                        <div class="builder-stat-label">
+                            Budget
+                        </div>
+
+                        <div
+                            id="builder-budget"
+                            class="builder-stat-value"
+                        >
+                            250m
+                        </div>
+
+                    </div>
+
+
+                    <div class="builder-stat">
+
+                        <div class="builder-stat-label">
+                            Spent
+                        </div>
+
+                        <div
+                            id="builder-spent"
+                            class="builder-stat-value"
+                        >
+                            0m
+                        </div>
+
+                    </div>
+
+
+                    <div class="builder-stat">
+
+                        <div class="builder-stat-label">
+                            Remaining
+                        </div>
+
+                        <div
+                            id="builder-remaining"
+                            class="builder-stat-value"
+                        >
+                            250m
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="builder-layout">
+
+
+                    <div class="panel">
+
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <div class="panel-title">
+                                    Your Squad
+                                </div>
+
+                                <div class="panel-subtitle">
+                                    <span id="builder-count">0</span> / 5
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="panel-body">
+
+
+                            <div
+                                id="builder-squad"
+                                class="squad-list"
+                            ></div>
+
+
+                            <div
+                                id="builder-message"
+                                class="status"
+                                style="display:none;margin-top:15px"
+                            ></div>
+
+
+                            <div class="builder-actions">
+
+
+                                <button
+                                    class="btn"
+                                    onclick="showPage('myteam')"
+                                >
+                                    Cancel
+                                </button>
+
+
+                                <button
+                                    class="btn primary"
+                                    id="save-team-button"
+                                    onclick="saveFantasyTeam()"
+                                >
+                                    Save Team
+                                </button>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="panel">
+
+
+                        <div class="panel-header">
+
+                            <div style="width:100%">
+
+                                <div class="panel-title">
+                                    Available PvMers
+                                </div>
+
+                                <div
+                                    class="panel-subtitle"
+                                    style="margin-bottom:10px"
+                                >
+                                    Search by RuneScape name
+                                </div>
+
+
+                                <input
+                                    id="builder-search"
+                                    type="text"
+                                    placeholder="Search PvMer..."
+                                    style="width:100%"
+                                    oninput="renderPlayerBuilder()"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            id="builder-players"
+                            class="leaderboard"
+                        ></div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
     <div class="footer">
+
         Fantasy PvM League • OSRS
+
         <span id="last-updated"></span>
+
     </div>
+
 
 </main>
 
 
-<!-- ========================= -->
-<!-- PLAYER MODAL -->
-<!-- ========================= -->
+
+<!-- ======================================
+     AUTH MODAL
+======================================= -->
+
+<div
+    id="auth-modal"
+    class="modal-backdrop"
+>
+
+
+    <div class="modal">
+
+
+        <div class="modal-header">
+
+
+            <div
+                id="auth-modal-title"
+                class="modal-title"
+            >
+                Login
+            </div>
+
+
+            <button
+                class="close-btn"
+                onclick="closeAuth()"
+            >
+                ×
+            </button>
+
+
+        </div>
+
+
+        <div class="modal-body">
+
+
+            <div
+                id="auth-error"
+                class="auth-error"
+            ></div>
+
+
+            <div
+                id="auth-success"
+                class="auth-success"
+            ></div>
+
+
+            <div class="form-group">
+
+
+                <label class="form-label">
+                    Username
+                </label>
+
+
+                <input
+                    id="auth-username"
+                    class="form-input"
+                    type="text"
+                    maxlength="20"
+                    autocomplete="username"
+                    placeholder="Username"
+                >
+
+
+                <div class="form-help">
+                    3–20 characters: letters, numbers, underscores and hyphens.
+                </div>
+
+
+            </div>
+
+
+            <div class="form-group">
+
+
+                <label class="form-label">
+                    Password
+                </label>
+
+
+                <input
+                    id="auth-password"
+                    class="form-input"
+                    type="password"
+                    autocomplete="current-password"
+                    placeholder="Password"
+                >
+
+
+            </div>
+
+
+            <div
+                id="auth-confirm-group"
+                class="form-group"
+                style="display:none"
+            >
+
+
+                <label class="form-label">
+                    Confirm Password
+                </label>
+
+
+                <input
+                    id="auth-confirm"
+                    class="form-input"
+                    type="password"
+                    autocomplete="new-password"
+                    placeholder="Confirm password"
+                >
+
+
+            </div>
+
+
+            <div class="modal-buttons">
+
+
+                <button
+                    id="auth-submit"
+                    class="btn primary"
+                    onclick="submitAuth()"
+                >
+                    Login
+                </button>
+
+
+            </div>
+
+
+            <div class="switch-auth">
+
+
+                <span id="auth-switch-text">
+                    Don't have an account?
+                </span>
+
+
+                <button
+                    id="auth-switch-button"
+                    onclick="switchAuthMode()"
+                >
+                    Sign up
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ======================================
+     PLAYER MODAL
+======================================= -->
 
 <div
     id="player-modal"
@@ -1177,12 +3176,15 @@
     onclick="closeModal(event)"
 >
 
+
     <div
         class="modal"
         onclick="event.stopPropagation()"
     >
 
+
         <div class="modal-header">
+
 
             <div
                 id="modal-name"
@@ -1191,6 +3193,7 @@
                 Player
             </div>
 
+
             <button
                 class="close-btn"
                 onclick="closePlayer()"
@@ -1198,11 +3201,15 @@
                 ×
             </button>
 
+
         </div>
+
 
         <div class="modal-body">
 
+
             <div class="modal-stats">
+
 
                 <div class="modal-stat">
 
@@ -1219,6 +3226,7 @@
 
                 </div>
 
+
                 <div class="modal-stat">
 
                     <div class="modal-stat-label">
@@ -1233,6 +3241,7 @@
                     </div>
 
                 </div>
+
 
                 <div class="modal-stat">
 
@@ -1249,6 +3258,7 @@
 
                 </div>
 
+
                 <div class="modal-stat">
 
                     <div class="modal-stat-label">
@@ -1264,161 +3274,309 @@
 
                 </div>
 
+
             </div>
 
-            <div class="panel-title" style="margin-bottom:10px">
+
+            <div
+                class="panel-title"
+                style="margin-bottom:10px"
+            >
                 Daily Scores
             </div>
+
 
             <div
                 id="modal-daily"
                 class="daily-list"
             ></div>
 
+
         </div>
 
+
     </div>
+
 
 </div>
 
 
+
 <script>
+
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+
 const CONFIG = {
-    fantasyCsv:
+
+    SUPABASE_URL:
+        "https://cantussixagesfxjjfrg.supabase.co",
+
+    SUPABASE_KEY:
+        "sb_publishable_p-jtnWdUrQRq48qirgbPUA_y17z8qhj",
+
+    FANTASY_CSV:
         "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=1220418834&single=true&output=csv",
 
-    teamsCsv:
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=2004919509&single=true&output=csv",
+    EVENT_START:
+        new Date(
+            "2026-09-20T19:00:00+01:00"
+        ),
 
-    eventStart: new Date("2026-09-20T19:00:00+01:00"),
+    EVENT_DAYS:
+        7,
 
-    eventDays: 7,
+    FANTASY_BUDGET:
+        250
 
-    fantasyBudget: 250
 };
 
 
+const supabaseClient =
+    window.supabase.createClient(
+        CONFIG.SUPABASE_URL,
+        CONFIG.SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+
 let fantasyData = [];
-let teamsData = [];
-let availableTeams = [];
-let selectedTeam = "";
+
+let currentSession = null;
+
+let currentProfile = null;
+
+let currentFantasyTeam = null;
+
+let builderPlayers = [];
+
+let authMode = "login";
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
 
 
 function normalise(value) {
-    return String(value ?? "").trim();
+
+    return String(
+        value ?? ""
+    ).trim();
+
 }
 
 
 function number(value) {
-    const n = parseFloat(
-        String(value ?? "")
-            .replace(/,/g, "")
-            .replace(/[^\d.-]/g, "")
-    );
 
-    return Number.isFinite(n) ? n : 0;
+    const parsed =
+        parseFloat(
+            String(value ?? "")
+                .replace(/,/g, "")
+                .replace(/[^\d.-]/g, "")
+        );
+
+    return Number.isFinite(parsed)
+        ? parsed
+        : 0;
+
 }
 
 
 function escapeHtml(value) {
+
     return String(value ?? "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+
 }
 
 
-/* =========================
+function usernameEmail(username) {
+
+    return (
+        username.toLowerCase() +
+        "@fantasypvm.local"
+    );
+
+}
+
+
+function teamNameValid(name) {
+
+    if (
+        name.length < 2 ||
+        name.length > 30
+    ) {
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+
+/* =========================================================
    CSV PARSER
-========================= */
+========================================================= */
+
 
 function parseCSV(text) {
 
     const rows = [];
 
     let row = [];
+
     let cell = "";
+
     let quoted = false;
 
-    for (let i = 0; i < text.length; i++) {
 
-        const char = text[i];
+    for (
+        let i = 0;
+        i < text.length;
+        i++
+    ) {
 
-        if (char === '"') {
+        const char =
+            text[i];
 
-            if (quoted && text[i + 1] === '"') {
+
+        if (
+            char === '"'
+        ) {
+
+            if (
+                quoted &&
+                text[i + 1] === '"'
+            ) {
 
                 cell += '"';
+
                 i++;
 
             } else {
 
-                quoted = !quoted;
+                quoted =
+                    !quoted;
 
             }
 
-        } else if (char === "," && !quoted) {
-
-            row.push(cell);
-            cell = "";
 
         } else if (
-            (char === "\n" || char === "\r") &&
+            char === "," &&
             !quoted
         ) {
 
-            if (char === "\r" && text[i + 1] === "\n") {
+            row.push(cell);
+
+            cell = "";
+
+
+        } else if (
+            (
+                char === "\n" ||
+                char === "\r"
+            ) &&
+            !quoted
+        ) {
+
+            if (
+                char === "\r" &&
+                text[i + 1] === "\n"
+            ) {
+
                 i++;
+
             }
 
+
             row.push(cell);
+
             cell = "";
+
 
             if (
                 row.some(
-                    value => normalise(value) !== ""
+                    value =>
+                        normalise(value) !== ""
                 )
             ) {
+
                 rows.push(row);
+
             }
 
+
             row = [];
+
 
         } else {
 
             cell += char;
 
         }
+
     }
 
 
-    if (cell !== "" || row.length > 0) {
+    if (
+        row.length ||
+        cell
+    ) {
 
         row.push(cell);
 
+
         if (
             row.some(
-                value => normalise(value) !== ""
+                value =>
+                    normalise(value) !== ""
             )
         ) {
+
             rows.push(row);
+
         }
 
     }
 
+
     return rows;
+
 }
 
 
-async function loadCSV(url, name) {
+async function loadCSV(
+    url,
+    name
+) {
 
-    const response = await fetch(url, {
-        cache: "no-store"
-    });
+    const response =
+        await fetch(
+            url,
+            {
+                cache:
+                    "no-store"
+            }
+        );
 
-    if (!response.ok) {
+
+    if (
+        !response.ok
+    ) {
 
         throw new Error(
             `${name} returned HTTP ${response.status}`
@@ -1426,15 +3584,19 @@ async function loadCSV(url, name) {
 
     }
 
-    const text = await response.text();
 
-    const trimmed = text.trim();
+    const text =
+        await response.text();
+
+
+    const trimmed =
+        text.trim();
+
 
     if (
         trimmed.startsWith("<!DOCTYPE") ||
         trimmed.startsWith("<html") ||
-        trimmed.startsWith("<HTML") ||
-        trimmed.includes("<head>")
+        trimmed.startsWith("<HTML")
     ) {
 
         throw new Error(
@@ -1443,9 +3605,14 @@ async function loadCSV(url, name) {
 
     }
 
-    const rows = parseCSV(text);
 
-    if (!rows.length) {
+    const rows =
+        parseCSV(text);
+
+
+    if (
+        !rows.length
+    ) {
 
         throw new Error(
             `${name} returned an empty CSV`
@@ -1453,157 +3620,102 @@ async function loadCSV(url, name) {
 
     }
 
+
     return rows;
+
 }
 
 
-/* =========================
+/* =========================================================
    STATUS
-========================= */
+========================================================= */
 
-function setStatus(message, type = "") {
 
-    const el =
-        document.getElementById("load-status");
+function setStatus(
+    message,
+    type = ""
+) {
 
-    if (!el) {
+    const element =
+        document.getElementById(
+            "load-status"
+        );
+
+
+    if (!element) {
         return;
     }
 
-    el.textContent = message;
 
-    el.className = "status";
+    element.textContent =
+        message;
 
-    if (type) {
-        el.classList.add(type);
+
+    element.className =
+        "status";
+
+
+    if (
+        type
+    ) {
+
+        element.classList.add(
+            type
+        );
+
     }
+
 }
 
 
-/* =========================
-   LOAD DATA
-========================= */
+/* =========================================================
+   LOAD GOOGLE SHEET
+========================================================= */
+
 
 async function loadData() {
 
     setStatus(
-        "Loading Fantasy PvM League data..."
+        "Loading Fantasy PvM data..."
     );
+
 
     try {
 
-        const [
-            fantasyRows,
-            teamRows
-        ] = await Promise.all([
-            loadCSV(
-                CONFIG.fantasyCsv,
+        fantasyData =
+            await loadCSV(
+                CONFIG.FANTASY_CSV,
                 "Fantasy PvM"
-            ),
-
-            loadCSV(
-                CONFIG.teamsCsv,
-                "Teams"
-            )
-        ]);
+            );
 
 
-        fantasyData = fantasyRows;
-        teamsData = teamRows;
+        renderHome();
 
+        renderPvMLeaderboard();
 
-        localStorage.setItem(
-            "fantasy_pvm_fantasy",
-            JSON.stringify(fantasyData)
-        );
+        renderDailyScores();
 
-        localStorage.setItem(
-            "fantasy_pvm_teams",
-            JSON.stringify(teamsData)
-        );
-
-
-        buildTeams();
-
-
-        if (!selectedTeam) {
-            loadRequestedTeam();
-        } else if (
-            !availableTeams.some(
-                team => team.name === selectedTeam
-            )
-        ) {
-            loadRequestedTeam();
-        }
-
-
-        renderAll();
-
-
-        const now =
-            new Date().toLocaleTimeString();
 
         document.getElementById(
             "last-updated"
         ).textContent =
-            ` • Last updated ${now}`;
+            ` • Last updated ${new Date().toLocaleTimeString()}`;
 
 
         setStatus(
-            `Data loaded successfully • ${availableTeams.length} teams`,
+            "Fantasy PvM data loaded successfully.",
             "success"
         );
 
-    } catch (error) {
+
+    } catch (
+        error
+    ) {
 
         console.error(
-            "Fantasy PvM League data loading failed:",
+            "Fantasy data loading failed:",
             error
         );
-
-
-        const cachedFantasy =
-            localStorage.getItem(
-                "fantasy_pvm_fantasy"
-            );
-
-        const cachedTeams =
-            localStorage.getItem(
-                "fantasy_pvm_teams"
-            );
-
-
-        if (cachedFantasy && cachedTeams) {
-
-            try {
-
-                fantasyData =
-                    JSON.parse(cachedFantasy);
-
-                teamsData =
-                    JSON.parse(cachedTeams);
-
-                buildTeams();
-                loadRequestedTeam();
-                renderAll();
-
-                setStatus(
-                    `Live data failed — displaying cached data. ${error.message}`,
-                    "error"
-                );
-
-                return;
-
-            } catch (cacheError) {
-
-                console.error(
-                    "Cached data also failed:",
-                    cacheError
-                );
-
-            }
-
-        }
 
 
         setStatus(
@@ -1611,292 +3723,26 @@ async function loadData() {
             "error"
         );
 
-        console.error(
-            "Fantasy data URL:",
-            CONFIG.fantasyCsv
-        );
-
-        console.error(
-            "Teams data URL:",
-            CONFIG.teamsCsv
-        );
     }
+
 }
 
 
-/* =========================
-   TEAM DETECTION
-========================= */
-
-function buildTeams() {
-
-    availableTeams = [];
-
-    for (
-        let i = 0;
-        i < teamsData.length - 1;
-        i++
-    ) {
-
-        const row =
-            teamsData[i];
-
-        const nextRow =
-            teamsData[i + 1];
-
-        const possibleName =
-            normalise(row[0]);
-
-        const nextFirst =
-            normalise(nextRow[0]).toLowerCase();
+/* =========================================================
+   PLAYER DATA
+========================================================= */
 
 
-        /*
-            A team header is identified by:
-            current row = team name
-            next row    = Players | Value | Points
-        */
-
-        if (
-            possibleName &&
-            nextFirst === "players"
-        ) {
-
-            availableTeams.push({
-                name: possibleName,
-                start: i
-            });
-
-        }
-
-    }
-
-
-    availableTeams.sort(
-        (a, b) =>
-            a.name.localeCompare(
-                b.name,
-                undefined,
-                {
-                    sensitivity: "base"
-                }
-            )
-    );
-}
-
-
-/* =========================
-   TEAM SELECTION
-========================= */
-
-function teamSlug(name) {
-
-    return String(name)
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, "-");
-}
-
-
-function loadRequestedTeam() {
-
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
-
-    const requested =
-        params.get("team");
-
-
-    if (requested) {
-
-        const found =
-            availableTeams.find(
-                team =>
-                    teamSlug(team.name) ===
-                    requested.toLowerCase()
-            );
-
-        if (found) {
-
-            selectedTeam =
-                found.name;
-
-            return;
-
-        }
-
-    }
-
-
-    const saved =
-        localStorage.getItem(
-            "fantasy_pvm_selected_team"
-        );
-
+function getPlayer(
+    name
+) {
 
     if (
-        saved &&
-        availableTeams.some(
-            team => team.name === saved
-        )
+        !fantasyData.length
     ) {
 
-        selectedTeam = saved;
-
-        return;
-
-    }
-
-
-    if (availableTeams.length) {
-
-        selectedTeam =
-            availableTeams[0].name;
-
-    }
-}
-
-
-function changeTeam(name) {
-
-    selectedTeam = name;
-
-    localStorage.setItem(
-        "fantasy_pvm_selected_team",
-        name
-    );
-
-
-    const slug =
-        teamSlug(name);
-
-
-    const newUrl =
-        `${window.location.pathname}?team=${encodeURIComponent(slug)}`;
-
-
-    window.history.replaceState(
-        {},
-        "",
-        newUrl
-    );
-
-
-    renderAll();
-}
-
-
-/* =========================
-   GET TEAM
-========================= */
-
-function getTeam(name) {
-
-    const team =
-        availableTeams.find(
-            item => item.name === name
-        );
-
-
-    if (!team) {
         return null;
-    }
 
-
-    const players = [];
-
-    const start =
-        team.start;
-
-
-    /*
-        start:
-        Team name
-
-        start + 1:
-        Players | Value | Points
-
-        start + 2 .. +6:
-        5 players
-
-        start + 7:
-        totals
-    */
-
-    for (
-        let i = start + 2;
-        i <= start + 6;
-        i++
-    ) {
-
-        const row =
-            teamsData[i];
-
-        if (!row) {
-            continue;
-        }
-
-
-        const player =
-            normalise(row[0]);
-
-
-        if (!player) {
-            continue;
-        }
-
-
-        players.push({
-            name: player,
-            value: number(row[1]),
-            points: number(row[2])
-        });
-
-    }
-
-
-    const totalRow =
-        teamsData[start + 7];
-
-
-    return {
-
-        name: team.name,
-
-        players,
-
-        totalValue:
-            totalRow
-                ? number(totalRow[1])
-                : players.reduce(
-                    (sum, player) =>
-                        sum + player.value,
-                    0
-                ),
-
-        totalPoints:
-            totalRow
-                ? number(totalRow[2])
-                : players.reduce(
-                    (sum, player) =>
-                        sum + player.points,
-                    0
-                )
-
-    };
-}
-
-
-/* =========================
-   GET PLAYER
-========================= */
-
-function getPlayer(name) {
-
-    if (!fantasyData.length) {
-        return null;
     }
 
 
@@ -1922,11 +3768,6 @@ function getPlayer(name) {
             const daily = [];
 
 
-            /*
-                F-L = columns 5-11
-                M   = total column 12
-            */
-
             for (
                 let col = 5;
                 col <= 11;
@@ -1936,11 +3777,15 @@ function getPlayer(name) {
                 daily.push({
 
                     boss:
-                        normalise(headers[col]) ||
+                        normalise(
+                            headers[col]
+                        ) ||
                         `Day ${col - 4}`,
 
                     points:
-                        number(row[col])
+                        number(
+                            row[col]
+                        )
 
                 });
 
@@ -1950,21 +3795,31 @@ function getPlayer(name) {
             return {
 
                 name:
-                    normalise(row[0]),
+                    normalise(
+                        row[0]
+                    ),
 
                 ehb:
-                    number(row[1]),
+                    number(
+                        row[1]
+                    ),
 
                 value:
-                    number(row[2]),
+                    number(
+                        row[2]
+                    ),
 
                 monthlyEhb:
-                    number(row[4]),
+                    number(
+                        row[4]
+                    ),
 
                 daily,
 
                 total:
-                    number(row[12])
+                    number(
+                        row[12]
+                    )
 
             };
 
@@ -1974,843 +3829,9 @@ function getPlayer(name) {
 
 
     return null;
+
 }
 
-
-/* =========================
-   EVENT
-========================= */
-
-function getCurrentDay() {
-
-    const now =
-        new Date();
-
-    const start =
-        CONFIG.eventStart;
-
-
-    if (now < start) {
-        return 0;
-    }
-
-
-    const elapsed =
-        now.getTime() -
-        start.getTime();
-
-
-    const day =
-        Math.floor(
-            elapsed /
-            (24 * 60 * 60 * 1000)
-        ) + 1;
-
-
-    return Math.min(
-        day,
-        CONFIG.eventDays
-    );
-}
-
-
-function getCurrentBoss() {
-
-    if (!fantasyData.length) {
-        return "TBC";
-    }
-
-
-    const headers =
-        fantasyData[0];
-
-
-    const day =
-        getCurrentDay();
-
-
-    if (day < 1 || day > 7) {
-        return "TBC";
-    }
-
-
-    /*
-        Day 1 = F = index 5
-        Day 7 = L = index 11
-    */
-
-    return (
-        normalise(
-            headers[day + 4]
-        ) || "TBC"
-    );
-}
-
-
-function getTimeRemaining() {
-
-    const now =
-        new Date();
-
-    const start =
-        CONFIG.eventStart;
-
-
-    if (now < start) {
-
-        return (
-            start.getTime() -
-            now.getTime()
-        );
-
-    }
-
-
-    const day =
-        getCurrentDay();
-
-
-    if (
-        day < 1 ||
-        day > CONFIG.eventDays
-    ) {
-
-        return 0;
-
-    }
-
-
-    const end =
-        start.getTime() +
-        day *
-        24 *
-        60 *
-        60 *
-        1000;
-
-
-    return Math.max(
-        0,
-        end - now.getTime()
-    );
-}
-
-
-function formatTime(ms) {
-
-    if (ms <= 0) {
-        return "00:00:00";
-    }
-
-
-    const totalSeconds =
-        Math.floor(ms / 1000);
-
-
-    const days =
-        Math.floor(
-            totalSeconds / 86400
-        );
-
-
-    const hours =
-        Math.floor(
-            (totalSeconds % 86400) /
-            3600
-        );
-
-
-    const minutes =
-        Math.floor(
-            (totalSeconds % 3600) /
-            60
-        );
-
-
-    const seconds =
-        totalSeconds % 60;
-
-
-    if (days > 0) {
-
-        return (
-            `${days}d ` +
-            `${String(hours).padStart(2, "0")}h ` +
-            `${String(minutes).padStart(2, "0")}m`
-        );
-
-    }
-
-
-    return (
-        `${String(hours).padStart(2, "0")}:` +
-        `${String(minutes).padStart(2, "0")}:` +
-        `${String(seconds).padStart(2, "0")}`
-    );
-}
-
-
-function updateCountdown() {
-
-    const el =
-        document.getElementById(
-            "countdown"
-        );
-
-
-    if (!el) {
-        return;
-    }
-
-
-    el.textContent =
-        formatTime(
-            getTimeRemaining()
-        );
-}
-
-
-/* =========================
-   RENDER ALL
-========================= */
-
-function renderAll() {
-
-    renderTeamSelector();
-
-    renderHome();
-
-    renderHomeLeaderboard();
-
-    renderFullTeamLeaderboard();
-
-    renderPvMLeaderboard();
-
-    renderDailyScores();
-
-    updateCountdown();
-}
-
-
-/* =========================
-   SELECT
-========================= */
-
-function renderTeamSelector() {
-
-    const selector =
-        document.getElementById(
-            "team-selector"
-        );
-
-
-    if (!selector) {
-        return;
-    }
-
-
-    selector.innerHTML = "";
-
-
-    for (
-        const team of availableTeams
-    ) {
-
-        const option =
-            document.createElement(
-                "option"
-            );
-
-
-        option.value =
-            team.name;
-
-        option.textContent =
-            team.name;
-
-        option.selected =
-            team.name ===
-            selectedTeam;
-
-
-        selector.appendChild(
-            option
-        );
-
-    }
-
-
-    selector.onchange = () => {
-
-        changeTeam(
-            selector.value
-        );
-
-    };
-}
-
-
-/* =========================
-   HOME
-========================= */
-
-function renderHome() {
-
-    const team =
-        getTeam(selectedTeam);
-
-
-    document.getElementById(
-        "current-boss"
-    ).textContent =
-        getCurrentBoss();
-
-
-    const currentDay =
-        getCurrentDay();
-
-
-    document.getElementById(
-        "current-day"
-    ).textContent =
-        currentDay === 0
-            ? "EVENT STARTS 20 SEPTEMBER 2026"
-            : `DAY ${currentDay} / ${CONFIG.eventDays}`;
-
-
-    document.getElementById(
-        "hero-team-name"
-    ).textContent =
-        team
-            ? team.name
-            : "No Team";
-
-
-    document.getElementById(
-        "hero-team-points"
-    ).textContent =
-        team
-            ? team.totalPoints.toLocaleString(
-                undefined,
-                {
-                    maximumFractionDigits: 2
-                }
-            )
-            : "0";
-
-
-    document.getElementById(
-        "hero-team-value"
-    ).textContent =
-        team
-            ? `${team.totalValue.toLocaleString()}m`
-            : "0m";
-
-
-    document.getElementById(
-        "team-title"
-    ).textContent =
-        team
-            ? team.name
-            : "No Team";
-
-
-    document.getElementById(
-        "team-title-large"
-    ).textContent =
-        team
-            ? team.name
-            : "No Team";
-
-
-    document.getElementById(
-        "team-total"
-    ).textContent =
-        team
-            ? team.totalPoints.toLocaleString(
-                undefined,
-                {
-                    maximumFractionDigits: 2
-                }
-            )
-            : "0";
-
-
-    document.getElementById(
-        "team-value"
-    ).textContent =
-        team
-            ? `${team.totalValue.toLocaleString()}m`
-            : "0m";
-
-
-    const playerContainer =
-        document.getElementById(
-            "team-players"
-        );
-
-
-    if (!team) {
-
-        playerContainer.innerHTML =
-            `<div class="empty">No team found.</div>`;
-
-        return;
-
-    }
-
-
-    document.getElementById(
-        "team-meta"
-    ).textContent =
-        `${team.players.length} / 5 players`;
-
-
-    playerContainer.innerHTML =
-        team.players.map(
-            player => {
-
-                const full =
-                    getPlayer(
-                        player.name
-                    );
-
-
-                return `
-                    <div
-                        class="player-card"
-                        data-player="${escapeHtml(player.name)}"
-                    >
-
-                        <div class="player-name">
-                            ${escapeHtml(player.name)}
-                        </div>
-
-                        <div class="player-stat">
-                            <span>Value</span>
-                            <strong>
-                                ${player.value}m
-                            </strong>
-                        </div>
-
-                        <div class="player-stat">
-                            <span>Points</span>
-                            <strong>
-                                ${player.points.toLocaleString(
-                                    undefined,
-                                    {
-                                        maximumFractionDigits: 2
-                                    }
-                                )}
-                            </strong>
-                        </div>
-
-                        <div class="player-stat">
-                            <span>EHB</span>
-                            <strong>
-                                ${
-                                    full
-                                        ? full.ehb.toLocaleString(
-                                            undefined,
-                                            {
-                                                maximumFractionDigits: 1
-                                            }
-                                        )
-                                        : "—"
-                                }
-                            </strong>
-                        </div>
-
-                    </div>
-                `;
-
-            }
-        ).join("");
-
-
-    playerContainer
-        .querySelectorAll(".player-card")
-        .forEach(card => {
-
-            card.addEventListener(
-                "click",
-                () => {
-
-                    showPlayer(
-                        card.dataset.player
-                    );
-
-                }
-            );
-
-        });
-
-
-    const spent =
-        team.totalValue;
-
-
-    const remaining =
-        CONFIG.fantasyBudget -
-        spent;
-
-
-    const percentage =
-        Math.min(
-            100,
-            Math.max(
-                0,
-                (spent /
-                    CONFIG.fantasyBudget) *
-                    100
-            )
-        );
-
-
-    document.getElementById(
-        "budget-progress"
-    ).style.width =
-        `${percentage}%`;
-
-
-    document.getElementById(
-        "budget-text"
-    ).textContent =
-        `${spent.toLocaleString()}m / ${CONFIG.fantasyBudget}m used`;
-
-
-    document.getElementById(
-        "budget-remaining"
-    ).textContent =
-        `${remaining.toLocaleString()}m`;
-}
-
-
-/* =========================
-   DAILY SCORES
-========================= */
-
-function renderDailyScores() {
-
-    const container =
-        document.getElementById(
-            "daily-grid"
-        );
-
-
-    const team =
-        getTeam(selectedTeam);
-
-
-    if (!team) {
-
-        container.innerHTML =
-            `<div class="empty">No team selected.</div>`;
-
-        return;
-
-    }
-
-
-    const players =
-        team.players
-            .map(
-                player =>
-                    getPlayer(
-                        player.name
-                    )
-            )
-            .filter(Boolean);
-
-
-    const days = [];
-
-
-    for (let day = 0; day < 7; day++) {
-
-        let total = 0;
-
-
-        for (
-            const player of players
-        ) {
-
-            if (
-                player.daily[day]
-            ) {
-
-                total +=
-                    player.daily[day].points;
-
-            }
-
-        }
-
-
-        const boss =
-            fantasyData.length
-                ? normalise(
-                    fantasyData[0][day + 5]
-                ) || `Day ${day + 1}`
-                : `Day ${day + 1}`;
-
-
-        days.push({
-            number: day + 1,
-            boss,
-            total
-        });
-
-    }
-
-
-    container.innerHTML =
-        days.map(day => `
-            <div class="daily-card">
-
-                <div class="daily-day">
-                    DAY ${day.number}
-                </div>
-
-                <div class="daily-boss">
-                    ${escapeHtml(day.boss)}
-                </div>
-
-                <div class="daily-points">
-                    ${day.total.toLocaleString(
-                        undefined,
-                        {
-                            maximumFractionDigits: 2
-                        }
-                    )}
-                </div>
-
-            </div>
-        `).join("");
-}
-
-
-/* =========================
-   TEAM LEADERBOARD
-========================= */
-
-function getTeamLeaderboard() {
-
-    return availableTeams
-        .map(team => getTeam(team.name))
-        .filter(Boolean)
-        .sort((a, b) => {
-
-            // 1. Highest points first
-            if (b.totalPoints !== a.totalPoints) {
-                return b.totalPoints - a.totalPoints;
-            }
-
-            // 2. If tied, alphabetical team name
-            return a.name.localeCompare(
-                b.name,
-                undefined,
-                {
-                    numeric: true,
-                    sensitivity: "base"
-                }
-            );
-        });
-}
-
-function renderHomeLeaderboard() {
-
-    const container =
-        document.getElementById(
-            "team-leaderboard"
-        );
-
-
-    if (!container) {
-        return;
-    }
-
-
-    const search =
-        normalise(
-            document.getElementById(
-                "home-team-search"
-            )?.value
-        ).toLowerCase();
-
-
-    const results =
-        getTeamLeaderboard()
-            .filter(
-                team =>
-                    !search ||
-                    team.name
-                        .toLowerCase()
-                        .includes(search)
-            );
-
-
-    if (!results.length) {
-
-        container.innerHTML =
-            `<div class="empty">No teams found.</div>`;
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        results.map(
-            (team, index) => `
-                <div
-                    class="lb-row"
-                    data-team="${escapeHtml(team.name)}"
-                >
-
-                    <div class="lb-rank">
-                        ${index + 1}
-                    </div>
-
-                    <div class="lb-name">
-                        ${escapeHtml(team.name)}
-                    </div>
-
-                    <div class="lb-points">
-                        ${team.totalPoints.toLocaleString(
-                            undefined,
-                            {
-                                maximumFractionDigits: 2
-                            }
-                        )}
-                    </div>
-
-                </div>
-            `
-        ).join("");
-
-
-    container
-        .querySelectorAll(".lb-row")
-        .forEach(row => {
-
-            row.addEventListener(
-                "click",
-                () => {
-
-                    changeTeam(
-                        row.dataset.team
-                    );
-
-                    showPage(
-                        "home"
-                    );
-
-                }
-            );
-
-        });
-}
-
-
-function renderFullTeamLeaderboard() {
-
-    const container =
-        document.getElementById(
-            "full-team-leaderboard"
-        );
-
-
-    if (!container) {
-        return;
-    }
-
-
-    const search =
-        normalise(
-            document.getElementById(
-                "team-search"
-            )?.value
-        ).toLowerCase();
-
-
-    const results =
-        getTeamLeaderboard()
-            .filter(
-                team =>
-                    !search ||
-                    team.name
-                        .toLowerCase()
-                        .includes(search)
-            );
-
-
-    if (!results.length) {
-
-        container.innerHTML =
-            `<div class="empty">No teams found.</div>`;
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        results.map(
-            (team, index) => `
-                <div
-                    class="lb-row"
-                    data-team="${escapeHtml(team.name)}"
-                >
-
-                    <div class="lb-rank">
-                        ${index + 1}
-                    </div>
-
-                    <div class="lb-name">
-                        ${escapeHtml(team.name)}
-                    </div>
-
-                    <div class="lb-points">
-                        ${team.totalPoints.toLocaleString(
-                            undefined,
-                            {
-                                maximumFractionDigits: 2
-                            }
-                        )}
-                    </div>
-
-                </div>
-            `
-        ).join("");
-
-
-    container
-        .querySelectorAll(".lb-row")
-        .forEach(row => {
-
-            row.addEventListener(
-                "click",
-                () => {
-
-                    changeTeam(
-                        row.dataset.team
-                    );
-
-                    showPage(
-                        "home"
-                    );
-
-                }
-            );
-
-        });
-}
-
-
-/* =========================
-   PVM LEADERBOARD
-========================= */
 
 function getPvMLeaderboard() {
 
@@ -2828,7 +3849,9 @@ function getPvMLeaderboard() {
 
 
         const name =
-            normalise(row[0]);
+            normalise(
+                row[0]
+            );
 
 
         if (!name) {
@@ -2837,22 +3860,2702 @@ function getPvMLeaderboard() {
 
 
         players.push({
+
             name,
-            ehb: number(row[1]),
-            value: number(row[2]),
-            monthlyEhb: number(row[4]),
-            points: number(row[12])
+
+            ehb:
+                number(
+                    row[1]
+                ),
+
+            value:
+                number(
+                    row[2]
+                ),
+
+            monthlyEhb:
+                number(
+                    row[4]
+                ),
+
+            points:
+                number(
+                    row[12]
+                )
+
         });
 
     }
 
 
     return players.sort(
-        (a, b) =>
+        (
+            a,
+            b
+        ) =>
             b.points -
             a.points
     );
+
 }
+
+
+/* =========================================================
+   AUTH MODAL
+========================================================= */
+
+
+function openAuth(
+    mode = "login"
+) {
+
+    authMode =
+        mode;
+
+
+    clearAuthMessages();
+
+
+    document.getElementById(
+        "auth-modal"
+    ).classList.add(
+        "open"
+    );
+
+
+    updateAuthModal();
+
+}
+
+
+function closeAuth() {
+
+    document.getElementById(
+        "auth-modal"
+    ).classList.remove(
+        "open"
+    );
+
+
+    clearAuthMessages();
+
+}
+
+
+function switchAuthMode() {
+
+    authMode =
+        authMode === "login"
+            ? "signup"
+            : "login";
+
+
+    clearAuthMessages();
+
+    updateAuthModal();
+
+}
+
+
+function updateAuthModal() {
+
+    const signup =
+        authMode === "signup";
+
+
+    document.getElementById(
+        "auth-modal-title"
+    ).textContent =
+        signup
+            ? "Create Account"
+            : "Login";
+
+
+    document.getElementById(
+        "auth-confirm-group"
+    ).style.display =
+        signup
+            ? "block"
+            : "none";
+
+
+    document.getElementById(
+        "auth-submit"
+    ).textContent =
+        signup
+            ? "Create Account"
+            : "Login";
+
+
+    document.getElementById(
+        "auth-switch-text"
+    ).textContent =
+        signup
+            ? "Already have an account?"
+            : "Don't have an account?";
+
+
+    document.getElementById(
+        "auth-switch-button"
+    ).textContent =
+        signup
+            ? "Login"
+            : "Sign up";
+
+}
+
+
+function clearAuthMessages() {
+
+    const error =
+        document.getElementById(
+            "auth-error"
+        );
+
+
+    const success =
+        document.getElementById(
+            "auth-success"
+        );
+
+
+    error.textContent =
+        "";
+
+    error.style.display =
+        "none";
+
+
+    success.textContent =
+        "";
+
+    success.style.display =
+        "none";
+
+}
+
+
+function showAuthError(
+    message
+) {
+
+    const element =
+        document.getElementById(
+            "auth-error"
+        );
+
+
+    element.textContent =
+        message;
+
+
+    element.style.display =
+        "block";
+
+}
+
+
+function showAuthSuccess(
+    message
+) {
+
+    const element =
+        document.getElementById(
+            "auth-success"
+        );
+
+
+    element.textContent =
+        message;
+
+
+    element.style.display =
+        "block";
+
+}
+
+
+/* =========================================================
+   SIGN UP / LOGIN
+========================================================= */
+
+
+async function submitAuth() {
+
+    clearAuthMessages();
+
+
+    const username =
+        normalise(
+            document.getElementById(
+                "auth-username"
+            ).value
+        );
+
+
+    const password =
+        document.getElementById(
+            "auth-password"
+        ).value;
+
+
+    if (
+        username.length < 3 ||
+        username.length > 20
+    ) {
+
+        showAuthError(
+            "Username must be between 3 and 20 characters."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !/^[A-Za-z0-9_-]+$/.test(
+            username
+        )
+    ) {
+
+        showAuthError(
+            "Username can only contain letters, numbers, underscores and hyphens."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !password
+    ) {
+
+        showAuthError(
+            "Enter a password."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        authMode === "signup"
+    ) {
+
+        const confirm =
+            document.getElementById(
+                "auth-confirm"
+            ).value;
+
+
+        if (
+            password.length < 8
+        ) {
+
+            showAuthError(
+                "Password must be at least 8 characters."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            password !== confirm
+        ) {
+
+            showAuthError(
+                "Your passwords do not match."
+            );
+
+            return;
+
+        }
+
+
+        await signUp(
+            username,
+            password
+        );
+
+
+    } else {
+
+        await signIn(
+            username,
+            password
+        );
+
+    }
+
+}
+
+
+async function signUp(
+    username,
+    password
+) {
+
+    /*
+        The user sees only a username.
+
+        Supabase Auth still needs an email-style
+        identity for password authentication, so
+        we create a private deterministic address.
+    */
+
+    const email =
+        usernameEmail(
+            username
+        );
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.auth.signUp({
+
+            email,
+
+            password
+
+        });
+
+
+    if (
+        error
+    ) {
+
+        showAuthError(
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !data.user
+    ) {
+
+        showAuthError(
+            "Account creation failed."
+        );
+
+        return;
+
+    }
+
+
+    /*
+        A trigger from the earlier setup may already
+        have created the profile row.
+
+        Upsert handles both cases.
+    */
+
+    const {
+        error: profileError
+    } =
+        await supabaseClient
+            .from(
+                "profiles"
+            )
+            .upsert(
+                {
+                    id:
+                        data.user.id,
+
+                    username:
+                        username
+                },
+                {
+                    onConflict:
+                        "id"
+                }
+            );
+
+
+    if (
+        profileError
+    ) {
+
+        console.error(
+            profileError
+        );
+
+
+        showAuthError(
+            `Account created, but profile setup failed: ${profileError.message}`
+        );
+
+        return;
+
+    }
+
+
+    currentSession =
+        data.session;
+
+
+    await refreshAuthState();
+
+
+    closeAuth();
+
+
+    showPage(
+        "myteam"
+    );
+
+}
+
+
+async function signIn(
+    username,
+    password
+) {
+
+    const email =
+        usernameEmail(
+            username
+        );
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.auth.signInWithPassword({
+
+            email,
+
+            password
+
+        });
+
+
+    if (
+        error
+    ) {
+
+        showAuthError(
+            "Incorrect username or password."
+        );
+
+        return;
+
+    }
+
+
+    currentSession =
+        data.session;
+
+
+    await refreshAuthState();
+
+
+    closeAuth();
+
+
+    showPage(
+        "myteam"
+    );
+
+}
+
+
+async function signOutUser() {
+
+    await supabaseClient.auth.signOut();
+
+}
+
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+
+async function refreshAuthState() {
+
+    const {
+        data
+    } =
+        await supabaseClient.auth.getSession();
+
+
+    currentSession =
+        data.session;
+
+
+    if (
+        currentSession
+    ) {
+
+        await loadProfile();
+
+        await loadMyFantasyTeam();
+
+    } else {
+
+        currentProfile =
+            null;
+
+        currentFantasyTeam =
+            null;
+
+    }
+
+
+    updateAccountArea();
+
+    renderHome();
+
+    renderMyTeam();
+
+    renderDailyScores();
+
+}
+
+
+supabaseClient.auth.onAuthStateChange(
+    async (
+        event,
+        session
+    ) => {
+
+        currentSession =
+            session;
+
+
+        if (
+            session
+        ) {
+
+            await loadProfile();
+
+            await loadMyFantasyTeam();
+
+        } else {
+
+            currentProfile =
+                null;
+
+            currentFantasyTeam =
+                null;
+
+        }
+
+
+        updateAccountArea();
+
+        renderHome();
+
+        renderMyTeam();
+
+        renderDailyScores();
+
+    }
+);
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+
+async function loadProfile() {
+
+    if (
+        !currentSession
+    ) {
+
+        currentProfile =
+            null;
+
+        return;
+
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from(
+                "profiles"
+            )
+            .select(
+                "id, username"
+            )
+            .eq(
+                "id",
+                currentSession.user.id
+            )
+            .maybeSingle();
+
+
+    if (
+        error
+    ) {
+
+        console.error(
+            "Profile load failed:",
+            error
+        );
+
+
+        currentProfile =
+            null;
+
+        return;
+
+    }
+
+
+    currentProfile =
+        data;
+
+}
+
+
+function updateAccountArea() {
+
+    const area =
+        document.getElementById(
+            "account-area"
+        );
+
+
+    if (
+        !currentSession ||
+        !currentProfile
+    ) {
+
+        area.innerHTML = `
+
+            <button
+                class="btn primary"
+                onclick="openAuth('login')"
+            >
+                Login
+            </button>
+
+        `;
+
+        return;
+
+    }
+
+
+    area.innerHTML = `
+
+        <span class="account-name">
+            ${escapeHtml(
+                currentProfile.username
+            )}
+        </span>
+
+        <button
+            class="btn"
+            onclick="showPage('myteam')"
+        >
+            My Team
+        </button>
+
+        <button
+            class="btn"
+            onclick="signOutUser()"
+        >
+            Logout
+        </button>
+
+    `;
+
+}
+
+
+/* =========================================================
+   MY TEAM
+========================================================= */
+
+
+async function loadMyFantasyTeam() {
+
+    if (
+        !currentSession
+    ) {
+
+        currentFantasyTeam =
+            null;
+
+        return;
+
+    }
+
+
+    const {
+        data: team,
+        error: teamError
+    } =
+        await supabaseClient
+            .from(
+                "fantasy_teams"
+            )
+            .select(
+                "*"
+            )
+            .eq(
+                "owner_id",
+                currentSession.user.id
+            )
+            .maybeSingle();
+
+
+    if (
+        teamError
+    ) {
+
+        console.error(
+            "Team load failed:",
+            teamError
+        );
+
+
+        currentFantasyTeam =
+            null;
+
+        return;
+
+    }
+
+
+    if (
+        !team
+    ) {
+
+        currentFantasyTeam =
+            null;
+
+        return;
+
+    }
+
+
+    const {
+        data: players,
+        error: playerError
+    } =
+        await supabaseClient
+            .from(
+                "fantasy_team_players"
+            )
+            .select(
+                "id,team_id,player_name,created_at"
+            )
+            .eq(
+                "team_id",
+                team.id
+            )
+            .order(
+                "created_at",
+                {
+                    ascending:
+                        true
+                }
+            );
+
+
+    if (
+        playerError
+    ) {
+
+        console.error(
+            "Team players load failed:",
+            playerError
+        );
+
+
+        currentFantasyTeam =
+            null;
+
+        return;
+
+    }
+
+
+    currentFantasyTeam = {
+
+        ...team,
+
+        players:
+            players || []
+
+    };
+
+}
+
+
+/* =========================================================
+   BUILDER
+========================================================= */
+
+
+function openTeamBuilder() {
+
+    if (
+        !currentSession
+    ) {
+
+        openAuth(
+            "login"
+        );
+
+        return;
+
+    }
+
+
+    builderPlayers =
+        currentFantasyTeam
+            ?.players
+            ?.map(
+                player =>
+                    player.player_name
+            ) || [];
+
+
+    document.getElementById(
+        "builder-team-name"
+    ).value =
+        currentFantasyTeam
+            ?.team_name || "";
+
+
+    document.getElementById(
+        "builder-search"
+    ).value =
+        "";
+
+
+    renderBuilder();
+
+
+    showPage(
+        "builder"
+    );
+
+}
+
+
+function renderBuilder() {
+
+    renderBuilderSquad();
+
+    renderPlayerBuilder();
+
+    updateBuilderStats();
+
+}
+
+
+function renderBuilderSquad() {
+
+    const container =
+        document.getElementById(
+            "builder-squad"
+        );
+
+
+    const selected =
+        builderPlayers
+            .map(
+                name =>
+                    getPlayer(name)
+            )
+            .filter(Boolean);
+
+
+    let html = "";
+
+
+    for (
+        let i = 0;
+        i < 5;
+        i++
+    ) {
+
+        const player =
+            selected[i];
+
+
+        if (
+            player
+        ) {
+
+            html += `
+
+                <div class="squad-slot">
+
+                    <div>
+
+                        <div class="squad-player-name">
+                            ${escapeHtml(
+                                player.name
+                            )}
+                        </div>
+
+                        <div class="squad-player-info">
+
+                            ${player.value}m
+
+                            •
+                            
+                            ${player.ehb.toLocaleString(
+                                undefined,
+                                {
+                                    maximumFractionDigits:1
+                                }
+                            )} EHB
+
+                            •
+
+                            ${player.total.toLocaleString(
+                                undefined,
+                                {
+                                    maximumFractionDigits:2
+                                }
+                            )} points
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="btn danger"
+                        data-remove-player="${escapeHtml(
+                            player.name
+                        )}"
+                    >
+                        Remove
+                    </button>
+
+                </div>
+
+            `;
+
+        } else {
+
+            html += `
+
+                <div class="squad-slot squad-empty">
+                    Empty squad slot
+                </div>
+
+            `;
+
+        }
+
+    }
+
+
+    container.innerHTML =
+        html;
+
+
+    container
+        .querySelectorAll(
+            "[data-remove-player]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        removeBuilderPlayer(
+                            button.dataset.removePlayer
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+function addBuilderPlayer(
+    name
+) {
+
+    if (
+        builderPlayers.includes(
+            name
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        builderPlayers.length >= 5
+    ) {
+
+        showBuilderMessage(
+            "Your squad already has five PvMers.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const player =
+        getPlayer(name);
+
+
+    if (
+        !player
+    ) {
+
+        return;
+
+    }
+
+
+    const spent =
+        builderPlayers
+            .map(
+                item =>
+                    getPlayer(item)
+            )
+            .filter(Boolean)
+            .reduce(
+                (
+                    total,
+                    item
+                ) =>
+                    total +
+                    item.value,
+                0
+            );
+
+
+    if (
+        spent +
+        player.value >
+        CONFIG.FANTASY_BUDGET
+    ) {
+
+        showBuilderMessage(
+            `${player.name} would put you over the ${CONFIG.FANTASY_BUDGET}m budget.`,
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    builderPlayers.push(
+        player.name
+    );
+
+
+    renderBuilder();
+
+}
+
+
+function removeBuilderPlayer(
+    name
+) {
+
+    builderPlayers =
+        builderPlayers.filter(
+            player =>
+                player !== name
+        );
+
+
+    renderBuilder();
+
+}
+
+
+function updateBuilderStats() {
+
+    const players =
+        builderPlayers
+            .map(
+                name =>
+                    getPlayer(name)
+            )
+            .filter(Boolean);
+
+
+    const spent =
+        players.reduce(
+            (
+                total,
+                player
+            ) =>
+                total +
+                player.value,
+            0
+        );
+
+
+    const remaining =
+        CONFIG.FANTASY_BUDGET -
+        spent;
+
+
+    document.getElementById(
+        "builder-budget"
+    ).textContent =
+        `${CONFIG.FANTASY_BUDGET}m`;
+
+
+    document.getElementById(
+        "builder-spent"
+    ).textContent =
+        `${spent}m`;
+
+
+    document.getElementById(
+        "builder-remaining"
+    ).textContent =
+        `${remaining}m`;
+
+
+    document.getElementById(
+        "builder-count"
+    ).textContent =
+        builderPlayers.length;
+
+}
+
+
+function showBuilderMessage(
+    message,
+    type
+) {
+
+    const element =
+        document.getElementById(
+            "builder-message"
+        );
+
+
+    element.textContent =
+        message;
+
+
+    element.style.display =
+        "block";
+
+
+    element.className =
+        "status";
+
+
+    if (
+        type === "error"
+    ) {
+
+        element.classList.add(
+            "error"
+        );
+
+    }
+
+
+    if (
+        type === "success"
+    ) {
+
+        element.classList.add(
+            "success"
+        );
+
+    }
+
+
+    clearTimeout(
+        window.builderMessageTimer
+    );
+
+
+    window.builderMessageTimer =
+        setTimeout(
+            () => {
+
+                element.style.display =
+                    "none";
+
+            },
+            3000
+        );
+
+}
+
+
+async function saveFantasyTeam() {
+
+    if (
+        !currentSession ||
+        !currentProfile
+    ) {
+
+        openAuth(
+            "login"
+        );
+
+        return;
+
+    }
+
+
+    const teamName =
+        normalise(
+            document.getElementById(
+                "builder-team-name"
+            ).value
+        );
+
+
+    if (
+        !teamNameValid(
+            teamName
+        )
+    ) {
+
+        showBuilderMessage(
+            "Team name must be between 2 and 30 characters.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        builderPlayers.length !== 5
+    ) {
+
+        showBuilderMessage(
+            "You must select exactly five PvMers.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const players =
+        builderPlayers
+            .map(
+                name =>
+                    getPlayer(name)
+            )
+            .filter(Boolean);
+
+
+    const spent =
+        players.reduce(
+            (
+                total,
+                player
+            ) =>
+                total +
+                player.value,
+            0
+        );
+
+
+    if (
+        spent >
+        CONFIG.FANTASY_BUDGET
+    ) {
+
+        showBuilderMessage(
+            "Your team is over budget.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const button =
+        document.getElementById(
+            "save-team-button"
+        );
+
+
+    button.disabled =
+        true;
+
+    button.textContent =
+        "Saving...";
+
+
+    try {
+
+
+        let team =
+            currentFantasyTeam;
+
+
+        /*
+            CREATE TEAM
+        */
+
+        if (
+            !team
+        ) {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from(
+                        "fantasy_teams"
+                    )
+                    .insert({
+                        owner_id:
+                            currentSession.user.id,
+
+                        team_name:
+                            teamName
+                    })
+                    .select()
+                    .single();
+
+
+            if (
+                error
+            ) {
+
+                if (
+                    error.code === "23505"
+                ) {
+
+                    throw new Error(
+                        "That team name is already taken."
+                    );
+
+                }
+
+                throw error;
+
+            }
+
+
+            team =
+                data;
+
+
+        } else {
+
+
+            /*
+                UPDATE EXISTING TEAM
+            */
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from(
+                        "fantasy_teams"
+                    )
+                    .update({
+
+                        team_name:
+                            teamName,
+
+                        updated_at:
+                            new Date().toISOString()
+
+                    })
+                    .eq(
+                        "id",
+                        team.id
+                    )
+                    .select()
+                    .single();
+
+
+            if (
+                error
+            ) {
+
+                if (
+                    error.code === "23505"
+                ) {
+
+                    throw new Error(
+                        "That team name is already taken."
+                    );
+
+                }
+
+                throw error;
+
+            }
+
+
+            team =
+                data;
+
+        }
+
+
+        /*
+            REPLACE PLAYER SELECTIONS
+        */
+
+        const {
+            error: deleteError
+        } =
+            await supabaseClient
+                .from(
+                    "fantasy_team_players"
+                )
+                .delete()
+                .eq(
+                    "team_id",
+                    team.id
+                );
+
+
+        if (
+            deleteError
+        ) {
+
+            throw deleteError;
+
+        }
+
+
+        const playerRows =
+            builderPlayers.map(
+                playerName => ({
+
+                    team_id:
+                        team.id,
+
+                    player_name:
+                        playerName
+
+                })
+            );
+
+
+        const {
+            error: insertError
+        } =
+            await supabaseClient
+                .from(
+                    "fantasy_team_players"
+                )
+                .insert(
+                    playerRows
+                );
+
+
+        if (
+            insertError
+        ) {
+
+            throw insertError;
+
+        }
+
+
+        await loadMyFantasyTeam();
+
+
+        renderHome();
+
+        renderMyTeam();
+
+        renderDailyScores();
+
+
+        showBuilderMessage(
+            "Team saved successfully.",
+            "success"
+        );
+
+
+        setTimeout(
+            () => {
+
+                showPage(
+                    "myteam"
+                );
+
+            },
+            500
+        );
+
+
+    } catch (
+        error
+    ) {
+
+        console.error(
+            "Saving fantasy team failed:",
+            error
+        );
+
+
+        showBuilderMessage(
+            error.message ||
+            "Could not save your team.",
+            "error"
+        );
+
+
+    } finally {
+
+        button.disabled =
+            false;
+
+        button.textContent =
+            "Save Team";
+
+    }
+
+}
+
+
+/* =========================================================
+   PLAYER BUILDER SEARCH
+========================================================= */
+
+
+function renderPlayerBuilder() {
+
+    const container =
+        document.getElementById(
+            "builder-players"
+        );
+
+
+    if (
+        !container
+    ) {
+
+        return;
+
+    }
+
+
+    const search =
+        normalise(
+            document.getElementById(
+                "builder-search"
+            )?.value
+        ).toLowerCase();
+
+
+    const players =
+        getPvMLeaderboard()
+            .filter(
+                player =>
+                    !search ||
+                    player.name
+                        .toLowerCase()
+                        .includes(
+                            search
+                        )
+            );
+
+
+    if (
+        !players.length
+    ) {
+
+        container.innerHTML =
+            `<div class="empty">No PvMers found.</div>`;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        players
+            .map(
+                player => {
+
+                    const selected =
+                        builderPlayers.includes(
+                            player.name
+                        );
+
+
+                    return `
+
+                        <div class="available-player">
+
+                            <div>
+
+                                <div class="available-player-name">
+                                    ${escapeHtml(
+                                        player.name
+                                    )}
+                                </div>
+
+                                <div class="available-player-meta">
+
+                                    ${player.ehb.toLocaleString(
+                                        undefined,
+                                        {
+                                            maximumFractionDigits:1
+                                        }
+                                    )} EHB
+
+                                    •
+                                    
+                                    ${player.points.toLocaleString(
+                                        undefined,
+                                        {
+                                            maximumFractionDigits:2
+                                        }
+                                    )} points
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="player-price">
+                                ${player.value}m
+                            </div>
+
+
+                            <button
+                                class="btn ${
+                                    selected
+                                        ? ""
+                                        : "primary"
+                                }"
+                                data-add-player="${escapeHtml(
+                                    player.name
+                                )}"
+                                ${
+                                    selected
+                                        ? "disabled"
+                                        : ""
+                                }
+                            >
+                                ${
+                                    selected
+                                        ? "Selected"
+                                        : "Add"
+                                }
+                            </button>
+
+
+                        </div>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+
+    container
+        .querySelectorAll(
+            "[data-add-player]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        addBuilderPlayer(
+                            button.dataset.addPlayer
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+
+function getMyDisplayTeam() {
+
+    if (
+        !currentFantasyTeam
+    ) {
+
+        return {
+
+            name:
+                currentProfile
+                    ? `${currentProfile.username}'s Team`
+                    : "Your Team",
+
+            players:
+                [],
+
+            totalValue:
+                0,
+
+            totalPoints:
+                0
+
+        };
+
+    }
+
+
+    const players =
+        currentFantasyTeam.players
+            .map(
+                item =>
+                    getPlayer(
+                        item.player_name
+                    )
+            )
+            .filter(Boolean);
+
+
+    return {
+
+        name:
+            currentFantasyTeam.team_name,
+
+        players,
+
+        totalValue:
+            players.reduce(
+                (
+                    total,
+                    player
+                ) =>
+                    total +
+                    player.value,
+                0
+            ),
+
+        totalPoints:
+            players.reduce(
+                (
+                    total,
+                    player
+                ) =>
+                    total +
+                    player.total,
+                0
+            )
+
+    };
+
+}
+
+
+function renderHome() {
+
+    const day =
+        getCurrentDay();
+
+
+    document.getElementById(
+        "current-boss"
+    ).textContent =
+        getCurrentBoss();
+
+
+    document.getElementById(
+        "current-day"
+    ).textContent =
+        day === 0
+            ? "EVENT STARTS 20 SEPTEMBER 2026"
+            : `DAY ${day} / ${CONFIG.EVENT_DAYS}`;
+
+
+    const team =
+        getMyDisplayTeam();
+
+
+    document.getElementById(
+        "hero-team-name"
+    ).textContent =
+        currentSession
+            ? team.name
+            : "Login to see your team";
+
+
+    document.getElementById(
+        "hero-team-points"
+    ).textContent =
+        currentSession
+            ? team.totalPoints.toLocaleString(
+                undefined,
+                {
+                    maximumFractionDigits:2
+                }
+            )
+            : "0";
+
+
+    document.getElementById(
+        "hero-team-value"
+    ).textContent =
+        currentSession
+            ? `${team.totalValue}m`
+            : "0m";
+
+
+    document.getElementById(
+        "team-title"
+    ).textContent =
+        currentSession
+            ? team.name
+            : "Your Team";
+
+
+    document.getElementById(
+        "team-title-large"
+    ).textContent =
+        currentSession
+            ? team.name
+            : "Your Team";
+
+
+    document.getElementById(
+        "team-total"
+    ).textContent =
+        team.totalPoints.toLocaleString(
+            undefined,
+            {
+                maximumFractionDigits:2
+            }
+        );
+
+
+    document.getElementById(
+        "team-value"
+    ).textContent =
+        `${team.totalValue}m`;
+
+
+    if (
+        !currentSession
+    ) {
+
+        document.getElementById(
+            "team-meta"
+        ).textContent =
+            "Login to create your fantasy team";
+
+
+    } else if (
+        !currentFantasyTeam
+    ) {
+
+        document.getElementById(
+            "team-meta"
+        ).textContent =
+            "No team created yet";
+
+
+    } else {
+
+        document.getElementById(
+            "team-meta"
+        ).textContent =
+            `${team.players.length} / 5 players`;
+
+    }
+
+
+    const container =
+        document.getElementById(
+            "team-players"
+        );
+
+
+    if (
+        !currentSession
+    ) {
+
+        container.innerHTML = `
+
+            <div
+                class="empty"
+                style="grid-column:1/-1"
+            >
+
+                <div
+                    style="
+                        color:white;
+                        font-size:17px;
+                        font-weight:800;
+                        margin-bottom:8px;
+                    "
+                >
+                    Build your Fantasy PvM team
+                </div>
+
+
+                <div style="margin-bottom:14px">
+                    Create an account and pick five PvMers within the 250m budget.
+                </div>
+
+
+                <button
+                    class="btn primary"
+                    onclick="openAuth('signup')"
+                >
+                    Create Account
+                </button>
+
+            </div>
+
+        `;
+
+
+        updateBudgetDisplay(
+            0
+        );
+
+
+        return;
+
+    }
+
+
+    if (
+        !currentFantasyTeam
+    ) {
+
+        container.innerHTML = `
+
+            <div
+                class="empty"
+                style="grid-column:1/-1"
+            >
+
+                You haven't created your team yet.
+
+
+                <div style="margin-top:12px">
+
+                    <button
+                        class="btn primary"
+                        onclick="openTeamBuilder()"
+                    >
+                        Create My Team
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        updateBudgetDisplay(
+            0
+        );
+
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        team.players
+            .map(
+                player => `
+
+                    <div
+                        class="player-card"
+                        data-home-player="${escapeHtml(
+                            player.name
+                        )}"
+                    >
+
+                        <div class="player-name">
+                            ${escapeHtml(
+                                player.name
+                            )}
+                        </div>
+
+
+                        <div class="player-stat">
+
+                            <span>
+                                Value
+                            </span>
+
+                            <strong>
+                                ${player.value}m
+                            </strong>
+
+                        </div>
+
+
+                        <div class="player-stat">
+
+                            <span>
+                                Points
+                            </span>
+
+                            <strong>
+                                ${player.total.toLocaleString(
+                                    undefined,
+                                    {
+                                        maximumFractionDigits:2
+                                    }
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="player-stat">
+
+                            <span>
+                                EHB
+                            </span>
+
+                            <strong>
+                                ${player.ehb.toLocaleString(
+                                    undefined,
+                                    {
+                                        maximumFractionDigits:1
+                                    }
+                                )}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                `
+            )
+            .join("");
+
+
+    container
+        .querySelectorAll(
+            "[data-home-player]"
+        )
+        .forEach(
+            card => {
+
+                card.addEventListener(
+                    "click",
+                    () => {
+
+                        showPlayer(
+                            card.dataset.homePlayer
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    updateBudgetDisplay(
+        team.totalValue
+    );
+
+}
+
+
+function updateBudgetDisplay(
+    spent
+) {
+
+    const remaining =
+        CONFIG.FANTASY_BUDGET -
+        spent;
+
+
+    const percentage =
+        Math.min(
+            100,
+            Math.max(
+                0,
+                (
+                    spent /
+                    CONFIG.FANTASY_BUDGET
+                ) * 100
+            )
+        );
+
+
+    document.getElementById(
+        "budget-progress"
+    ).style.width =
+        `${percentage}%`;
+
+
+    document.getElementById(
+        "budget-text"
+    ).textContent =
+        `${spent}m / ${CONFIG.FANTASY_BUDGET}m used`;
+
+
+    document.getElementById(
+        "budget-remaining"
+    ).textContent =
+        `${remaining}m remaining`;
+
+}
+
+
+/* =========================================================
+   DAILY SCORES
+========================================================= */
+
+
+function renderDailyScores() {
+
+    const container =
+        document.getElementById(
+            "daily-grid"
+        );
+
+
+    if (
+        !container
+    ) {
+        return;
+    }
+
+
+    const team =
+        getMyDisplayTeam();
+
+
+    const days = [];
+
+
+    for (
+        let i = 0;
+        i < 7;
+        i++
+    ) {
+
+        let total =
+            0;
+
+
+        for (
+            const player of team.players
+        ) {
+
+            if (
+                player.daily[i]
+            ) {
+
+                total +=
+                    player.daily[i].points;
+
+            }
+
+        }
+
+
+        let boss =
+            `Day ${i + 1}`;
+
+
+        if (
+            fantasyData.length
+        ) {
+
+            boss =
+                normalise(
+                    fantasyData[0][i + 5]
+                ) ||
+                `Day ${i + 1}`;
+
+        }
+
+
+        days.push({
+
+            day:
+                i + 1,
+
+            boss,
+
+            total
+
+        });
+
+    }
+
+
+    container.innerHTML =
+        days
+            .map(
+                item => `
+
+                    <div class="daily-card">
+
+                        <div class="daily-day">
+                            DAY ${item.day}
+                        </div>
+
+
+                        <div class="daily-boss">
+                            ${escapeHtml(
+                                item.boss
+                            )}
+                        </div>
+
+
+                        <div
+                            style="
+                                color:var(--muted);
+                                font-size:9px;
+                                text-transform:uppercase;
+                                letter-spacing:.8px;
+                                margin-top:10px;
+                            "
+                        >
+                            Team Points
+                        </div>
+
+
+                        <div class="daily-points">
+                            ${item.total.toLocaleString(
+                                undefined,
+                                {
+                                    maximumFractionDigits:2
+                                }
+                            )}
+                        </div>
+
+                    </div>
+
+                `
+            )
+            .join("");
+
+}
+
+
+/* =========================================================
+   TEAM LEADERBOARD
+========================================================= */
+
+
+async function getTeamLeaderboardData() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from(
+                "fantasy_teams"
+            )
+            .select(`
+                id,
+                team_name,
+                fantasy_team_players (
+                    player_name
+                )
+            `);
+
+
+    if (
+        error
+    ) {
+
+        console.error(
+            "Team leaderboard failed:",
+            error
+        );
+
+        return [];
+
+    }
+
+
+    return (
+        data || []
+    )
+        .map(
+            team => {
+
+                const players =
+                    (
+                        team.fantasy_team_players ||
+                        []
+                    )
+                    .map(
+                        item =>
+                            getPlayer(
+                                item.player_name
+                            )
+                    )
+                    .filter(Boolean);
+
+
+                const points =
+                    players.reduce(
+                        (
+                            total,
+                            player
+                        ) =>
+                            total +
+                            player.total,
+                        0
+                    );
+
+
+                const value =
+                    players.reduce(
+                        (
+                            total,
+                            player
+                        ) =>
+                            total +
+                            player.value,
+                        0
+                    );
+
+
+                return {
+
+                    id:
+                        team.id,
+
+                    name:
+                        team.team_name,
+
+                    points,
+
+                    value,
+
+                    playerCount:
+                        players.length
+
+                };
+
+            }
+        );
+
+}
+
+
+function sortTeams(
+    teams
+) {
+
+    return teams.sort(
+        (
+            a,
+            b
+        ) => {
+
+            /*
+                Primary:
+                highest points
+            */
+
+            if (
+                b.points !==
+                a.points
+            ) {
+
+                return (
+                    b.points -
+                    a.points
+                );
+
+            }
+
+
+            /*
+                Tie breaker:
+                natural alphabetical order.
+
+                This means:
+
+                Team 2
+                Team 10
+                Team 19
+
+                rather than:
+
+                Team 10
+                Team 19
+                Team 2
+            */
+
+            return a.name.localeCompare(
+                b.name,
+                undefined,
+                {
+                    numeric:
+                        true,
+
+                    sensitivity:
+                        "base"
+                }
+            );
+
+        }
+    );
+
+}
+
+
+async function renderHomeLeaderboard() {
+
+    const container =
+        document.getElementById(
+            "team-leaderboard"
+        );
+
+
+    if (
+        !container
+    ) {
+        return;
+    }
+
+
+    const search =
+        normalise(
+            document.getElementById(
+                "home-team-search"
+            )?.value
+        ).toLowerCase();
+
+
+    const teams =
+        sortTeams(
+            await getTeamLeaderboardData()
+        );
+
+
+    const filtered =
+        teams.filter(
+            team =>
+                !search ||
+                team.name
+                    .toLowerCase()
+                    .includes(
+                        search
+                    )
+        );
+
+
+    if (
+        !filtered.length
+    ) {
+
+        container.innerHTML =
+            `<div class="empty">No teams found.</div>`;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        filtered
+            .map(
+                (
+                    team,
+                    index
+                ) => `
+
+                    <div class="lb-row">
+
+                        <div class="lb-rank">
+                            ${index + 1}
+                        </div>
+
+
+                        <div class="lb-name">
+                            ${escapeHtml(
+                                team.name
+                            )}
+                        </div>
+
+
+                        <div class="lb-points">
+                            ${team.points.toLocaleString(
+                                undefined,
+                                {
+                                    maximumFractionDigits:2
+                                }
+                            )}
+                        </div>
+
+                    </div>
+
+                `
+            )
+            .join("");
+
+}
+
+
+async function renderFullTeamLeaderboard() {
+
+    const container =
+        document.getElementById(
+            "full-team-leaderboard"
+        );
+
+
+    if (
+        !container
+    ) {
+        return;
+    }
+
+
+    const search =
+        normalise(
+            document.getElementById(
+                "team-search"
+            )?.value
+        ).toLowerCase();
+
+
+    const teams =
+        sortTeams(
+            await getTeamLeaderboardData()
+        );
+
+
+    const filtered =
+        teams.filter(
+            team =>
+                !search ||
+                team.name
+                    .toLowerCase()
+                    .includes(
+                        search
+                    )
+        );
+
+
+    if (
+        !filtered.length
+    ) {
+
+        container.innerHTML =
+            `<div class="empty">No teams found.</div>`;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        filtered
+            .map(
+                (
+                    team,
+                    index
+                ) => `
+
+                    <div class="lb-row">
+
+                        <div class="lb-rank">
+                            ${index + 1}
+                        </div>
+
+
+                        <div>
+
+                            <div class="lb-name">
+                                ${escapeHtml(
+                                    team.name
+                                )}
+                            </div>
+
+
+                            <div
+                                style="
+                                    color:var(--muted);
+                                    font-size:10px;
+                                    margin-top:3px;
+                                "
+                            >
+                                ${team.playerCount} / 5 players
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="lb-points">
+                            ${team.points.toLocaleString(
+                                undefined,
+                                {
+                                    maximumFractionDigits:2
+                                }
+                            )}
+                        </div>
+
+                    </div>
+
+                `
+            )
+            .join("");
+
+}
+
+
+/* =========================================================
+   PVM LEADERBOARD
+========================================================= */
 
 
 function renderPvMLeaderboard() {
@@ -2863,7 +6566,9 @@ function renderPvMLeaderboard() {
         );
 
 
-    if (!container) {
+    if (
+        !container
+    ) {
         return;
     }
 
@@ -2876,18 +6581,22 @@ function renderPvMLeaderboard() {
         ).toLowerCase();
 
 
-    const results =
+    const players =
         getPvMLeaderboard()
             .filter(
                 player =>
                     !search ||
                     player.name
                         .toLowerCase()
-                        .includes(search)
+                        .includes(
+                            search
+                        )
             );
 
 
-    if (!results.length) {
+    if (
+        !players.length
+    ) {
 
         container.innerHTML =
             `<div class="empty">No players found.</div>`;
@@ -2898,86 +6607,443 @@ function renderPvMLeaderboard() {
 
 
     container.innerHTML =
-        results.map(
-            (player, index) => `
-                <div
-                    class="lb-row"
-                    data-player="${escapeHtml(player.name)}"
-                >
+        players
+            .map(
+                (
+                    player,
+                    index
+                ) => `
 
-                    <div class="lb-rank">
-                        ${index + 1}
-                    </div>
+                    <div
+                        class="lb-row"
+                        data-player="${escapeHtml(
+                            player.name
+                        )}"
+                    >
 
-                    <div>
-
-                        <div class="lb-name">
-                            ${escapeHtml(player.name)}
+                        <div class="lb-rank">
+                            ${index + 1}
                         </div>
 
-                        <div
-                            style="
-                                color:var(--muted);
-                                font-size:10px;
-                                margin-top:3px;
-                            "
-                        >
-                            ${player.ehb.toLocaleString(
+
+                        <div>
+
+                            <div class="lb-name">
+                                ${escapeHtml(
+                                    player.name
+                                )}
+                            </div>
+
+
+                            <div
+                                style="
+                                    color:var(--muted);
+                                    font-size:10px;
+                                    margin-top:3px;
+                                "
+                            >
+                                ${player.ehb.toLocaleString(
+                                    undefined,
+                                    {
+                                        maximumFractionDigits:1
+                                    }
+                                )} EHB
+                                •
+                                ${player.value}m
+                            </div>
+
+                        </div>
+
+
+                        <div class="lb-points">
+                            ${player.points.toLocaleString(
                                 undefined,
                                 {
-                                    maximumFractionDigits: 1
+                                    maximumFractionDigits:2
                                 }
-                            )} EHB
-                            •
-                            ${player.value}m
+                            )}
                         </div>
 
                     </div>
 
-                    <div class="lb-points">
-                        ${player.points.toLocaleString(
-                            undefined,
-                            {
-                                maximumFractionDigits: 2
-                            }
-                        )}
-                    </div>
-
-                </div>
-            `
-        ).join("");
+                `
+            )
+            .join("");
 
 
     container
-        .querySelectorAll(".lb-row")
-        .forEach(row => {
+        .querySelectorAll(
+            "[data-player]"
+        )
+        .forEach(
+            row => {
 
-            row.addEventListener(
-                "click",
-                () => {
+                row.addEventListener(
+                    "click",
+                    () => {
 
-                    showPlayer(
-                        row.dataset.player
-                    );
+                        showPlayer(
+                            row.dataset.player
+                        );
 
-                }
-            );
+                    }
+                );
 
-        });
+            }
+        );
+
 }
 
 
-/* =========================
-   PLAYER MODAL
-========================= */
+/* =========================================================
+   MY TEAM PAGE
+========================================================= */
 
-function showPlayer(name) {
+
+function renderMyTeam() {
+
+    const container =
+        document.getElementById(
+            "myteam-content"
+        );
+
+
+    if (
+        !container
+    ) {
+        return;
+    }
+
+
+    if (
+        !currentSession ||
+        !currentProfile
+    ) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div
+                    style="
+                        color:white;
+                        font-size:18px;
+                        font-weight:800;
+                        margin-bottom:8px;
+                    "
+                >
+                    Login to create your Fantasy PvM team
+                </div>
+
+
+                <div style="margin-bottom:14px">
+                    Your account permanently owns your team.
+                </div>
+
+
+                <button
+                    class="btn primary"
+                    onclick="openAuth('login')"
+                >
+                    Login
+                </button>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    if (
+        !currentFantasyTeam
+    ) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div
+                    style="
+                        color:white;
+                        font-size:18px;
+                        font-weight:800;
+                        margin-bottom:8px;
+                    "
+                >
+                    You don't have a fantasy team yet.
+                </div>
+
+
+                <div style="margin-bottom:14px">
+                    Pick five PvMers and build your team.
+                </div>
+
+
+                <button
+                    class="btn primary"
+                    onclick="openTeamBuilder()"
+                >
+                    Create My Team
+                </button>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const players =
+        currentFantasyTeam.players
+            .map(
+                item =>
+                    getPlayer(
+                        item.player_name
+                    )
+            )
+            .filter(Boolean);
+
+
+    const value =
+        players.reduce(
+            (
+                total,
+                player
+            ) =>
+                total +
+                player.value,
+            0
+        );
+
+
+    const points =
+        players.reduce(
+            (
+                total,
+                player
+            ) =>
+                total +
+                player.total,
+            0
+        );
+
+
+    container.innerHTML = `
+
+        <div class="account-team-card">
+
+            <div>
+
+                <div class="account-team-title">
+
+                    ${escapeHtml(
+                        currentFantasyTeam.team_name
+                    )}
+
+                </div>
+
+
+                <div class="account-team-manager">
+
+                    Manager:
+                    ${escapeHtml(
+                        currentProfile.username
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <div class="account-actions">
+
+                <button
+                    class="btn primary"
+                    onclick="openTeamBuilder()"
+                >
+                    Edit Team
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="builder-summary"
+            style="margin-top:18px"
+        >
+
+            <div class="builder-stat">
+
+                <div class="builder-stat-label">
+                    Budget
+                </div>
+
+                <div class="builder-stat-value">
+                    ${CONFIG.FANTASY_BUDGET}m
+                </div>
+
+            </div>
+
+
+            <div class="builder-stat">
+
+                <div class="builder-stat-label">
+                    Spent
+                </div>
+
+                <div class="builder-stat-value">
+                    ${value}m
+                </div>
+
+            </div>
+
+
+            <div class="builder-stat">
+
+                <div class="builder-stat-label">
+                    Points
+                </div>
+
+                <div class="builder-stat-value">
+                    ${points.toLocaleString(
+                        undefined,
+                        {
+                            maximumFractionDigits:2
+                        }
+                    )}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="player-grid">
+
+            ${players
+                .map(
+                    player => `
+
+                        <div
+                            class="player-card"
+                            data-my-player="${escapeHtml(
+                                player.name
+                            )}"
+                        >
+
+                            <div class="player-name">
+                                ${escapeHtml(
+                                    player.name
+                                )}
+                            </div>
+
+
+                            <div class="player-stat">
+
+                                <span>
+                                    Value
+                                </span>
+
+                                <strong>
+                                    ${player.value}m
+                                </strong>
+
+                            </div>
+
+
+                            <div class="player-stat">
+
+                                <span>
+                                    Points
+                                </span>
+
+                                <strong>
+                                    ${player.total.toLocaleString(
+                                        undefined,
+                                        {
+                                            maximumFractionDigits:2
+                                        }
+                                    )}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="player-stat">
+
+                                <span>
+                                    EHB
+                                </span>
+
+                                <strong>
+                                    ${player.ehb.toLocaleString(
+                                        undefined,
+                                        {
+                                            maximumFractionDigits:1
+                                        }
+                                    )}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    `
+                )
+                .join("")}
+
+        </div>
+
+    `;
+
+
+    container
+        .querySelectorAll(
+            "[data-my-player]"
+        )
+        .forEach(
+            card => {
+
+                card.addEventListener(
+                    "click",
+                    () => {
+
+                        showPlayer(
+                            card.dataset.myPlayer
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   PLAYER MODAL
+========================================================= */
+
+
+function showPlayer(
+    name
+) {
 
     const player =
         getPlayer(name);
 
 
-    if (!player) {
+    if (
+        !player
+    ) {
         return;
     }
 
@@ -2994,7 +7060,7 @@ function showPlayer(name) {
         player.ehb.toLocaleString(
             undefined,
             {
-                maximumFractionDigits: 1
+                maximumFractionDigits:1
             }
         );
 
@@ -3011,7 +7077,7 @@ function showPlayer(name) {
         player.total.toLocaleString(
             undefined,
             {
-                maximumFractionDigits: 2
+                maximumFractionDigits:2
             }
         );
 
@@ -3022,45 +7088,54 @@ function showPlayer(name) {
         player.monthlyEhb.toLocaleString(
             undefined,
             {
-                maximumFractionDigits: 1
+                maximumFractionDigits:1
             }
         );
 
 
-    const daily =
-        document.getElementById(
-            "modal-daily"
-        );
+    document.getElementById(
+        "modal-daily"
+    ).innerHTML =
+        player.daily
+            .map(
+                (
+                    day,
+                    index
+                ) => `
+
+                    <div class="daily-row">
+
+                        <span>
+                            Day ${index + 1}
+                            •
+                            ${escapeHtml(
+                                day.boss
+                            )}
+                        </span>
 
 
-    daily.innerHTML =
-        player.daily.map(
-            (day, index) => `
-                <div class="daily-row">
+                        <strong>
+                            ${day.points.toLocaleString(
+                                undefined,
+                                {
+                                    maximumFractionDigits:2
+                                }
+                            )}
+                        </strong>
 
-                    <span>
-                        Day ${index + 1}
-                        •
-                        ${escapeHtml(day.boss)}
-                    </span>
+                    </div>
 
-                    <strong>
-                        ${day.points.toLocaleString(
-                            undefined,
-                            {
-                                maximumFractionDigits: 2
-                            }
-                        )}
-                    </strong>
-
-                </div>
-            `
-        ).join("");
+                `
+            )
+            .join("");
 
 
     document.getElementById(
         "player-modal"
-    ).classList.add("open");
+    ).classList.add(
+        "open"
+    );
+
 }
 
 
@@ -3068,11 +7143,16 @@ function closePlayer() {
 
     document.getElementById(
         "player-modal"
-    ).classList.remove("open");
+    ).classList.remove(
+        "open"
+    );
+
 }
 
 
-function closeModal(event) {
+function closeModal(
+    event
+) {
 
     if (
         event.target.id ===
@@ -3082,64 +7162,352 @@ function closeModal(event) {
         closePlayer();
 
     }
-}
-
-
-/* =========================
-   PAGE NAVIGATION
-========================= */
-
-function showPage(page) {
-
-    document
-        .querySelectorAll(".page-section")
-        .forEach(section => {
-
-            section.classList.remove(
-                "active"
-            );
-
-        });
-
-
-    document
-        .getElementById(
-            `page-${page}`
-        )
-        ?.classList.add(
-            "active"
-        );
-
-
-    document
-        .querySelectorAll(".nav button")
-        .forEach(button => {
-
-            button.classList.remove(
-                "active"
-            );
-
-        });
-
-
-    document
-        .getElementById(
-            `nav-${page === "teams"
-                ? "teams"
-                : page === "pvm"
-                    ? "pvm"
-                    : "home"}`
-        )
-        ?.classList.add(
-            "active"
-        );
 
 }
 
 
-/* =========================
+/* =========================================================
+   EVENT
+========================================================= */
+
+
+function getCurrentDay() {
+
+    const now =
+        new Date();
+
+
+    if (
+        now <
+        CONFIG.EVENT_START
+    ) {
+
+        return 0;
+
+    }
+
+
+    const elapsed =
+        now.getTime() -
+        CONFIG.EVENT_START.getTime();
+
+
+    return Math.min(
+
+        Math.floor(
+            elapsed /
+            (
+                24 *
+                60 *
+                60 *
+                1000
+            )
+        ) + 1,
+
+        CONFIG.EVENT_DAYS
+
+    );
+
+}
+
+
+function getCurrentBoss() {
+
+    if (
+        !fantasyData.length
+    ) {
+
+        return "TBC";
+
+    }
+
+
+    const day =
+        getCurrentDay();
+
+
+    if (
+        day < 1 ||
+        day > 7
+    ) {
+
+        return "TBC";
+
+    }
+
+
+    return (
+        normalise(
+            fantasyData[0][
+                day + 4
+            ]
+        ) ||
+        "TBC"
+    );
+
+}
+
+
+function getTimeRemaining() {
+
+    const now =
+        new Date();
+
+
+    if (
+        now <
+        CONFIG.EVENT_START
+    ) {
+
+        return (
+            CONFIG.EVENT_START.getTime() -
+            now.getTime()
+        );
+
+    }
+
+
+    const day =
+        getCurrentDay();
+
+
+    if (
+        day < 1 ||
+        day > CONFIG.EVENT_DAYS
+    ) {
+
+        return 0;
+
+    }
+
+
+    const end =
+        CONFIG.EVENT_START.getTime() +
+        day *
+        24 *
+        60 *
+        60 *
+        1000;
+
+
+    return Math.max(
+        0,
+        end -
+        now.getTime()
+    );
+
+}
+
+
+function formatCountdown(
+    milliseconds
+) {
+
+    if (
+        milliseconds <= 0
+    ) {
+
+        return "00:00:00";
+
+    }
+
+
+    const seconds =
+        Math.floor(
+            milliseconds / 1000
+        );
+
+
+    const days =
+        Math.floor(
+            seconds / 86400
+        );
+
+
+    const hours =
+        Math.floor(
+            (
+                seconds %
+                86400
+            ) / 3600
+        );
+
+
+    const minutes =
+        Math.floor(
+            (
+                seconds %
+                3600
+            ) / 60
+        );
+
+
+    const secs =
+        seconds %
+        60;
+
+
+    if (
+        days > 0
+    ) {
+
+        return (
+            `${days}d ` +
+            `${String(hours).padStart(2,"0")}h ` +
+            `${String(minutes).padStart(2,"0")}m`
+        );
+
+    }
+
+
+    return (
+        `${String(hours).padStart(2,"0")}:` +
+        `${String(minutes).padStart(2,"0")}:` +
+        `${String(secs).padStart(2,"0")}`
+    );
+
+}
+
+
+function updateCountdown() {
+
+    const element =
+        document.getElementById(
+            "countdown"
+        );
+
+
+    if (
+        element
+    ) {
+
+        element.textContent =
+            formatCountdown(
+                getTimeRemaining()
+            );
+
+    }
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+
+function showPage(
+    page
+) {
+
+    document
+        .querySelectorAll(
+            ".page-section"
+        )
+        .forEach(
+            section => {
+
+                section.classList.remove(
+                    "active"
+                );
+
+            }
+        );
+
+
+    document.getElementById(
+        `page-${page}`
+    )?.classList.add(
+        "active"
+    );
+
+
+    document
+        .querySelectorAll(
+            ".nav button"
+        )
+        .forEach(
+            button => {
+
+                button.classList.remove(
+                    "active"
+                );
+
+            }
+        );
+
+
+    const navMap = {
+
+        home:
+            "nav-home",
+
+        teams:
+            "nav-teams",
+
+        pvm:
+            "nav-pvm",
+
+        myteam:
+            "nav-myteam"
+
+    };
+
+
+    navMap[
+        page
+    ] &&
+        document.getElementById(
+            navMap[
+                page
+            ]
+        )?.classList.add(
+            "active"
+        );
+
+
+    if (
+        page === "myteam"
+    ) {
+
+        renderMyTeam();
+
+    }
+
+
+    if (
+        page === "builder"
+    ) {
+
+        renderBuilder();
+
+    }
+
+
+    if (
+        page === "teams"
+    ) {
+
+        renderFullTeamLeaderboard();
+
+    }
+
+
+    if (
+        page === "pvm"
+    ) {
+
+        renderPvMLeaderboard();
+
+    }
+
+}
+
+
+/* =========================================================
    REFRESH
-========================= */
+========================================================= */
+
 
 async function manualRefresh() {
 
@@ -3149,42 +7517,97 @@ async function manualRefresh() {
         );
 
 
-    if (button) {
+    button.disabled =
+        true;
 
-        button.disabled = true;
-        button.textContent =
-            "Refreshing...";
-
-    }
+    button.textContent =
+        "Refreshing...";
 
 
     try {
 
         await loadData();
 
+        await renderHomeLeaderboard();
+
+        await renderFullTeamLeaderboard();
+
+
     } finally {
 
-        if (button) {
+        button.disabled =
+            false;
 
-            button.disabled = false;
-            button.textContent =
-                "Refresh";
-
-        }
+        button.textContent =
+            "Refresh";
 
     }
+
 }
 
 
-/* =========================
-   GLOBAL FUNCTIONS
-========================= */
+/* =========================================================
+   STARTUP
+========================================================= */
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        await loadData();
+
+        await refreshAuthState();
+
+        await renderHomeLeaderboard();
+
+        await renderFullTeamLeaderboard();
+
+        renderPvMLeaderboard();
+
+        updateCountdown();
+
+
+        setInterval(
+            updateCountdown,
+            1000
+        );
+
+    }
+);
+
+
+/* =========================================================
+   GLOBALS
+========================================================= */
+
+
+window.openAuth =
+    openAuth;
+
+window.closeAuth =
+    closeAuth;
+
+window.switchAuthMode =
+    switchAuthMode;
+
+window.submitAuth =
+    submitAuth;
+
+window.signOutUser =
+    signOutUser;
+
+window.showPage =
+    showPage;
+
+window.openTeamBuilder =
+    openTeamBuilder;
+
+window.saveFantasyTeam =
+    saveFantasyTeam;
 
 window.manualRefresh =
     manualRefresh;
-
-window.changeTeam =
-    changeTeam;
 
 window.showPlayer =
     showPlayer;
@@ -3195,9 +7618,6 @@ window.closePlayer =
 window.closeModal =
     closeModal;
 
-window.showPage =
-    showPage;
-
 window.renderHomeLeaderboard =
     renderHomeLeaderboard;
 
@@ -3207,28 +7627,13 @@ window.renderFullTeamLeaderboard =
 window.renderPvMLeaderboard =
     renderPvMLeaderboard;
 
+window.renderPlayerBuilder =
+    renderPlayerBuilder;
 
-/* =========================
-   START
-========================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        loadData();
-
-        updateCountdown();
-
-        setInterval(
-            updateCountdown,
-            1000
-        );
-
-    }
-);
 
 </script>
 
+
 </body>
+
 </html>
