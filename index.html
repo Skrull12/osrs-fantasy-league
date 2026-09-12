@@ -1,12 +1,13 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Fantasy PvM League</title>
 
+    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -84,6 +85,14 @@
 
         button {
             cursor: pointer;
+        }
+
+        input {
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--orange) !important;
         }
 
         .topbar {
@@ -616,8 +625,6 @@
             color: var(--muted);
         }
 
-        /* Builder */
-
         .builder-layout {
             display: grid;
             grid-template-columns:
@@ -734,8 +741,6 @@
             margin-top: 18px;
         }
 
-        /* Account */
-
         .account-team-card {
             display: grid;
             grid-template-columns:
@@ -765,8 +770,6 @@
             gap: 8px;
             justify-content: flex-end;
         }
-
-        /* Modal */
 
         .modal-backdrop {
             position: fixed;
@@ -1041,21 +1044,17 @@
 
 </head>
 
-
 <body>
-
 
 <header class="topbar">
 
     <div class="topbar-inner">
-
 
         <div class="brand">
 
             <div class="brand-icon">
                 ⚔
             </div>
-
 
             <div>
 
@@ -1071,7 +1070,6 @@
 
         </div>
 
-
         <nav class="nav">
 
             <button
@@ -1082,7 +1080,6 @@
                 Homepage
             </button>
 
-
             <button
                 id="nav-teams"
                 onclick="showPage('teams')"
@@ -1090,14 +1087,12 @@
                 Team Leaderboard
             </button>
 
-
             <button
                 id="nav-pvm"
                 onclick="showPage('pvm')"
             >
                 PvM Leaderboard
             </button>
-
 
             <button
                 id="nav-myteam"
@@ -1107,7 +1102,6 @@
             </button>
 
         </nav>
-
 
         <div
             id="account-area"
@@ -1123,14 +1117,11 @@
 
         </div>
 
-
     </div>
 
 </header>
 
-
 <main class="page">
-
 
     <div
         id="load-status"
@@ -1138,7 +1129,6 @@
     >
         Loading Fantasy PvM data...
     </div>
-
 
     <div class="toolbar">
 
@@ -1152,26 +1142,22 @@
 
     </div>
 
-
-    <!-- =====================================
-         HOMEPAGE
-    ====================================== -->
+    <!-- =========================
+         HOME
+    ========================== -->
 
     <section
         id="page-home"
         class="page-section active"
     >
 
-
         <div class="hero">
-
 
             <div class="hero-main">
 
                 <div class="eyebrow">
                     Current Hunt
                 </div>
-
 
                 <h1
                     id="current-boss"
@@ -1180,7 +1166,6 @@
                     TBC
                 </h1>
 
-
                 <div
                     id="current-day"
                     class="day-label"
@@ -1188,11 +1173,9 @@
                     EVENT STARTS SOON
                 </div>
 
-
                 <div class="countdown-label">
                     Time Remaining
                 </div>
-
 
                 <div
                     id="countdown"
@@ -1203,16 +1186,13 @@
 
             </div>
 
-
             <div class="hero-side">
-
 
                 <div class="hero-stat">
 
                     <div class="hero-stat-label">
                         Your Team
                     </div>
-
 
                     <div
                         id="hero-team-name"
@@ -1223,13 +1203,11 @@
 
                 </div>
 
-
                 <div class="hero-stat">
 
                     <div class="hero-stat-label">
                         Team Points
                     </div>
-
 
                     <div
                         id="hero-team-points"
@@ -1240,13 +1218,11 @@
 
                 </div>
 
-
                 <div class="hero-stat">
 
                     <div class="hero-stat-label">
                         Team Value
                     </div>
-
 
                     <div
                         id="hero-team-value"
@@ -1257,23 +1233,17 @@
 
                 </div>
 
-
             </div>
 
         </div>
 
-
         <div class="layout">
-
 
             <div>
 
-
                 <div class="panel">
 
-
                     <div class="panel-header">
-
 
                         <div>
 
@@ -1284,20 +1254,17 @@
                                 Your Team
                             </div>
 
-
                             <div class="panel-subtitle">
                                 Your selected fantasy team
                             </div>
 
                         </div>
 
-
                         <div class="team-total-box">
 
                             <div class="team-total-label">
                                 Total Points
                             </div>
-
 
                             <div
                                 id="team-total"
@@ -1308,22 +1275,17 @@
 
                         </div>
 
-
                     </div>
-
 
                     <div class="panel-body">
 
-
                         <div class="team-heading">
-
 
                             <div>
 
                                 <h1 id="team-title-large">
                                     Your Team
                                 </h1>
-
 
                                 <div
                                     id="team-meta"
@@ -1334,13 +1296,11 @@
 
                             </div>
 
-
                             <div class="team-total-box">
 
                                 <div class="team-total-label">
                                     Total Value
                                 </div>
-
 
                                 <div
                                     id="team-value"
@@ -1351,37 +1311,29 @@
 
                             </div>
 
-
                         </div>
-
 
                         <div
                             id="team-players"
                             class="player-grid"
                         ></div>
 
-
                         <div style="margin-top:25px">
-
 
                             <div class="team-total-label">
                                 BUDGET
                             </div>
 
-
                             <div
                                 id="budget-text"
                                 style="
                                     font-size:13px;
-                                    margin:
-                                        5px 0 8px;
-                                    color:
-                                        var(--muted)
+                                    margin:5px 0 8px;
+                                    color:var(--muted)
                                 "
                             >
                                 0m / 250m used
                             </div>
-
 
                             <div class="progress">
 
@@ -1392,13 +1344,11 @@
 
                             </div>
 
-
                             <div class="progress-labels">
 
                                 <span>
                                     Spent
                                 </span>
-
 
                                 <span
                                     id="budget-remaining"
@@ -1408,24 +1358,18 @@
 
                             </div>
 
-
                         </div>
-
 
                     </div>
 
-
                 </div>
-
 
                 <div
                     class="panel"
                     style="margin-top:18px"
                 >
 
-
                     <div class="panel-header">
-
 
                         <div>
 
@@ -1433,43 +1377,32 @@
                                 Daily Team Scores
                             </div>
 
-
                             <div class="panel-subtitle">
                                 Your team's points from each day
                             </div>
 
                         </div>
 
-
                     </div>
 
-
                     <div class="panel-body">
-
 
                         <div
                             id="daily-grid"
                             class="daily-grid"
                         ></div>
 
-
                     </div>
-
 
                 </div>
 
-
             </div>
-
 
             <aside>
 
-
                 <div class="panel">
 
-
                     <div class="panel-header">
-
 
                         <div>
 
@@ -1477,16 +1410,13 @@
                                 Team Leaderboard
                             </div>
 
-
                             <div class="panel-subtitle">
                                 All fantasy teams
                             </div>
 
                         </div>
 
-
                     </div>
-
 
                     <div class="search-wrap">
 
@@ -1499,37 +1429,29 @@
 
                     </div>
 
-
                     <div
                         id="team-leaderboard"
                         class="leaderboard"
                     ></div>
 
-
                 </div>
-
 
             </aside>
 
-
         </div>
-
 
     </section>
 
-
-    <!-- =====================================
+    <!-- =========================
          TEAM LEADERBOARD
-    ====================================== -->
+    ========================== -->
 
     <section
         id="page-teams"
         class="page-section"
     >
 
-
         <div class="panel">
-
 
             <div class="panel-header">
 
@@ -1539,19 +1461,15 @@
                         Team Leaderboard
                     </div>
 
-
                     <div class="panel-subtitle">
                         Every fantasy team
                     </div>
 
                 </div>
 
-
             </div>
 
-
             <div class="panel-body">
-
 
                 <div class="table-controls">
 
@@ -1564,34 +1482,27 @@
 
                 </div>
 
-
                 <div
                     id="full-team-leaderboard"
                     class="leaderboard"
                 ></div>
 
-
             </div>
-
 
         </div>
 
-
     </section>
 
-
-    <!-- =====================================
+    <!-- =========================
          PVM LEADERBOARD
-    ====================================== -->
+    ========================== -->
 
     <section
         id="page-pvm"
         class="page-section"
     >
 
-
         <div class="panel">
-
 
             <div class="panel-header">
 
@@ -1601,19 +1512,15 @@
                         PvM Leaderboard
                     </div>
 
-
                     <div class="panel-subtitle">
                         Individual fantasy player performance
                     </div>
 
                 </div>
 
-
             </div>
 
-
             <div class="panel-body">
-
 
                 <div class="table-controls">
 
@@ -1626,34 +1533,27 @@
 
                 </div>
 
-
                 <div
                     id="pvm-leaderboard"
                     class="leaderboard"
                 ></div>
 
-
             </div>
-
 
         </div>
 
-
     </section>
 
-
-    <!-- =====================================
+    <!-- =========================
          MY TEAM
-    ====================================== -->
+    ========================== -->
 
     <section
         id="page-myteam"
         class="page-section"
     >
 
-
         <div class="panel">
-
 
             <div class="panel-header">
 
@@ -1663,41 +1563,33 @@
                         My Team
                     </div>
 
-
                     <div class="panel-subtitle">
                         Manage your Fantasy PvM team
                     </div>
 
                 </div>
 
-
             </div>
-
 
             <div
                 id="myteam-content"
                 class="panel-body"
             ></div>
 
-
         </div>
-
 
     </section>
 
-
-    <!-- =====================================
+    <!-- =========================
          TEAM BUILDER
-    ====================================== -->
+    ========================== -->
 
     <section
         id="page-builder"
         class="page-section"
     >
 
-
         <div class="panel">
-
 
             <div class="panel-header">
 
@@ -1707,19 +1599,15 @@
                         Build Your Fantasy Team
                     </div>
 
-
                     <div class="panel-subtitle">
                         Pick exactly five PvMers within your budget
                     </div>
 
                 </div>
 
-
             </div>
 
-
             <div class="panel-body">
-
 
                 <div class="form-group">
 
@@ -1730,7 +1618,6 @@
                         Team Name
                     </label>
 
-
                     <input
                         id="builder-team-name"
                         class="team-name-input"
@@ -1739,23 +1626,19 @@
                         placeholder="Enter your team name"
                     >
 
-
                     <div class="form-help">
                         This is the public name shown on the leaderboard.
                     </div>
 
                 </div>
 
-
                 <div class="builder-summary">
-
 
                     <div class="builder-stat">
 
                         <div class="builder-stat-label">
                             Budget
                         </div>
-
 
                         <div
                             id="builder-budget"
@@ -1766,13 +1649,11 @@
 
                     </div>
 
-
                     <div class="builder-stat">
 
                         <div class="builder-stat-label">
                             Spent
                         </div>
-
 
                         <div
                             id="builder-spent"
@@ -1783,13 +1664,11 @@
 
                     </div>
 
-
                     <div class="builder-stat">
 
                         <div class="builder-stat-label">
                             Remaining
                         </div>
-
 
                         <div
                             id="builder-remaining"
@@ -1800,15 +1679,11 @@
 
                     </div>
 
-
                 </div>
-
 
                 <div class="builder-layout">
 
-
                     <div class="panel">
-
 
                         <div class="panel-header">
 
@@ -1818,27 +1693,25 @@
                                     Your Squad
                                 </div>
 
-
                                 <div class="panel-subtitle">
+
                                     <span id="builder-count">
                                         0
                                     </span>
                                     / 5
+
                                 </div>
 
                             </div>
 
                         </div>
 
-
                         <div class="panel-body">
-
 
                             <div
                                 id="builder-squad"
                                 class="squad-list"
                             ></div>
-
 
                             <div
                                 id="builder-message"
@@ -1849,9 +1722,7 @@
                                 "
                             ></div>
 
-
                             <div class="builder-actions">
-
 
                                 <button
                                     class="btn"
@@ -1859,7 +1730,6 @@
                                 >
                                     Cancel
                                 </button>
-
 
                                 <button
                                     id="save-team-button"
@@ -1869,21 +1739,15 @@
                                     Save Team
                                 </button>
 
-
                             </div>
-
 
                         </div>
 
-
                     </div>
-
 
                     <div class="panel">
 
-
                         <div class="panel-header">
-
 
                             <div style="width:100%">
 
@@ -1891,14 +1755,12 @@
                                     Available PvMers
                                 </div>
 
-
                                 <div
                                     class="panel-subtitle"
                                     style="margin-bottom:10px"
                                 >
                                     Search by RuneScape name
                                 </div>
-
 
                                 <input
                                     id="builder-search"
@@ -1910,30 +1772,22 @@
 
                             </div>
 
-
                         </div>
-
 
                         <div
                             id="builder-players"
                             class="leaderboard"
                         ></div>
 
-
                     </div>
-
 
                 </div>
 
-
             </div>
-
 
         </div>
 
-
     </section>
-
 
     <div class="footer">
 
@@ -1943,26 +1797,20 @@
 
     </div>
 
-
 </main>
 
-
-
-<!-- =====================================
+<!-- =========================
      AUTH MODAL
-====================================== -->
+========================== -->
 
 <div
     id="auth-modal"
     class="modal-backdrop"
 >
 
-
     <div class="modal">
 
-
         <div class="modal-header">
-
 
             <div
                 id="auth-modal-title"
@@ -1971,7 +1819,6 @@
                 Login
             </div>
 
-
             <button
                 class="close-btn"
                 onclick="closeAuth()"
@@ -1979,32 +1826,25 @@
                 ×
             </button>
 
-
         </div>
 
-
         <div class="modal-body">
-
 
             <div
                 id="auth-error"
                 class="auth-error"
             ></div>
 
-
             <div
                 id="auth-success"
                 class="auth-success"
             ></div>
 
-
             <div class="form-group">
-
 
                 <label class="form-label">
                     Username
                 </label>
-
 
                 <input
                     id="auth-username"
@@ -2015,24 +1855,19 @@
                     placeholder="Username"
                 >
 
-
                 <div class="form-help">
                     3–20 characters:
                     letters, numbers,
                     underscores and hyphens.
                 </div>
 
-
             </div>
 
-
             <div class="form-group">
-
 
                 <label class="form-label">
                     Password
                 </label>
-
 
                 <input
                     id="auth-password"
@@ -2042,9 +1877,7 @@
                     placeholder="Password"
                 >
 
-
             </div>
-
 
             <div
                 id="auth-confirm-group"
@@ -2052,11 +1885,9 @@
                 style="display:none"
             >
 
-
                 <label class="form-label">
                     Confirm Password
                 </label>
-
 
                 <input
                     id="auth-confirm"
@@ -2066,12 +1897,9 @@
                     placeholder="Confirm password"
                 >
 
-
             </div>
 
-
             <div class="modal-buttons">
-
 
                 <button
                     id="auth-submit"
@@ -2081,17 +1909,13 @@
                     Login
                 </button>
 
-
             </div>
 
-
             <div class="switch-auth">
-
 
                 <span id="auth-switch-text">
                     Don't have an account?
                 </span>
-
 
                 <button
                     id="auth-switch-button"
@@ -2100,23 +1924,17 @@
                     Sign up
                 </button>
 
-
             </div>
-
 
         </div>
 
-
     </div>
-
 
 </div>
 
-
-
-<!-- =====================================
+<!-- =========================
      PLAYER MODAL
-====================================== -->
+========================== -->
 
 <div
     id="player-modal"
@@ -2124,15 +1942,12 @@
     onclick="closeModal(event)"
 >
 
-
     <div
         class="modal"
         onclick="event.stopPropagation()"
     >
 
-
         <div class="modal-header">
-
 
             <div
                 id="modal-name"
@@ -2141,7 +1956,6 @@
                 Player
             </div>
 
-
             <button
                 class="close-btn"
                 onclick="closePlayer()"
@@ -2149,22 +1963,17 @@
                 ×
             </button>
 
-
         </div>
-
 
         <div class="modal-body">
 
-
             <div class="modal-stats">
-
 
                 <div class="modal-stat">
 
                     <div class="modal-stat-label">
                         EHB
                     </div>
-
 
                     <div
                         id="modal-ehb"
@@ -2175,13 +1984,11 @@
 
                 </div>
 
-
                 <div class="modal-stat">
 
                     <div class="modal-stat-label">
                         Value
                     </div>
-
 
                     <div
                         id="modal-value"
@@ -2192,13 +1999,11 @@
 
                 </div>
 
-
                 <div class="modal-stat">
 
                     <div class="modal-stat-label">
                         Total
                     </div>
-
 
                     <div
                         id="modal-total"
@@ -2209,13 +2014,11 @@
 
                 </div>
 
-
                 <div class="modal-stat">
 
                     <div class="modal-stat-label">
                         Monthly EHB
                     </div>
-
 
                     <div
                         id="modal-monthly"
@@ -2226,9 +2029,7 @@
 
                 </div>
 
-
             </div>
-
 
             <div
                 class="panel-title"
@@ -2237,22 +2038,16 @@
                 Daily Scores
             </div>
 
-
             <div
                 id="modal-daily"
                 class="daily-list"
             ></div>
 
-
         </div>
-
 
     </div>
 
-
 </div>
-
-
 
 <script>
 
@@ -2268,8 +2063,8 @@ const CONFIG = {
     SUPABASE_KEY:
         "sb_publishable_p-jtnWdUrQRq48qirgbPUA_y17z8qhj",
 
-    FANTASY_CSV:
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=1220418834&single=true&output=csv",
+    EDGE_FUNCTION:
+        "google-sheet",
 
     EVENT_START:
         new Date(
@@ -2284,6 +2079,10 @@ const CONFIG = {
 
 };
 
+
+/* =========================================================
+   SUPABASE
+========================================================= */
 
 const supabaseClient =
     window.supabase.createClient(
@@ -2307,6 +2106,10 @@ let currentFantasyTeam = null;
 let builderPlayers = [];
 
 let authMode = "login";
+
+let teamLeaderboardCache = null;
+
+let lastTeamLeaderboardLoad = 0;
 
 
 /* =========================================================
@@ -2490,73 +2293,6 @@ function parseCSV(text) {
 }
 
 
-async function loadCSV(
-    url,
-    name
-) {
-
-    const response =
-        await fetch(
-            url,
-            {
-                cache:
-                    "no-store"
-            }
-        );
-
-
-    if (
-        !response.ok
-    ) {
-
-        throw new Error(
-            `${name} returned HTTP ${response.status}`
-        );
-
-    }
-
-
-    const text =
-        await response.text();
-
-
-    const trimmed =
-        text.trim();
-
-
-    if (
-        trimmed.startsWith("<!DOCTYPE") ||
-        trimmed.startsWith("<html") ||
-        trimmed.startsWith("<HTML")
-    ) {
-
-        throw new Error(
-            `${name} returned HTML instead of CSV`
-        );
-
-    }
-
-
-    const rows =
-        parseCSV(text);
-
-
-    if (
-        !rows.length
-    ) {
-
-        throw new Error(
-            `${name} returned an empty CSV`
-        );
-
-    }
-
-
-    return rows;
-
-}
-
-
 /* =========================================================
    STATUS
 ========================================================= */
@@ -2599,7 +2335,7 @@ function setStatus(
 
 
 /* =========================================================
-   DATA
+   LOAD FANTASY DATA
 ========================================================= */
 
 async function loadData() {
@@ -2611,15 +2347,141 @@ async function loadData() {
 
     try {
 
-        fantasyData =
-            await loadCSV(
-                CONFIG.FANTASY_CSV,
-                "Fantasy PvM"
+        /*
+            IMPORTANT:
+            Use Supabase's function client rather than
+            fetching the function URL directly.
+
+            This automatically supplies the correct
+            Supabase authentication headers.
+        */
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .functions
+                .invoke(
+                    CONFIG.EDGE_FUNCTION
+                );
+
+
+        if (
+            error
+        ) {
+
+            console.error(
+                "Edge function error:",
+                error
+            );
+
+            throw new Error(
+                error.message ||
+                "Could not load Fantasy PvM data."
+            );
+
+        }
+
+
+        let csvText;
+
+
+        if (
+            typeof data === "string"
+        ) {
+
+            csvText =
+                data;
+
+        } else if (
+            data instanceof Blob
+        ) {
+
+            csvText =
+                await data.text();
+
+        } else {
+
+            csvText =
+                String(data ?? "");
+
+        }
+
+
+        if (
+            !csvText.trim()
+        ) {
+
+            throw new Error(
+                "Fantasy PvM data function returned an empty response."
+            );
+
+        }
+
+
+        if (
+            csvText
+                .trim()
+                .startsWith("{")
+        ) {
+
+            try {
+
+                const parsed =
+                    JSON.parse(
+                        csvText
+                    );
+
+
+                if (
+                    parsed.error
+                ) {
+
+                    throw new Error(
+                        parsed.error
+                    );
+
+                }
+
+            } catch (
+                jsonError
+            ) {
+
+                throw jsonError;
+
+            }
+
+        }
+
+
+        const rows =
+            parseCSV(
+                csvText
             );
 
 
+        if (
+            rows.length < 2
+        ) {
+
+            throw new Error(
+                "Fantasy PvM data contains no player rows."
+            );
+
+        }
+
+
+        fantasyData =
+            rows;
+
+
+        teamLeaderboardCache =
+            null;
+
+
         setStatus(
-            "Fantasy PvM data loaded successfully.",
+            `Fantasy PvM data loaded: ${rows.length - 1} players.`,
             "success"
         );
 
@@ -2647,7 +2509,7 @@ async function loadData() {
 
 
         setStatus(
-            `ERROR: ${error.message}`,
+            `ERROR: ${error.message || "Fantasy data could not be loaded."}`,
             "error"
         );
 
@@ -2823,16 +2685,41 @@ function getPvMLeaderboard() {
         (
             a,
             b
-        ) =>
-            b.points -
-            a.points
+        ) => {
+
+            if (
+                b.points !==
+                a.points
+            ) {
+
+                return (
+                    b.points -
+                    a.points
+                );
+
+            }
+
+
+            return a.name.localeCompare(
+                b.name,
+                undefined,
+                {
+                    numeric:
+                        true,
+
+                    sensitivity:
+                        "base"
+                }
+            );
+
+        }
     );
 
 }
 
 
 /* =========================================================
-   AUTH
+   AUTH UI
 ========================================================= */
 
 function clearAuthMessages() {
@@ -2991,6 +2878,44 @@ function updateAuthModal() {
 }
 
 
+/* =========================================================
+   AUTH
+========================================================= */
+
+function validateUsername(
+    username
+) {
+
+    if (
+        username.length < 3 ||
+        username.length > 20
+    ) {
+
+        return (
+            "Username must be between 3 and 20 characters."
+        );
+
+    }
+
+
+    if (
+        !/^[A-Za-z0-9_-]+$/.test(
+            username
+        )
+    ) {
+
+        return (
+            "Username can only contain letters, numbers, underscores and hyphens."
+        );
+
+    }
+
+
+    return "";
+
+}
+
+
 async function submitAuth() {
 
     clearAuthMessages();
@@ -3010,28 +2935,18 @@ async function submitAuth() {
         ).value;
 
 
-    if (
-        username.length < 3 ||
-        username.length > 20
-    ) {
-
-        showAuthError(
-            "Username must be between 3 and 20 characters."
+    const validation =
+        validateUsername(
+            username
         );
 
-        return;
-
-    }
-
 
     if (
-        !/^[A-Za-z0-9_-]+$/.test(
-            username
-        )
+        validation
     ) {
 
         showAuthError(
-            "Username can only contain letters, numbers, underscores and hyphens."
+            validation
         );
 
         return;
@@ -3094,10 +3009,11 @@ async function submitAuth() {
 
 
 /*
-    SIGN UP
+    Create account.
 
-    This version contains the automatic-login
-    fallback that was missing before.
+    We keep the internal Supabase email mapping because
+    Supabase password auth requires an email/phone identity,
+    while the website continues to expose username only.
 */
 
 async function signUp(
@@ -3155,7 +3071,7 @@ async function signUp(
 
 
     if (
-        !data.user
+        !data?.user
     ) {
 
         showAuthError(
@@ -3168,11 +3084,8 @@ async function signUp(
 
 
     /*
-        With email confirmation disabled,
-        Supabase normally returns a session.
-
-        If it doesn't, immediately sign in
-        using the same credentials.
+        Some Supabase configurations return a session
+        immediately. Others may return no session.
     */
 
     let session =
@@ -3183,36 +3096,30 @@ async function signUp(
         !session
     ) {
 
-        console.log(
-            "Signup returned no session. Attempting automatic login..."
-        );
+        const login =
+            await supabaseClient
+                .auth
+                .signInWithPassword({
 
+                    email,
 
-        const {
-            data: loginData,
-            error: loginError
-        } =
-            await supabaseClient.auth.signInWithPassword({
+                    password
 
-                email,
-
-                password
-
-            });
+                });
 
 
         if (
-            loginError
+            login.error
         ) {
 
             console.error(
                 "Automatic login failed:",
-                loginError
+                login.error
             );
 
 
             showAuthError(
-                `Account created, but automatic login failed: ${loginError.message}`
+                `Account created, but automatic login failed: ${login.error.message}`
             );
 
             return;
@@ -3221,7 +3128,7 @@ async function signUp(
 
 
         session =
-            loginData.session;
+            login.data.session;
 
     }
 
@@ -3231,7 +3138,7 @@ async function signUp(
     ) {
 
         showAuthError(
-            "Account created, but Supabase did not create a login session."
+            "Account was created, but no login session was returned."
         );
 
         return;
@@ -3239,60 +3146,38 @@ async function signUp(
     }
 
 
-    currentSession =
-        session;
+    await establishLoggedInState(
+        session,
+        username
+    );
 
 
-    /*
-        Give the auth trigger a moment to create
-        the profile, then load it.
-    */
-
-    await loadProfile();
+    showAuthSuccess(
+        "Account created and logged in."
+    );
 
 
-    /*
-        In case the trigger has not completed by
-        the first request, retry once.
-    */
+    setTimeout(
+        () => {
 
-    if (
-        !currentProfile
-    ) {
+            closeAuth();
 
-        await new Promise(
-            resolve =>
-                setTimeout(
-                    resolve,
-                    400
-                )
-        );
+            showPage(
+                currentFantasyTeam
+                    ? "myteam"
+                    : "home"
+            );
 
-
-        await loadProfile();
-
-    }
-
-
-    await loadMyFantasyTeam();
-
-
-    updateAccountArea();
-
-    renderHome();
-
-    renderMyTeam();
-
-
-    closeAuth();
-
-
-    showPage(
-        "myteam"
+        },
+        250
     );
 
 }
 
+
+/*
+    Login.
+*/
 
 async function signIn(
     username,
@@ -3309,13 +3194,15 @@ async function signIn(
         data,
         error
     } =
-        await supabaseClient.auth.signInWithPassword({
+        await supabaseClient
+            .auth
+            .signInWithPassword({
 
-            email,
+                email,
 
-            password
+                password
 
-        });
+            });
 
 
     if (
@@ -3337,11 +3224,143 @@ async function signIn(
     }
 
 
+    await establishLoggedInState(
+        data.session,
+        username
+    );
+
+
+    setTimeout(
+        () => {
+
+            closeAuth();
+
+            showPage(
+                currentFantasyTeam
+                    ? "myteam"
+                    : "home"
+            );
+
+        },
+        150
+    );
+
+}
+
+
+/*
+    This is deliberately independent of the profiles table.
+
+    A valid Supabase session means the user is logged in.
+    The profile row is only used as an optional source
+    of display information.
+*/
+
+async function establishLoggedInState(
+    session,
+    fallbackUsername = ""
+) {
+
     currentSession =
-        data.session;
+        session || null;
 
 
-    await loadProfile();
+    if (
+        !currentSession
+    ) {
+
+        currentProfile =
+            null;
+
+        currentFantasyTeam =
+            null;
+
+        updateAccountArea();
+
+        return;
+
+    }
+
+
+    const metadataUsername =
+        normalise(
+            currentSession
+                .user
+                .user_metadata
+                ?.username
+        );
+
+
+    /*
+        Immediately recognise the session.
+    */
+
+    currentProfile = {
+
+        id:
+            currentSession.user.id,
+
+        username:
+            metadataUsername ||
+            fallbackUsername ||
+            "Player"
+
+    };
+
+
+    updateAccountArea();
+
+
+    /*
+        Try to load the profile, but do NOT let a
+        profile/RLS issue log the user back out.
+    */
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "profiles"
+                )
+                .select(
+                    "id,username"
+                )
+                .eq(
+                    "id",
+                    currentSession.user.id
+                )
+                .maybeSingle();
+
+
+        if (
+            !error &&
+            data
+        ) {
+
+            currentProfile =
+                data;
+
+        }
+
+    } catch (
+        error
+    ) {
+
+        console.warn(
+            "Optional profile lookup failed:",
+            error
+        );
+
+    }
+
+
+    /*
+        Team loading is also independent from profile.
+    */
 
     await loadMyFantasyTeam();
 
@@ -3352,13 +3371,162 @@ async function signIn(
 
     renderMyTeam();
 
+}
 
-    closeAuth();
+
+async function refreshAuthState() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .auth
+            .getSession();
 
 
-    showPage(
-        "myteam"
+    if (
+        error
+    ) {
+
+        console.error(
+            "Session check failed:",
+            error
+        );
+
+
+        currentSession =
+            null;
+
+        currentProfile =
+            null;
+
+        currentFantasyTeam =
+            null;
+
+        updateAccountArea();
+
+        return;
+
+    }
+
+
+    await establishLoggedInState(
+        data.session,
+        data.session
+            ?.user
+            ?.user_metadata
+            ?.username || ""
     );
+
+}
+
+
+supabaseClient.auth.onAuthStateChange(
+    (
+        event,
+        session
+    ) => {
+
+        /*
+            Don't perform Supabase queries directly
+            inside this callback.
+
+            Queue the state update so we avoid the
+            auth event/query deadlock issue.
+        */
+
+        setTimeout(
+            () => {
+
+                establishLoggedInState(
+                    session,
+                    session
+                        ?.user
+                        ?.user_metadata
+                        ?.username || ""
+                );
+
+            },
+            0
+        );
+
+    }
+);
+
+
+/* =========================================================
+   ACCOUNT AREA
+========================================================= */
+
+function updateAccountArea() {
+
+    const area =
+        document.getElementById(
+            "account-area"
+        );
+
+
+    if (
+        !currentSession
+    ) {
+
+        area.innerHTML = `
+
+            <button
+                class="btn primary"
+                onclick="openAuth('login')"
+            >
+                Login
+            </button>
+
+        `;
+
+        return;
+
+    }
+
+
+    const username =
+        normalise(
+            currentProfile?.username
+        ) ||
+        normalise(
+            currentSession
+                ?.user
+                ?.user_metadata
+                ?.username
+        ) ||
+        "Player";
+
+
+    area.innerHTML = `
+
+        <span class="account-name">
+
+            ${escapeHtml(
+                username
+            )}
+
+        </span>
+
+
+        <button
+            class="btn"
+            onclick="showPage('myteam')"
+        >
+            My Team
+        </button>
+
+
+        <button
+            class="btn"
+            onclick="signOutUser()"
+        >
+            Logout
+        </button>
+
+    `;
 
 }
 
@@ -3368,7 +3536,9 @@ async function signOutUser() {
     const {
         error
     } =
-        await supabaseClient.auth.signOut();
+        await supabaseClient
+            .auth
+            .signOut();
 
 
     if (
@@ -3409,210 +3579,7 @@ async function signOutUser() {
 
 
 /* =========================================================
-   AUTH STATE
-========================================================= */
-
-async function refreshAuthState() {
-
-    const {
-        data
-    } =
-        await supabaseClient.auth.getSession();
-
-
-    currentSession =
-        data.session;
-
-
-    if (
-        currentSession
-    ) {
-
-        await loadProfile();
-
-        await loadMyFantasyTeam();
-
-    } else {
-
-        currentProfile =
-            null;
-
-        currentFantasyTeam =
-            null;
-
-    }
-
-
-    updateAccountArea();
-
-    renderHome();
-
-    renderMyTeam();
-
-}
-
-
-supabaseClient.auth.onAuthStateChange(
-    async (
-        event,
-        session
-    ) => {
-
-        currentSession =
-            session;
-
-
-        if (
-            session
-        ) {
-
-            await loadProfile();
-
-            await loadMyFantasyTeam();
-
-        } else {
-
-            currentProfile =
-                null;
-
-            currentFantasyTeam =
-                null;
-
-        }
-
-
-        updateAccountArea();
-
-        renderHome();
-
-        renderMyTeam();
-
-    }
-);
-
-
-/* =========================================================
-   PROFILE
-========================================================= */
-
-async function loadProfile() {
-
-    if (
-        !currentSession
-    ) {
-
-        currentProfile =
-            null;
-
-        return;
-
-    }
-
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from(
-                "profiles"
-            )
-            .select(
-                "id,username"
-            )
-            .eq(
-                "id",
-                currentSession.user.id
-            )
-            .maybeSingle();
-
-
-    if (
-        error
-    ) {
-
-        console.error(
-            "Profile load error:",
-            error
-        );
-
-
-        currentProfile =
-            null;
-
-        return;
-
-    }
-
-
-    currentProfile =
-        data;
-
-}
-
-
-function updateAccountArea() {
-
-    const area =
-        document.getElementById(
-            "account-area"
-        );
-
-
-    if (
-        !currentSession ||
-        !currentProfile
-    ) {
-
-        area.innerHTML = `
-
-            <button
-                class="btn primary"
-                onclick="openAuth('login')"
-            >
-                Login
-            </button>
-
-        `;
-
-        return;
-
-    }
-
-
-    area.innerHTML = `
-
-        <span class="account-name">
-
-            ${escapeHtml(
-                currentProfile.username
-            )}
-
-        </span>
-
-
-        <button
-            class="btn"
-            onclick="showPage('myteam')"
-        >
-            My Team
-        </button>
-
-
-        <button
-            class="btn"
-            onclick="signOutUser()"
-        >
-            Logout
-        </button>
-
-    `;
-
-}
-
-
-/* =========================================================
-   MY TEAM FROM SUPABASE
+   MY TEAM
 ========================================================= */
 
 async function loadMyFantasyTeam() {
@@ -3629,104 +3596,121 @@ async function loadMyFantasyTeam() {
     }
 
 
-    const {
-        data: team,
-        error: teamError
-    } =
-        await supabaseClient
-            .from(
-                "fantasy_teams"
-            )
-            .select(
-                "*"
-            )
-            .eq(
-                "owner_id",
-                currentSession.user.id
-            )
-            .maybeSingle();
+    try {
+
+        const {
+            data: team,
+            error: teamError
+        } =
+            await supabaseClient
+                .from(
+                    "fantasy_teams"
+                )
+                .select(
+                    "id,owner_id,team_name,created_at,updated_at"
+                )
+                .eq(
+                    "owner_id",
+                    currentSession.user.id
+                )
+                .maybeSingle();
 
 
-    if (
-        teamError
-    ) {
-
-        console.error(
-            "Fantasy team load error:",
+        if (
             teamError
-        );
+        ) {
 
-
-        currentFantasyTeam =
-            null;
-
-        return;
-
-    }
-
-
-    if (
-        !team
-    ) {
-
-        currentFantasyTeam =
-            null;
-
-        return;
-
-    }
-
-
-    const {
-        data: players,
-        error: playerError
-    } =
-        await supabaseClient
-            .from(
-                "fantasy_team_players"
-            )
-            .select(
-                "id,team_id,player_name,created_at"
-            )
-            .eq(
-                "team_id",
-                team.id
-            )
-            .order(
-                "created_at",
-                {
-                    ascending:
-                        true
-                }
+            console.error(
+                "Fantasy team load error:",
+                teamError
             );
 
 
-    if (
-        playerError
+            currentFantasyTeam =
+                null;
+
+            return;
+
+        }
+
+
+        if (
+            !team
+        ) {
+
+            currentFantasyTeam =
+                null;
+
+            return;
+
+        }
+
+
+        const {
+            data: players,
+            error: playerError
+        } =
+            await supabaseClient
+                .from(
+                    "fantasy_team_players"
+                )
+                .select(
+                    "id,team_id,player_name,created_at"
+                )
+                .eq(
+                    "team_id",
+                    team.id
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending:
+                            true
+                    }
+                );
+
+
+        if (
+            playerError
+        ) {
+
+            console.error(
+                "Fantasy team players load error:",
+                playerError
+            );
+
+
+            currentFantasyTeam =
+                null;
+
+            return;
+
+        }
+
+
+        currentFantasyTeam = {
+
+            ...team,
+
+            players:
+                players || []
+
+        };
+
+    } catch (
+        error
     ) {
 
         console.error(
-            "Fantasy team players load error:",
-            playerError
+            "Unexpected team load error:",
+            error
         );
 
 
         currentFantasyTeam =
             null;
 
-        return;
-
     }
-
-
-    currentFantasyTeam = {
-
-        ...team,
-
-        players:
-            players || []
-
-    };
 
 }
 
@@ -3738,8 +3722,7 @@ async function loadMyFantasyTeam() {
 function openTeamBuilder() {
 
     if (
-        !currentSession ||
-        !currentProfile
+        !currentSession
     ) {
 
         openAuth(
@@ -3855,7 +3838,8 @@ function renderBuilderSquad() {
                             ${player.ehb.toLocaleString(
                                 undefined,
                                 {
-                                    maximumFractionDigits:1
+                                    maximumFractionDigits:
+                                        1
                                 }
                             )} EHB
 
@@ -3864,7 +3848,8 @@ function renderBuilderSquad() {
                             ${player.total.toLocaleString(
                                 undefined,
                                 {
-                                    maximumFractionDigits:2
+                                    maximumFractionDigits:
+                                        2
                                 }
                             )} points
 
@@ -3917,7 +3902,8 @@ function renderBuilderSquad() {
                     () => {
 
                         removeBuilderPlayer(
-                            button.dataset.removePlayer
+                            button.dataset
+                                .removePlayer
                         );
 
                     }
@@ -3959,7 +3945,9 @@ function addBuilderPlayer(
 
 
     const player =
-        getPlayer(name);
+        getPlayer(
+            name
+        );
 
 
     if (
@@ -4145,7 +4133,7 @@ function showBuilderMessage(
                     "none";
 
             },
-            3000
+            3500
         );
 
 }
@@ -4158,8 +4146,7 @@ function showBuilderMessage(
 async function saveFantasyTeam() {
 
     if (
-        !currentSession ||
-        !currentProfile
+        !currentSession
     ) {
 
         openAuth(
@@ -4278,7 +4265,7 @@ async function saveFantasyTeam() {
 
 
         /*
-            CREATE
+            CREATE TEAM
         */
 
         if (
@@ -4310,17 +4297,19 @@ async function saveFantasyTeam() {
                 error
             ) {
 
+                console.error(
+                    "Create team error:",
+                    error
+                );
+
+
                 if (
-                    error.code === "23505"
+                    error.code ===
+                    "23505"
                 ) {
 
-                    /*
-                        Could be either the owner
-                        or the team name.
-                    */
-
                     throw new Error(
-                        "That team name is already taken, or you already have a fantasy team."
+                        "You already have a fantasy team."
                     );
 
                 }
@@ -4337,9 +4326,8 @@ async function saveFantasyTeam() {
 
         } else {
 
-
             /*
-                UPDATE
+                UPDATE EXISTING TEAM
             */
 
             const {
@@ -4356,12 +4344,17 @@ async function saveFantasyTeam() {
                             teamName,
 
                         updated_at:
-                            new Date().toISOString()
+                            new Date()
+                                .toISOString()
 
                     })
                     .eq(
                         "id",
                         team.id
+                    )
+                    .eq(
+                        "owner_id",
+                        currentSession.user.id
                     )
                     .select()
                     .single();
@@ -4371,15 +4364,10 @@ async function saveFantasyTeam() {
                 error
             ) {
 
-                if (
-                    error.code === "23505"
-                ) {
-
-                    throw new Error(
-                        "That team name is already taken."
-                    );
-
-                }
+                console.error(
+                    "Update team error:",
+                    error
+                );
 
 
                 throw error;
@@ -4394,7 +4382,7 @@ async function saveFantasyTeam() {
 
 
         /*
-            Replace players
+            Replace player list.
         */
 
         const {
@@ -4458,11 +4446,16 @@ async function saveFantasyTeam() {
         await loadMyFantasyTeam();
 
 
+        teamLeaderboardCache =
+            null;
+
+
         renderHome();
 
         renderMyTeam();
 
         renderDailyScores();
+
 
         await renderHomeLeaderboard();
 
@@ -4483,7 +4476,7 @@ async function saveFantasyTeam() {
                 );
 
             },
-            500
+            600
         );
 
 
@@ -4600,7 +4593,8 @@ function renderPlayerBuilder() {
                                     ${player.ehb.toLocaleString(
                                         undefined,
                                         {
-                                            maximumFractionDigits:1
+                                            maximumFractionDigits:
+                                                1
                                         }
                                     )} EHB
 
@@ -4609,7 +4603,8 @@ function renderPlayerBuilder() {
                                     ${player.points.toLocaleString(
                                         undefined,
                                         {
-                                            maximumFractionDigits:2
+                                            maximumFractionDigits:
+                                                2
                                         }
                                     )} points
 
@@ -4670,7 +4665,8 @@ function renderPlayerBuilder() {
                     () => {
 
                         addBuilderPlayer(
-                            button.dataset.addPlayer
+                            button.dataset
+                                .addPlayer
                         );
 
                     }
@@ -4755,6 +4751,10 @@ function getMyDisplayTeam() {
 
 }
 
+
+/* =========================================================
+   HOME
+========================================================= */
 
 function renderHome() {
 
@@ -4880,7 +4880,10 @@ function renderHome() {
 
 
                 <div style="margin-bottom:14px">
-                    Create an account and pick five PvMers within the 250m budget.
+
+                    Create an account and pick five
+                    PvMers within the 250m budget.
+
                 </div>
 
 
@@ -4902,7 +4905,6 @@ function renderHome() {
 
 
         renderDailyScores();
-
 
         return;
 
@@ -4945,7 +4947,6 @@ function renderHome() {
 
 
         renderDailyScores();
-
 
         return;
 
@@ -4998,7 +4999,8 @@ function renderHome() {
                                 ${player.total.toLocaleString(
                                     undefined,
                                     {
-                                        maximumFractionDigits:2
+                                        maximumFractionDigits:
+                                            2
                                     }
                                 )}
                             </strong>
@@ -5017,7 +5019,8 @@ function renderHome() {
                                 ${player.ehb.toLocaleString(
                                     undefined,
                                     {
-                                        maximumFractionDigits:1
+                                        maximumFractionDigits:
+                                            1
                                     }
                                 )}
                             </strong>
@@ -5043,7 +5046,8 @@ function renderHome() {
                     () => {
 
                         showPlayer(
-                            card.dataset.homePlayer
+                            card.dataset
+                                .homePlayer
                         );
 
                     }
@@ -5107,7 +5111,7 @@ function updateBudgetDisplay(
 
 
 /* =========================================================
-   DAILY
+   DAILY SCORES
 ========================================================= */
 
 function renderDailyScores() {
@@ -5225,7 +5229,8 @@ function renderDailyScores() {
                             ${item.total.toLocaleString(
                                 undefined,
                                 {
-                                    maximumFractionDigits:2
+                                    maximumFractionDigits:
+                                        2
                                 }
                             )}
 
@@ -5241,10 +5246,34 @@ function renderDailyScores() {
 
 
 /* =========================================================
-   TEAM LEADERBOARD
+   TEAM LEADERBOARD DATA
 ========================================================= */
 
-async function getTeamLeaderboardData() {
+async function getTeamLeaderboardData(
+    forceRefresh = false
+) {
+
+    /*
+        Prevent every search keystroke from repeatedly
+        hitting Supabase.
+    */
+
+    const now =
+        Date.now();
+
+
+    if (
+        !forceRefresh &&
+        teamLeaderboardCache &&
+        now -
+            lastTeamLeaderboardLoad <
+            5000
+    ) {
+
+        return teamLeaderboardCache;
+
+    }
+
 
     const {
         data,
@@ -5272,68 +5301,82 @@ async function getTeamLeaderboardData() {
             error
         );
 
+
         return [];
 
     }
 
 
-    return (
-        data || []
-    )
-        .map(
-            team => {
+    const teams =
+        (
+            data || []
+        )
+            .map(
+                team => {
 
-                const players =
-                    (
-                        team.fantasy_team_players ||
-                        []
-                    )
-                    .map(
-                        item =>
-                            getPlayer(
-                                item.player_name
-                            )
-                    )
-                    .filter(Boolean);
+                    const players =
+                        (
+                            team
+                                .fantasy_team_players ||
+                            []
+                        )
+                        .map(
+                            item =>
+                                getPlayer(
+                                    item.player_name
+                                )
+                        )
+                        .filter(Boolean);
 
 
-                return {
+                    return {
 
-                    id:
-                        team.id,
+                        id:
+                            team.id,
 
-                    name:
-                        team.team_name,
+                        name:
+                            team.team_name,
 
-                    points:
-                        players.reduce(
-                            (
-                                total,
-                                player
-                            ) =>
-                                total +
-                                player.total,
-                            0
-                        ),
+                        points:
+                            players.reduce(
+                                (
+                                    total,
+                                    player
+                                ) =>
+                                    total +
+                                    player.total,
+                                0
+                            ),
 
-                    value:
-                        players.reduce(
-                            (
-                                total,
-                                player
-                            ) =>
-                                total +
-                                player.value,
-                            0
-                        ),
+                        value:
+                            players.reduce(
+                                (
+                                    total,
+                                    player
+                                ) =>
+                                    total +
+                                    player.value,
+                                0
+                            ),
 
-                    playerCount:
-                        players.length
+                        playerCount:
+                            players.length
 
-                };
+                    };
 
-            }
-        );
+                }
+            );
+
+
+    teamLeaderboardCache =
+        teams;
+
+
+    lastTeamLeaderboardLoad =
+        now;
+
+
+    return teams;
 
 }
 
@@ -5362,7 +5405,7 @@ function sortTeams(
 
 
             /*
-                Natural alphabetical sorting:
+                Natural alphabetical sorting.
 
                 Team 2
                 Team 10
@@ -5473,7 +5516,8 @@ async function renderHomeLeaderboard() {
                             ${team.points.toLocaleString(
                                 undefined,
                                 {
-                                    maximumFractionDigits:2
+                                    maximumFractionDigits:
+                                        2
                                 }
                             )}
 
@@ -5590,7 +5634,136 @@ async function renderFullTeamLeaderboard() {
                             ${team.points.toLocaleString(
                                 undefined,
                                 {
-                                    maximumFractionDigits:2
+                                    maximumFractionDigits:
+                                        2
+                                }
+                            )}
+
+                        </div>
+
+                    </div>
+
+                `
+            )
+            .join("");
+
+}
+
+
+/* =========================================================
+   PVM LEADERBOARD
+========================================================= */
+
+function renderPvMLeaderboard() {
+
+    const container =
+        document.getElementById(
+            "pvm-leaderboard"
+        );
+
+
+    if (
+        !container
+    ) {
+        return;
+    }
+
+
+    const search =
+        normalise(
+            document.getElementById(
+                "pvm-search"
+            )?.value
+        ).toLowerCase();
+
+
+    const players =
+        getPvMLeaderboard()
+            .filter(
+                player =>
+                    !search ||
+                    player.name
+                        .toLowerCase()
+                        .includes(
+                            search
+                        )
+            );
+
+
+    if (
+        !players.length
+    ) {
+
+        container.innerHTML =
+            `<div class="empty">No PvMers found.</div>`;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        players
+            .map(
+                (
+                    player,
+                    index
+                ) => `
+
+                    <div class="lb-row">
+
+                        <div class="lb-rank">
+
+                            ${index + 1}
+
+                        </div>
+
+
+                        <div>
+
+                            <div class="lb-name">
+
+                                ${escapeHtml(
+                                    player.name
+                                )}
+
+                            </div>
+
+
+                            <div
+                                style="
+                                    color:var(--muted);
+                                    font-size:10px;
+                                    margin-top:3px;
+                                "
+                            >
+
+                                ${player.value}m
+
+                                •
+
+                                ${player.ehb.toLocaleString(
+                                    undefined,
+                                    {
+                                        maximumFractionDigits:
+                                            1
+                                    }
+                                )}
+
+                                EHB
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="lb-points">
+
+                            ${player.points.toLocaleString(
+                                undefined,
+                                {
+                                    maximumFractionDigits:
+                                        2
                                 }
                             )}
 
@@ -5625,8 +5798,7 @@ function renderMyTeam() {
 
 
     if (
-        !currentSession ||
-        !currentProfile
+        !currentSession
     ) {
 
         container.innerHTML = `
@@ -5747,10 +5919,22 @@ function renderMyTeam() {
         );
 
 
+    const manager =
+        normalise(
+            currentProfile?.username
+        ) ||
+        normalise(
+            currentSession
+                ?.user
+                ?.user_metadata
+                ?.username
+        ) ||
+        "Player";
+
+
     container.innerHTML = `
 
         <div class="account-team-card">
-
 
             <div>
 
@@ -5767,7 +5951,7 @@ function renderMyTeam() {
 
                     Manager:
                     ${escapeHtml(
-                        currentProfile.username
+                        manager
                     )}
 
                 </div>
@@ -5786,7 +5970,6 @@ function renderMyTeam() {
 
             </div>
 
-
         </div>
 
 
@@ -5794,7 +5977,6 @@ function renderMyTeam() {
             class="builder-summary"
             style="margin-top:18px"
         >
-
 
             <div class="builder-stat">
 
@@ -5836,14 +6018,14 @@ function renderMyTeam() {
                     ${points.toLocaleString(
                         undefined,
                         {
-                            maximumFractionDigits:2
+                            maximumFractionDigits:
+                                2
                         }
                     )}
 
                 </div>
 
             </div>
-
 
         </div>
 
@@ -5896,7 +6078,8 @@ function renderMyTeam() {
                                     ${player.total.toLocaleString(
                                         undefined,
                                         {
-                                            maximumFractionDigits:2
+                                            maximumFractionDigits:
+                                                2
                                         }
                                     )}
 
@@ -5917,7 +6100,8 @@ function renderMyTeam() {
                                     ${player.ehb.toLocaleString(
                                         undefined,
                                         {
-                                            maximumFractionDigits:1
+                                            maximumFractionDigits:
+                                                1
                                         }
                                     )}
 
@@ -5948,7 +6132,8 @@ function renderMyTeam() {
                     () => {
 
                         showPlayer(
-                            card.dataset.myPlayer
+                            card.dataset
+                                .myPlayer
                         );
 
                     }
@@ -5993,7 +6178,8 @@ function showPlayer(
         player.ehb.toLocaleString(
             undefined,
             {
-                maximumFractionDigits:1
+                maximumFractionDigits:
+                    1
             }
         );
 
@@ -6010,7 +6196,8 @@ function showPlayer(
         player.total.toLocaleString(
             undefined,
             {
-                maximumFractionDigits:2
+                maximumFractionDigits:
+                    2
             }
         );
 
@@ -6021,7 +6208,8 @@ function showPlayer(
         player.monthlyEhb.toLocaleString(
             undefined,
             {
-                maximumFractionDigits:1
+                maximumFractionDigits:
+                    1
             }
         );
 
@@ -6056,7 +6244,8 @@ function showPlayer(
                             ${day.points.toLocaleString(
                                 undefined,
                                 {
-                                    maximumFractionDigits:2
+                                    maximumFractionDigits:
+                                        2
                                 }
                             )}
 
@@ -6334,6 +6523,125 @@ function updateCountdown() {
 
 
 /* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+function showPage(
+    page
+) {
+
+    document
+        .querySelectorAll(
+            ".page-section"
+        )
+        .forEach(
+            section =>
+                section.classList.remove(
+                    "active"
+                )
+        );
+
+
+    const target =
+        document.getElementById(
+            `page-${page}`
+        );
+
+
+    if (
+        target
+    ) {
+
+        target.classList.add(
+            "active"
+        );
+
+    }
+
+
+    document
+        .querySelectorAll(
+            ".nav button"
+        )
+        .forEach(
+            button =>
+                button.classList.remove(
+                    "active"
+                )
+        );
+
+
+    const navMap = {
+
+        home:
+            "nav-home",
+
+        teams:
+            "nav-teams",
+
+        pvm:
+            "nav-pvm",
+
+        myteam:
+            "nav-myteam"
+
+    };
+
+
+    if (
+        navMap[page]
+    ) {
+
+        document
+            .getElementById(
+                navMap[page]
+            )
+            .classList.add(
+                "active"
+            );
+
+    }
+
+
+    if (
+        page === "teams"
+    ) {
+
+        renderFullTeamLeaderboard();
+
+    }
+
+
+    if (
+        page === "pvm"
+    ) {
+
+        renderPvMLeaderboard();
+
+    }
+
+
+    if (
+        page === "myteam"
+    ) {
+
+        renderMyTeam();
+
+    }
+
+
+    if (
+        page === "builder"
+    ) {
+
+        renderBuilder();
+
+    }
+
+}
+
+
+/* =========================================================
    REFRESH
 ========================================================= */
 
@@ -6356,12 +6664,35 @@ async function manualRefresh() {
 
         await loadData();
 
+
         await refreshAuthState();
+
+
+        teamLeaderboardCache =
+            null;
+
+
+        lastTeamLeaderboardLoad =
+            0;
+
 
         await renderHomeLeaderboard();
 
         await renderFullTeamLeaderboard();
 
+        renderPvMLeaderboard();
+
+        renderDailyScores();
+
+
+    } catch (
+        error
+    ) {
+
+        console.error(
+            "Refresh failed:",
+            error
+        );
 
     } finally {
 
@@ -6384,18 +6715,6 @@ document.addEventListener(
     "DOMContentLoaded",
     async () => {
 
-        await loadData();
-
-        await refreshAuthState();
-
-        await renderHomeLeaderboard();
-
-        await renderFullTeamLeaderboard();
-
-        renderPvMLeaderboard();
-
-        renderDailyScores();
-
         updateCountdown();
 
 
@@ -6404,12 +6723,40 @@ document.addEventListener(
             1000
         );
 
+
+        /*
+            Load the public fantasy data first.
+        */
+
+        await loadData();
+
+
+        /*
+            Then restore the user's login session.
+        */
+
+        await refreshAuthState();
+
+
+        /*
+            Then load the public team leaderboards.
+        */
+
+        await renderHomeLeaderboard();
+
+        await renderFullTeamLeaderboard();
+
+
+        renderPvMLeaderboard();
+
+        renderDailyScores();
+
     }
 );
 
 
 /* =========================================================
-   GLOBALS FOR HTML BUTTONS
+   GLOBAL FUNCTIONS
 ========================================================= */
 
 window.openAuth =
@@ -6464,3 +6811,4 @@ window.renderPlayerBuilder =
 
 </body>
 </html>
+```
