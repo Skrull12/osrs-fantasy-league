@@ -1,2114 +1,939 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Fantasy PvM League</title>
 
-
-    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
     <style>
-
         * {
             box-sizing: border-box;
         }
 
-
         :root {
-
             --bg: #080a0d;
-
             --panel: #11151a;
-
             --panel-2: #171c22;
-
             --panel-3: #1d232b;
-
             --border: #303842;
-
             --text: #f2f4f7;
-
             --muted: #929aa5;
-
             --orange: #d88932;
-
-            --orange-dark: #9c5c1c;
-
             --gold: #e4b552;
-
             --green: #63bd79;
-
             --red: #d85b5b;
-
         }
-
 
         html,
         body {
-
             margin: 0;
-
             padding: 0;
-
             min-height: 100%;
-
         }
-
 
         body {
-
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
-
+            font-family: Arial, Helvetica, sans-serif;
             color: var(--text);
-
             background:
-                radial-gradient(
-                    circle at 50% -10%,
-                    rgba(216,137,50,0.16),
-                    transparent 35%
-                ),
-                radial-gradient(
-                    circle at 10% 50%,
-                    rgba(80,100,120,0.08),
-                    transparent 30%
-                ),
-                linear-gradient(
-                    180deg,
-                    #0b0e12 0%,
-                    #080a0d 100%
-                );
-
+                radial-gradient(circle at 50% -10%, rgba(216,137,50,.16), transparent 35%),
+                radial-gradient(circle at 10% 50%, rgba(80,100,120,.08), transparent 30%),
+                linear-gradient(180deg, #0b0e12 0%, #080a0d 100%);
             min-height: 100vh;
-
         }
-
 
         body::before {
-
             content: "";
-
             position: fixed;
-
             inset: 0;
-
             pointer-events: none;
-
-            opacity: 0.12;
-
+            opacity: .12;
             background-image:
-                linear-gradient(
-                    rgba(255,255,255,0.025) 1px,
-                    transparent 1px
-                ),
-                linear-gradient(
-                    90deg,
-                    rgba(255,255,255,0.025) 1px,
-                    transparent 1px
-                );
-
+                linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
             background-size: 32px 32px;
-
         }
-
 
         button,
-        input,
-        select {
-
+        input {
             font: inherit;
-
         }
-
 
         button {
-
             cursor: pointer;
-
         }
-
 
         .topbar {
-
             position: sticky;
-
             top: 0;
-
             z-index: 50;
-
-            background:
-                rgba(8,10,13,0.95);
-
+            background: rgba(8,10,13,.95);
             backdrop-filter: blur(10px);
-
-            border-bottom:
-                1px solid var(--border);
-
+            border-bottom: 1px solid var(--border);
         }
-
 
         .topbar-inner {
-
             max-width: 1500px;
-
             margin: auto;
-
             padding: 14px 20px;
-
             display: flex;
-
             align-items: center;
-
             justify-content: space-between;
-
             gap: 20px;
-
         }
-
 
         .brand {
-
             display: flex;
-
             align-items: center;
-
             gap: 12px;
-
         }
-
 
         .brand-icon {
-
             width: 40px;
-
             height: 40px;
-
             border-radius: 10px;
-
             display: grid;
-
             place-items: center;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #d9953e,
-                    #754317
-                );
-
-            border:
-                1px solid #e6a552;
-
-            box-shadow:
-                0 0 22px
-                rgba(216,137,50,0.2);
-
+            background: linear-gradient(145deg, #d9953e, #754317);
+            border: 1px solid #e6a552;
+            box-shadow: 0 0 22px rgba(216,137,50,.2);
             font-size: 20px;
-
         }
-
 
         .brand-main {
-
             font-size: 17px;
-
             font-weight: 900;
-
             letter-spacing: .5px;
-
         }
-
 
         .brand-sub {
-
             color: var(--muted);
-
             font-size: 11px;
-
             margin-top: 2px;
-
         }
-
 
         .nav {
-
             display: flex;
-
             gap: 6px;
-
             flex-wrap: wrap;
-
             align-items: center;
-
         }
-
 
         .nav button {
-
-            border:
-                1px solid transparent;
-
+            border: 1px solid transparent;
             color: var(--muted);
-
             background: transparent;
-
             padding: 9px 12px;
-
             border-radius: 8px;
-
         }
-
 
         .nav button:hover,
         .nav button.active {
-
             color: white;
-
-            background:
-                var(--panel-2);
-
-            border-color:
-                var(--border);
-
+            background: var(--panel-2);
+            border-color: var(--border);
         }
-
 
         .account-area {
-
             display: flex;
-
             align-items: center;
-
             gap: 8px;
-
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
-
 
         .account-name {
-
             color: white;
-
             font-size: 12px;
-
             font-weight: 800;
-
             padding: 9px 10px;
-
-            background:
-                var(--panel-2);
-
-            border:
-                1px solid var(--border);
-
+            background: var(--panel-2);
+            border: 1px solid var(--border);
             border-radius: 8px;
-
         }
-
 
         .page {
-
             position: relative;
-
             z-index: 1;
-
             max-width: 1500px;
-
             margin: auto;
-
-            padding:
-                28px 20px 50px;
-
+            padding: 28px 20px 50px;
         }
-
 
         .toolbar {
-
             display: flex;
-
-            justify-content:
-                flex-end;
-
+            justify-content: flex-end;
             margin-bottom: 20px;
-
         }
-
 
         .btn {
-
-            border:
-                1px solid var(--border);
-
+            border: 1px solid var(--border);
             color: var(--text);
-
-            background:
-                var(--panel);
-
-            padding:
-                10px 13px;
-
+            background: var(--panel);
+            padding: 10px 13px;
             border-radius: 8px;
-
         }
-
 
         .btn:hover {
-
-            background:
-                var(--panel-2);
-
-            border-color:
-                #48515c;
-
+            background: var(--panel-2);
+            border-color: #48515c;
         }
-
 
         .btn.primary {
-
-            background:
-                linear-gradient(
-                    180deg,
-                    #d9913c,
-                    #a76220
-                );
-
-            border-color:
-                #e3a052;
-
-            color: #fff;
-
+            background: linear-gradient(180deg, #d9913c, #a76220);
+            border-color: #e3a052;
+            color: white;
             font-weight: 700;
-
         }
-
 
         .btn.danger {
-
-            background:
-                rgba(216,91,91,0.1);
-
-            border-color:
-                rgba(216,91,91,0.35);
-
-            color:
-                #ffaaaa;
-
+            background: rgba(216,91,91,.1);
+            border-color: rgba(216,91,91,.35);
+            color: #ffaaaa;
         }
-
 
         .btn:disabled {
-
             opacity: .5;
-
             cursor: not-allowed;
-
         }
-
 
         .hero {
-
             display: grid;
-
-            grid-template-columns:
-                minmax(0,1.7fr)
-                minmax(300px,.8fr);
-
+            grid-template-columns: minmax(0,1.7fr) minmax(300px,.8fr);
             gap: 18px;
-
             margin-bottom: 18px;
-
         }
-
 
         .hero-main,
         .hero-side {
-
             background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,.035),
-                    rgba(255,255,255,.01)
-                ),
+                linear-gradient(145deg, rgba(255,255,255,.035), rgba(255,255,255,.01)),
                 var(--panel);
-
-            border:
-                1px solid var(--border);
-
+            border: 1px solid var(--border);
             border-radius: 14px;
-
             overflow: hidden;
-
         }
-
 
         .hero-main {
-
             padding: 28px;
-
             min-height: 245px;
-
             position: relative;
-
         }
-
 
         .hero-main::after {
-
             content: "";
-
             position: absolute;
-
             right: -80px;
-
             bottom: -120px;
-
             width: 340px;
-
             height: 340px;
-
             border-radius: 50%;
-
-            background:
-                rgba(216,137,50,.07);
-
+            background: rgba(216,137,50,.07);
             filter: blur(20px);
-
         }
-
 
         .eyebrow {
-
-            color:
-                var(--orange);
-
-            text-transform:
-                uppercase;
-
-            letter-spacing:
-                2px;
-
-            font-size:
-                11px;
-
-            font-weight:
-                800;
-
-            margin-bottom:
-                12px;
-
+            color: var(--orange);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 11px;
+            font-weight: 800;
+            margin-bottom: 12px;
         }
-
 
         .boss-name {
-
-            font-size:
-                clamp(32px,5vw,60px);
-
-            line-height:
-                1;
-
-            font-weight:
-                900;
-
-            margin:
-                0 0 12px;
-
+            font-size: clamp(32px,5vw,60px);
+            line-height: 1;
+            font-weight: 900;
+            margin: 0 0 12px;
         }
-
 
         .day-label {
-
-            color:
-                var(--muted);
-
-            font-weight:
-                700;
-
-            font-size:
-                13px;
-
+            color: var(--muted);
+            font-weight: 700;
+            font-size: 13px;
         }
-
 
         .countdown-label {
-
-            color:
-                var(--muted);
-
-            text-transform:
-                uppercase;
-
-            letter-spacing:
-                1.5px;
-
-            font-size:
-                10px;
-
-            margin-top:
-                25px;
-
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 10px;
+            margin-top: 25px;
         }
-
 
         .countdown {
-
-            font-size:
-                26px;
-
-            font-weight:
-                900;
-
-            margin-top:
-                5px;
-
-            color:
-                var(--gold);
-
+            font-size: 26px;
+            font-weight: 900;
+            margin-top: 5px;
+            color: var(--gold);
         }
-
 
         .hero-side {
-
-            padding:
-                22px;
-
-            display:
-                flex;
-
-            flex-direction:
-                column;
-
-            justify-content:
-                center;
-
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
-
 
         .hero-stat {
-
-            padding:
-                13px 0;
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,.07);
-
+            padding: 13px 0;
+            border-bottom: 1px solid rgba(255,255,255,.07);
         }
-
 
         .hero-stat:last-child {
-
-            border-bottom:
-                0;
-
+            border-bottom: 0;
         }
-
 
         .hero-stat-label {
-
-            color:
-                var(--muted);
-
-            text-transform:
-                uppercase;
-
-            letter-spacing:
-                1px;
-
-            font-size:
-                10px;
-
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 10px;
         }
-
 
         .hero-stat-value {
-
-            font-size:
-                24px;
-
-            font-weight:
-                900;
-
-            margin-top:
-                4px;
-
+            font-size: 24px;
+            font-weight: 900;
+            margin-top: 4px;
         }
-
 
         .layout {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                minmax(0,1fr)
-                360px;
-
-            gap:
-                18px;
-
+            display: grid;
+            grid-template-columns: minmax(0,1fr) 360px;
+            gap: 18px;
         }
-
 
         .panel {
-
-            background:
-                var(--panel);
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius:
-                14px;
-
-            overflow:
-                hidden;
-
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
         }
-
 
         .panel-header {
-
-            padding:
-                16px 18px;
-
-            border-bottom:
-                1px solid
-                var(--border);
-
-            display:
-                flex;
-
-            justify-content:
-                space-between;
-
-            align-items:
-                center;
-
-            gap:
-                10px;
-
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
         }
-
 
         .panel-title {
-
-            font-size:
-                15px;
-
-            font-weight:
-                900;
-
+            font-size: 15px;
+            font-weight: 900;
         }
-
 
         .panel-subtitle {
-
-            color:
-                var(--muted);
-
-            font-size:
-                11px;
-
+            color: var(--muted);
+            font-size: 11px;
         }
-
 
         .panel-body {
-
-            padding:
-                18px;
-
+            padding: 18px;
         }
-
 
         .team-heading {
-
-            display:
-                flex;
-
-            justify-content:
-                space-between;
-
-            align-items:
-                end;
-
-            gap:
-                12px;
-
-            margin-bottom:
-                18px;
-
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 12px;
+            margin-bottom: 18px;
         }
-
 
         .team-heading h1 {
-
-            margin:
-                0;
-
-            font-size:
-                28px;
-
+            margin: 0;
+            font-size: 28px;
         }
-
 
         .team-meta {
-
-            color:
-                var(--muted);
-
-            font-size:
-                12px;
-
-            margin-top:
-                5px;
-
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 5px;
         }
-
 
         .team-total-box {
-
-            text-align:
-                right;
-
+            text-align: right;
         }
-
 
         .team-total-label {
-
-            color:
-                var(--muted);
-
-            text-transform:
-                uppercase;
-
-            font-size:
-                9px;
-
-            letter-spacing:
-                1px;
-
+            color: var(--muted);
+            text-transform: uppercase;
+            font-size: 9px;
+            letter-spacing: 1px;
         }
-
 
         .team-total {
-
-            color:
-                var(--gold);
-
-            font-size:
-                26px;
-
-            font-weight:
-                900;
-
+            color: var(--gold);
+            font-size: 26px;
+            font-weight: 900;
         }
-
 
         .player-grid {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(5,minmax(0,1fr));
-
-            gap:
-                12px;
-
+            display: grid;
+            grid-template-columns: repeat(5,minmax(0,1fr));
+            gap: 12px;
         }
-
 
         .player-card {
-
-            background:
-                var(--panel-2);
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius:
-                11px;
-
-            padding:
-                16px;
-
-            cursor:
-                pointer;
-
-            transition:
-                transform .15s ease,
-                border-color .15s ease,
-                background .15s ease;
-
+            background: var(--panel-2);
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            padding: 16px;
+            cursor: pointer;
+            transition: transform .15s ease, border-color .15s ease, background .15s ease;
         }
-
 
         .player-card:hover {
-
-            transform:
-                translateY(-2px);
-
-            border-color:
-                var(--orange);
-
-            background:
-                var(--panel-3);
-
+            transform: translateY(-2px);
+            border-color: var(--orange);
+            background: var(--panel-3);
         }
-
 
         .player-name {
-
-            font-weight:
-                900;
-
-            font-size:
-                15px;
-
-            margin-bottom:
-                14px;
-
-            overflow:
-                hidden;
-
-            text-overflow:
-                ellipsis;
-
-            white-space:
-                nowrap;
-
+            font-weight: 900;
+            font-size: 15px;
+            margin-bottom: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
-
 
         .player-stat {
-
-            display:
-                flex;
-
-            justify-content:
-                space-between;
-
-            gap:
-                8px;
-
-            padding:
-                7px 0;
-
-            border-top:
-                1px solid
-                rgba(255,255,255,.06);
-
-            font-size:
-                12px;
-
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 7px 0;
+            border-top: 1px solid rgba(255,255,255,.06);
+            font-size: 12px;
         }
-
 
         .player-stat span {
-
-            color:
-                var(--muted);
-
+            color: var(--muted);
         }
-
-
-        .player-stat strong {
-
-            color:
-                #fff;
-
-        }
-
 
         .progress {
-
-            height:
-                8px;
-
-            border-radius:
-                999px;
-
-            background:
-                #090b0e;
-
-            overflow:
-                hidden;
-
-            border:
-                1px solid
-                var(--border);
-
+            height: 8px;
+            border-radius: 999px;
+            background: #090b0e;
+            overflow: hidden;
+            border: 1px solid var(--border);
         }
-
 
         .progress-bar {
-
-            height:
-                100%;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #9b5a20,
-                    #e0a14b
-                );
-
-            border-radius:
-                inherit;
-
-            width:
-                0;
-
-            transition:
-                width .3s ease;
-
+            height: 100%;
+            background: linear-gradient(90deg,#9b5a20,#e0a14b);
+            border-radius: inherit;
+            width: 0;
         }
-
 
         .progress-labels {
-
-            display:
-                flex;
-
-            justify-content:
-                space-between;
-
-            margin-top:
-                7px;
-
-            color:
-                var(--muted);
-
-            font-size:
-                11px;
-
+            display: flex;
+            justify-content: space-between;
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 11px;
         }
-
 
         .leaderboard {
-
-            display:
-                flex;
-
-            flex-direction:
-                column;
-
+            display: flex;
+            flex-direction: column;
         }
-
 
         .lb-row {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                34px
-                minmax(0,1fr)
-                auto;
-
-            align-items:
-                center;
-
-            gap:
-                8px;
-
-            padding:
-                12px 16px;
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,.055);
-
+            display: grid;
+            grid-template-columns: 34px minmax(0,1fr) auto;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255,255,255,.055);
         }
-
-
-        .lb-row:last-child {
-
-            border-bottom:
-                0;
-
-        }
-
-
-        .lb-row:hover {
-
-            background:
-                rgba(255,255,255,.025);
-
-        }
-
 
         .lb-rank {
-
-            color:
-                var(--muted);
-
-            font-weight:
-                800;
-
-            font-size:
-                12px;
-
+            color: var(--muted);
+            font-weight: 800;
+            font-size: 12px;
         }
-
 
         .lb-name {
-
-            overflow:
-                hidden;
-
-            text-overflow:
-                ellipsis;
-
-            white-space:
-                nowrap;
-
-            font-weight:
-                700;
-
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 700;
         }
-
 
         .lb-points {
-
-            color:
-                var(--gold);
-
-            font-weight:
-                900;
-
-            font-size:
-                12px;
-
+            color: var(--gold);
+            font-weight: 900;
+            font-size: 12px;
         }
-
 
         .search-wrap {
-
-            padding:
-                12px;
-
+            padding: 12px;
         }
-
 
         .search-wrap input {
-
-            width:
-                100%;
-
+            width: 100%;
         }
-
-
-        input {
-
-            border:
-                1px solid
-                var(--border);
-
-            color:
-                var(--text);
-
-            background:
-                var(--panel);
-
-            border-radius:
-                8px;
-
-            padding:
-                10px 12px;
-
-            outline:
-                none;
-
-        }
-
-
-        input:focus {
-
-            border-color:
-                var(--orange);
-
-        }
-
 
         .daily-grid {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(7,1fr);
-
-            gap:
-                10px;
-
-            margin-top:
-                18px;
-
+            display: grid;
+            grid-template-columns: repeat(7,1fr);
+            gap: 10px;
+            margin-top: 18px;
         }
-
 
         .daily-card {
-
-            background:
-                var(--panel-2);
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius:
-                9px;
-
-            padding:
-                12px;
-
+            background: var(--panel-2);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 12px;
         }
-
 
         .daily-day {
-
-            font-size:
-                10px;
-
-            color:
-                var(--muted);
-
-            text-transform:
-                uppercase;
-
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
         }
-
 
         .daily-boss {
-
-            margin-top:
-                5px;
-
-            font-weight:
-                800;
-
-            font-size:
-                12px;
-
-            min-height:
-                30px;
-
+            margin-top: 5px;
+            font-weight: 800;
+            font-size: 12px;
+            min-height: 30px;
         }
-
 
         .daily-points {
-
-            color:
-                var(--gold);
-
-            margin-top:
-                7px;
-
-            font-weight:
-                900;
-
-            font-size:
-                14px;
-
+            color: var(--gold);
+            margin-top: 7px;
+            font-weight: 900;
+            font-size: 14px;
         }
-
 
         .status {
-
-            margin:
-                0 0 18px;
-
-            padding:
-                10px 13px;
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius:
-                8px;
-
-            background:
-                rgba(255,255,255,.025);
-
-            color:
-                var(--muted);
-
-            font-size:
-                12px;
-
+            margin: 0 0 18px;
+            padding: 10px 13px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(255,255,255,.025);
+            color: var(--muted);
+            font-size: 12px;
         }
-
 
         .status.error {
-
-            color:
-                #ff9d9d;
-
-            border-color:
-                rgba(216,91,91,.35);
-
-            background:
-                rgba(216,91,91,.06);
-
+            color: #ff9d9d;
+            border-color: rgba(216,91,91,.35);
+            background: rgba(216,91,91,.06);
         }
-
 
         .status.success {
-
-            color:
-                #a7e2b4;
-
+            color: #a7e2b4;
         }
-
 
         .page-section {
-
-            display:
-                none;
-
+            display: none;
         }
-
 
         .page-section.active {
-
-            display:
-                block;
-
+            display: block;
         }
-
 
         .table-controls {
-
-            margin-bottom:
-                15px;
-
+            margin-bottom: 15px;
         }
-
 
         .table-controls input {
-
-            width:
-                min(100%,400px);
-
+            width: min(100%,400px);
         }
-
 
         .empty {
-
-            padding:
-                30px;
-
-            text-align:
-                center;
-
-            color:
-                var(--muted);
-
+            padding: 30px;
+            text-align: center;
+            color: var(--muted);
         }
-
 
         /* Builder */
 
         .builder-layout {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                minmax(300px,.8fr)
-                minmax(0,1.2fr);
-
-            gap:
-                18px;
-
+            display: grid;
+            grid-template-columns: minmax(300px,.8fr) minmax(0,1.2fr);
+            gap: 18px;
         }
-
 
         .builder-summary {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(3,1fr);
-
-            gap:
-                10px;
-
-            margin-bottom:
-                15px;
-
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 10px;
+            margin-bottom: 18px;
         }
-
 
         .builder-stat {
-
-            padding:
-                13px;
-
-            border:
-                1px solid
-                var(--border);
-
-            background:
-                var(--panel-2);
-
-            border-radius:
-                9px;
-
+            padding: 13px;
+            border: 1px solid var(--border);
+            background: var(--panel-2);
+            border-radius: 9px;
         }
-
 
         .builder-stat-label {
-
-            color:
-                var(--muted);
-
-            font-size:
-                9px;
-
-            letter-spacing:
-                1px;
-
-            text-transform:
-                uppercase;
-
+            color: var(--muted);
+            font-size: 9px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
-
 
         .builder-stat-value {
-
-            margin-top:
-                4px;
-
-            font-weight:
-                900;
-
-            font-size:
-                19px;
-
+            margin-top: 4px;
+            font-weight: 900;
+            font-size: 19px;
         }
-
-
-        .squad-list {
-
-            display:
-                flex;
-
-            flex-direction:
-                column;
-
-            gap:
-                10px;
-
-        }
-
-
-        .squad-slot {
-
-            min-height:
-                78px;
-
-            border:
-                1px dashed
-                #3c4651;
-
-            border-radius:
-                10px;
-
-            background:
-                rgba(255,255,255,.015);
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                space-between;
-
-            padding:
-                13px 15px;
-
-            gap:
-                10px;
-
-        }
-
-
-        .squad-empty {
-
-            justify-content:
-                center;
-
-            color:
-                #66707b;
-
-            font-size:
-                12px;
-
-        }
-
-
-        .squad-player-name {
-
-            font-weight:
-                900;
-
-            font-size:
-                14px;
-
-        }
-
-
-        .squad-player-info {
-
-            color:
-                var(--muted);
-
-            font-size:
-                11px;
-
-            margin-top:
-                4px;
-
-        }
-
-
-        .available-player {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                minmax(0,1fr)
-                auto
-                auto;
-
-            align-items:
-                center;
-
-            gap:
-                10px;
-
-            padding:
-                11px 13px;
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,.055);
-
-        }
-
-
-        .available-player-name {
-
-            font-weight:
-                800;
-
-        }
-
-
-        .available-player-meta {
-
-            color:
-                var(--muted);
-
-            font-size:
-                10px;
-
-            margin-top:
-                3px;
-
-        }
-
-
-        .player-price {
-
-            color:
-                var(--gold);
-
-            font-weight:
-                900;
-
-            font-size:
-                12px;
-
-        }
-
 
         .team-name-input {
-
-            width:
-                min(100%,450px);
-
-            margin-top:
-                8px;
-
-            font-size:
-                20px;
-
-            font-weight:
-                800;
-
+            width: min(100%,450px);
+            font-size: 20px;
+            font-weight: 800;
         }
 
+        .squad-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .squad-slot {
+            min-height: 78px;
+            border: 1px dashed #3c4651;
+            border-radius: 10px;
+            background: rgba(255,255,255,.015);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 15px;
+            gap: 10px;
+        }
+
+        .squad-empty {
+            justify-content: center;
+            color: #66707b;
+            font-size: 12px;
+        }
+
+        .squad-player-name {
+            font-weight: 900;
+            font-size: 14px;
+        }
+
+        .squad-player-info {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .available-player {
+            display: grid;
+            grid-template-columns: minmax(0,1fr) auto auto;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 13px;
+            border-bottom: 1px solid rgba(255,255,255,.055);
+        }
+
+        .available-player-name {
+            font-weight: 800;
+        }
+
+        .available-player-meta {
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        .player-price {
+            color: var(--gold);
+            font-weight: 900;
+            font-size: 12px;
+        }
 
         .builder-actions {
-
-            display:
-                flex;
-
-            justify-content:
-                flex-end;
-
-            gap:
-                8px;
-
-            margin-top:
-                18px;
-
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 18px;
         }
 
+        /* Account/team */
 
-        /* Modals */
+        .account-team-card {
+            display: grid;
+            grid-template-columns: minmax(0,1fr) auto;
+            gap: 18px;
+            align-items: center;
+            background: var(--panel-2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .account-team-title {
+            font-size: 25px;
+            font-weight: 900;
+        }
+
+        .account-team-manager {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .account-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        /* Forms/modal */
 
         .modal-backdrop {
-
-            position:
-                fixed;
-
-            inset:
-                0;
-
-            background:
-                rgba(0,0,0,.72);
-
-            backdrop-filter:
-                blur(7px);
-
-            z-index:
-                100;
-
-            display:
-                none;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            padding:
-                20px;
-
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.72);
+            backdrop-filter: blur(7px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
-
 
         .modal-backdrop.open {
-
-            display:
-                flex;
-
+            display: flex;
         }
-
 
         .modal {
-
-            width:
-                min(700px,100%);
-
-            max-height:
-                90vh;
-
-            overflow:
-                auto;
-
-            background:
-                var(--panel);
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius:
-                14px;
-
-            box-shadow:
-                0 20px 70px
-                rgba(0,0,0,.5);
-
+            width: min(700px,100%);
+            max-height: 90vh;
+            overflow: auto;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 20px 70px rgba(0,0,0,.5);
         }
-
 
         .modal-header {
-
-            padding:
-                20px;
-
-            border-bottom:
-                1px solid
-                var(--border);
-
-            display:
-                flex;
-
-            justify-content:
-                space-between;
-
-            align-items:
-                center;
-
-            gap:
-                12px;
-
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
         }
-
 
         .modal-title {
-
-            font-size:
-                22px;
-
-            font-weight:
-                900;
-
+            font-size: 22px;
+            font-weight: 900;
         }
-
-
-        .close-btn {
-
-            border:
-                0;
-
-            background:
-                transparent;
-
-            color:
-                var(--muted);
-
-            font-size:
-                22px;
-
-        }
-
 
         .modal-body {
-
-            padding:
-                20px;
-
+            padding: 20px;
         }
 
-
-        .modal-stats {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(4,1fr);
-
-            gap:
-                10px;
-
-            margin-bottom:
-                18px;
-
+        .close-btn {
+            border: 0;
+            background: transparent;
+            color: var(--muted);
+            font-size: 24px;
         }
-
-
-        .modal-stat {
-
-            background:
-                var(--panel-2);
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius:
-                9px;
-
-            padding:
-                13px;
-
-        }
-
-
-        .modal-stat-label {
-
-            color:
-                var(--muted);
-
-            text-transform:
-                uppercase;
-
-            font-size:
-                9px;
-
-        }
-
-
-        .modal-stat-value {
-
-            font-weight:
-                900;
-
-            margin-top:
-                5px;
-
-        }
-
-
-        .daily-list {
-
-            border-top:
-                1px solid
-                var(--border);
-
-        }
-
-
-        .daily-row {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                minmax(0,1fr)
-                auto;
-
-            gap:
-                10px;
-
-            padding:
-                10px 0;
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,.06);
-
-            font-size:
-                12px;
-
-        }
-
-
-        .daily-row span {
-
-            color:
-                var(--muted);
-
-        }
-
 
         .form-group {
-
-            margin-bottom:
-                14px;
-
+            margin-bottom: 14px;
         }
-
 
         .form-label {
-
-            display:
-                block;
-
-            color:
-                var(--muted);
-
-            text-transform:
-                uppercase;
-
-            font-size:
-                10px;
-
-            letter-spacing:
-                1px;
-
-            margin-bottom:
-                6px;
-
+            display: block;
+            color: var(--muted);
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
         }
-
 
         .form-input {
-
-            width:
-                100%;
-
+            width: 100%;
         }
-
 
         .form-help {
-
-            color:
-                #67717b;
-
-            font-size:
-                10px;
-
-            margin-top:
-                5px;
-
+            color: #67717b;
+            font-size: 10px;
+            margin-top: 5px;
         }
-
 
         .auth-error,
         .auth-success {
-
-            padding:
-                10px 12px;
-
-            border-radius:
-                8px;
-
-            font-size:
-                12px;
-
-            margin-bottom:
-                12px;
-
-            display:
-                none;
-
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-bottom: 12px;
+            display: none;
         }
-
 
         .auth-error {
-
-            background:
-                rgba(216,91,91,.08);
-
-            border:
-                1px solid
-                rgba(216,91,91,.35);
-
-            color:
-                #ff9d9d;
-
+            background: rgba(216,91,91,.08);
+            border: 1px solid rgba(216,91,91,.35);
+            color: #ff9d9d;
         }
-
 
         .auth-success {
-
-            background:
-                rgba(99,189,121,.08);
-
-            border:
-                1px solid
-                rgba(99,189,121,.35);
-
-            color:
-                #a7e2b4;
-
+            background: rgba(99,189,121,.08);
+            border: 1px solid rgba(99,189,121,.35);
+            color: #a7e2b4;
         }
 
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 18px;
+        }
 
         .switch-auth {
-
-            text-align:
-                center;
-
-            margin-top:
-                15px;
-
-            color:
-                var(--muted);
-
-            font-size:
-                11px;
-
+            text-align: center;
+            margin-top: 15px;
+            color: var(--muted);
+            font-size: 11px;
         }
-
 
         .switch-auth button {
-
-            border:
-                0;
-
-            background:
-                transparent;
-
-            color:
-                var(--orange);
-
-            font-weight:
-                800;
-
+            border: 0;
+            background: transparent;
+            color: var(--orange);
+            font-weight: 800;
         }
 
+        .modal-stats {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .modal-stat {
+            background: var(--panel-2);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 13px;
+        }
+
+        .modal-stat-label {
+            color: var(--muted);
+            font-size: 9px;
+            text-transform: uppercase;
+        }
+
+        .modal-stat-value {
+            font-weight: 900;
+            margin-top: 5px;
+        }
+
+        .daily-list {
+            border-top: 1px solid var(--border);
+        }
+
+        .daily-row {
+            display: grid;
+            grid-template-columns: minmax(0,1fr) auto;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+            font-size: 12px;
+        }
+
+        .daily-row span {
+            color: var(--muted);
+        }
 
         .footer {
-
-            text-align:
-                center;
-
-            color:
-                #5e6670;
-
-            font-size:
-                10px;
-
-            margin-top:
-                35px;
-
+            text-align: center;
+            color: #5e6670;
+            font-size: 10px;
+            margin-top: 35px;
         }
-
 
         @media (max-width:1100px) {
 
             .player-grid {
-
-                grid-template-columns:
-                    repeat(3,1fr);
-
+                grid-template-columns: repeat(3,1fr);
             }
-
 
             .layout {
-
-                grid-template-columns:
-                    1fr;
-
+                grid-template-columns: 1fr;
             }
 
-
             .daily-grid {
+                grid-template-columns: repeat(4,1fr);
+            }
 
-                grid-template-columns:
-                    repeat(4,1fr);
-
+            .builder-layout {
+                grid-template-columns: 1fr;
             }
 
         }
-
 
         @media (max-width:800px) {
 
             .hero {
-
-                grid-template-columns:
-                    1fr;
-
+                grid-template-columns: 1fr;
             }
-
 
             .player-grid {
-
-                grid-template-columns:
-                    repeat(2,1fr);
-
+                grid-template-columns: repeat(2,1fr);
             }
-
-
-            .builder-layout {
-
-                grid-template-columns:
-                    1fr;
-
-            }
-
 
             .modal-stats {
-
-                grid-template-columns:
-                    repeat(2,1fr);
-
+                grid-template-columns: repeat(2,1fr);
             }
-
 
             .topbar-inner {
-
-                align-items:
-                    flex-start;
-
-                flex-direction:
-                    column;
-
+                align-items: flex-start;
+                flex-direction: column;
             }
 
-
             .account-area {
+                justify-content: flex-start;
+            }
 
-                width:
-                    100%;
-
+            .account-team-card {
+                grid-template-columns: 1fr;
             }
 
         }
 
-
         @media (max-width:520px) {
 
             .player-grid {
-
-                grid-template-columns:
-                    1fr;
-
+                grid-template-columns: 1fr;
             }
-
 
             .daily-grid {
-
-                grid-template-columns:
-                    repeat(2,1fr);
-
+                grid-template-columns: repeat(2,1fr);
             }
-
 
             .builder-summary {
-
-                grid-template-columns:
-                    1fr;
-
+                grid-template-columns: 1fr;
             }
-
 
             .available-player {
-
-                grid-template-columns:
-                    minmax(0,1fr)
-                    auto;
-
+                grid-template-columns: minmax(0,1fr) auto;
             }
 
-
-            .available-player .player-price {
-
-                display:
-                    none;
-
+            .player-price {
+                display: none;
             }
-
 
             .nav button {
-
-                padding:
-                    8px 9px;
-
-                font-size:
-                    11px;
-
+                padding: 8px 9px;
+                font-size: 11px;
             }
 
         }
@@ -2131,7 +956,6 @@
             <div class="brand-icon">
                 ⚔
             </div>
-
 
             <div>
 
@@ -2212,7 +1036,7 @@
         id="load-status"
         class="status"
     >
-        Loading Fantasy PvM League data...
+        Loading Fantasy PvM data...
     </div>
 
 
@@ -2229,9 +1053,10 @@
     </div>
 
 
-    <!-- ======================================
+
+    <!-- =========================
          HOMEPAGE
-    ======================================= -->
+    ========================== -->
 
     <section
         id="page-home"
@@ -2277,7 +1102,6 @@
                     --
                 </div>
 
-
             </div>
 
 
@@ -2289,7 +1113,6 @@
                     <div class="hero-stat-label">
                         Your Team
                     </div>
-
 
                     <div
                         id="hero-team-name"
@@ -2307,7 +1130,6 @@
                         Team Points
                     </div>
 
-
                     <div
                         id="hero-team-points"
                         class="hero-stat-value"
@@ -2324,7 +1146,6 @@
                         Team Value
                     </div>
 
-
                     <div
                         id="hero-team-value"
                         class="hero-stat-value"
@@ -2336,6 +1157,7 @@
 
 
             </div>
+
 
         </div>
 
@@ -2361,7 +1183,9 @@
                                 Your Team
                             </div>
 
-                            <div class="panel-subtitle">
+                            <div
+                                class="panel-subtitle"
+                            >
                                 Your selected fantasy team
                             </div>
 
@@ -2522,10 +1346,6 @@
 
 
 
-            <!-- ==================================
-                 HOMEPAGE TEAM LEADERBOARD
-            =================================== -->
-
             <aside>
 
 
@@ -2580,9 +1400,9 @@
 
 
 
-    <!-- ======================================
+    <!-- =========================
          TEAM LEADERBOARD
-    ======================================= -->
+    ========================== -->
 
     <section
         id="page-teams"
@@ -2641,9 +1461,9 @@
 
 
 
-    <!-- ======================================
+    <!-- =========================
          PVM LEADERBOARD
-    ======================================= -->
+    ========================== -->
 
     <section
         id="page-pvm"
@@ -2702,9 +1522,9 @@
 
 
 
-    <!-- ======================================
+    <!-- =========================
          MY TEAM
-    ======================================= -->
+    ========================== -->
 
     <section
         id="page-myteam"
@@ -2751,9 +1571,9 @@
 
 
 
-    <!-- ======================================
+    <!-- =========================
          TEAM BUILDER
-    ======================================= -->
+    ========================== -->
 
     <section
         id="page-builder"
@@ -2773,7 +1593,7 @@
                     </div>
 
                     <div class="panel-subtitle">
-                        Pick exactly five PvMers within the budget
+                        Pick exactly five PvMers within your budget
                     </div>
 
                 </div>
@@ -2917,8 +1737,8 @@
 
 
                                 <button
-                                    class="btn primary"
                                     id="save-team-button"
+                                    class="btn primary"
                                     onclick="saveFantasyTeam()"
                                 >
                                     Save Team
@@ -2988,7 +1808,6 @@
     </section>
 
 
-
     <div class="footer">
 
         Fantasy PvM League • OSRS
@@ -3002,9 +1821,9 @@
 
 
 
-<!-- ======================================
+<!-- =========================
      AUTH MODAL
-======================================= -->
+========================== -->
 
 <div
     id="auth-modal"
@@ -3016,7 +1835,6 @@
 
 
         <div class="modal-header">
-
 
             <div
                 id="auth-modal-title"
@@ -3032,7 +1850,6 @@
             >
                 ×
             </button>
-
 
         </div>
 
@@ -3054,7 +1871,6 @@
 
             <div class="form-group">
 
-
                 <label class="form-label">
                     Username
                 </label>
@@ -3074,12 +1890,10 @@
                     3–20 characters: letters, numbers, underscores and hyphens.
                 </div>
 
-
             </div>
 
 
             <div class="form-group">
-
 
                 <label class="form-label">
                     Password
@@ -3094,7 +1908,6 @@
                     placeholder="Password"
                 >
 
-
             </div>
 
 
@@ -3103,7 +1916,6 @@
                 class="form-group"
                 style="display:none"
             >
-
 
                 <label class="form-label">
                     Confirm Password
@@ -3118,12 +1930,10 @@
                     placeholder="Confirm password"
                 >
 
-
             </div>
 
 
             <div class="modal-buttons">
-
 
                 <button
                     id="auth-submit"
@@ -3133,12 +1943,10 @@
                     Login
                 </button>
 
-
             </div>
 
 
             <div class="switch-auth">
-
 
                 <span id="auth-switch-text">
                     Don't have an account?
@@ -3151,7 +1959,6 @@
                 >
                     Sign up
                 </button>
-
 
             </div>
 
@@ -3166,9 +1973,9 @@
 
 
 
-<!-- ======================================
+<!-- =========================
      PLAYER MODAL
-======================================= -->
+========================== -->
 
 <div
     id="player-modal"
@@ -3185,7 +1992,6 @@
 
         <div class="modal-header">
 
-
             <div
                 id="modal-name"
                 class="modal-title"
@@ -3200,7 +2006,6 @@
             >
                 ×
             </button>
-
 
         </div>
 
@@ -3304,11 +2109,9 @@
 
 <script>
 
-
 /* =========================================================
    CONFIG
 ========================================================= */
-
 
 const CONFIG = {
 
@@ -3322,9 +2125,7 @@ const CONFIG = {
         "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=1220418834&single=true&output=csv",
 
     EVENT_START:
-        new Date(
-            "2026-09-20T19:00:00+01:00"
-        ),
+        new Date("2026-09-20T19:00:00+01:00"),
 
     EVENT_DAYS:
         7,
@@ -3346,7 +2147,6 @@ const supabaseClient =
    STATE
 ========================================================= */
 
-
 let fantasyData = [];
 
 let currentSession = null;
@@ -3363,7 +2163,6 @@ let authMode = "login";
 /* =========================================================
    HELPERS
 ========================================================= */
-
 
 function normalise(value) {
 
@@ -3412,26 +2211,9 @@ function usernameEmail(username) {
 }
 
 
-function teamNameValid(name) {
-
-    if (
-        name.length < 2 ||
-        name.length > 30
-    ) {
-
-        return false;
-
-    }
-
-    return true;
-
-}
-
-
 /* =========================================================
-   CSV PARSER
+   CSV
 ========================================================= */
-
 
 function parseCSV(text) {
 
@@ -3627,51 +2409,8 @@ async function loadCSV(
 
 
 /* =========================================================
-   STATUS
+   LOAD DATA
 ========================================================= */
-
-
-function setStatus(
-    message,
-    type = ""
-) {
-
-    const element =
-        document.getElementById(
-            "load-status"
-        );
-
-
-    if (!element) {
-        return;
-    }
-
-
-    element.textContent =
-        message;
-
-
-    element.className =
-        "status";
-
-
-    if (
-        type
-    ) {
-
-        element.classList.add(
-            type
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   LOAD GOOGLE SHEET
-========================================================= */
-
 
 async function loadData() {
 
@@ -3732,7 +2471,6 @@ async function loadData() {
    PLAYER DATA
 ========================================================= */
 
-
 function getPlayer(
     name
 ) {
@@ -3761,8 +2499,12 @@ function getPlayer(
 
 
         if (
-            normalise(row[0]).toLowerCase() ===
-            normalise(name).toLowerCase()
+            normalise(
+                row[0]
+            ).toLowerCase() ===
+            normalise(
+                name
+            ).toLowerCase()
         ) {
 
             const daily = [];
@@ -3901,9 +2643,8 @@ function getPvMLeaderboard() {
 
 
 /* =========================================================
-   AUTH MODAL
+   AUTH UI
 ========================================================= */
-
 
 function openAuth(
     mode = "login"
@@ -4007,70 +2748,16 @@ function updateAuthModal() {
 
 function clearAuthMessages() {
 
-    const error =
-        document.getElementById(
-            "auth-error"
-        );
-
-
-    const success =
-        document.getElementById(
-            "auth-success"
-        );
-
-
-    error.textContent =
-        "";
-
-    error.style.display =
+    document.getElementById(
+        "auth-error"
+    ).style.display =
         "none";
 
 
-    success.textContent =
-        "";
-
-    success.style.display =
+    document.getElementById(
+        "auth-success"
+    ).style.display =
         "none";
-
-}
-
-
-function showAuthError(
-    message
-) {
-
-    const element =
-        document.getElementById(
-            "auth-error"
-        );
-
-
-    element.textContent =
-        message;
-
-
-    element.style.display =
-        "block";
-
-}
-
-
-function showAuthSuccess(
-    message
-) {
-
-    const element =
-        document.getElementById(
-            "auth-success"
-        );
-
-
-    element.textContent =
-        message;
-
-
-    element.style.display =
-        "block";
 
 }
 
@@ -4078,7 +2765,6 @@ function showAuthSuccess(
 /* =========================================================
    SIGN UP / LOGIN
 ========================================================= */
-
 
 async function submitAuth() {
 
@@ -4201,11 +2887,9 @@ async function signUp(
 ) {
 
     /*
-        The user sees only a username.
-
-        Supabase Auth still needs an email-style
-        identity for password authentication, so
-        we create a private deterministic address.
+        Username is stored in Supabase metadata.
+        The database trigger created earlier takes
+        that metadata and creates public.profiles.
     */
 
     const email =
@@ -4222,7 +2906,18 @@ async function signUp(
 
             email,
 
-            password
+            password,
+
+            options: {
+
+                data: {
+
+                    username:
+                        username
+
+                }
+
+            }
 
         });
 
@@ -4230,6 +2925,12 @@ async function signUp(
     if (
         error
     ) {
+
+        console.error(
+            "Signup failed:",
+            error
+        );
+
 
         showAuthError(
             error.message
@@ -4254,45 +2955,33 @@ async function signUp(
 
 
     /*
-        A trigger from the earlier setup may already
-        have created the profile row.
+        Profile creation is handled by the
+        database trigger.
 
-        Upsert handles both cases.
+        We deliberately DO NOT insert into
+        profiles here.
     */
 
-    const {
-        error: profileError
-    } =
-        await supabaseClient
-            .from(
-                "profiles"
-            )
-            .upsert(
-                {
-                    id:
-                        data.user.id,
 
-                    username:
-                        username
-                },
-                {
-                    onConflict:
-                        "id"
-                }
-            );
+    currentSession =
+        data.session;
 
+
+    /*
+        If Supabase returns a session immediately,
+        refresh everything.
+    */
 
     if (
-        profileError
+        currentSession
     ) {
 
-        console.error(
-            profileError
-        );
+        await refreshAuthState();
 
+        closeAuth();
 
-        showAuthError(
-            `Account created, but profile setup failed: ${profileError.message}`
+        showPage(
+            "myteam"
         );
 
         return;
@@ -4300,18 +2989,14 @@ async function signUp(
     }
 
 
-    currentSession =
-        data.session;
+    /*
+        Normally this should not happen with
+        email confirmation disabled, but leave
+        a clear message if it does.
+    */
 
-
-    await refreshAuthState();
-
-
-    closeAuth();
-
-
-    showPage(
-        "myteam"
+    showAuthSuccess(
+        "Account created. Please log in."
     );
 
 }
@@ -4344,6 +3029,12 @@ async function signIn(
     if (
         error
     ) {
+
+        console.error(
+            "Login failed:",
+            error
+        );
+
 
         showAuthError(
             "Incorrect username or password."
@@ -4381,7 +3072,6 @@ async function signOutUser() {
 /* =========================================================
    AUTH STATE
 ========================================================= */
-
 
 async function refreshAuthState() {
 
@@ -4470,7 +3160,6 @@ supabaseClient.auth.onAuthStateChange(
    PROFILE
 ========================================================= */
 
-
 async function loadProfile() {
 
     if (
@@ -4494,7 +3183,7 @@ async function loadProfile() {
                 "profiles"
             )
             .select(
-                "id, username"
+                "id,username"
             )
             .eq(
                 "id",
@@ -4559,10 +3248,13 @@ function updateAccountArea() {
     area.innerHTML = `
 
         <span class="account-name">
+
             ${escapeHtml(
                 currentProfile.username
             )}
+
         </span>
+
 
         <button
             class="btn"
@@ -4570,6 +3262,7 @@ function updateAccountArea() {
         >
             My Team
         </button>
+
 
         <button
             class="btn"
@@ -4584,9 +3277,8 @@ function updateAccountArea() {
 
 
 /* =========================================================
-   MY TEAM
+   FANTASY TEAM DATABASE
 ========================================================= */
-
 
 async function loadMyFantasyTeam() {
 
@@ -4625,7 +3317,7 @@ async function loadMyFantasyTeam() {
     ) {
 
         console.error(
-            "Team load failed:",
+            "Fantasy team load failed:",
             teamError
         );
 
@@ -4679,7 +3371,7 @@ async function loadMyFantasyTeam() {
     ) {
 
         console.error(
-            "Team players load failed:",
+            "Fantasy team players load failed:",
             playerError
         );
 
@@ -4705,14 +3397,14 @@ async function loadMyFantasyTeam() {
 
 
 /* =========================================================
-   BUILDER
+   TEAM BUILDER
 ========================================================= */
-
 
 function openTeamBuilder() {
 
     if (
-        !currentSession
+        !currentSession ||
+        !currentProfile
     ) {
 
         openAuth(
@@ -4730,14 +3422,16 @@ function openTeamBuilder() {
             ?.map(
                 player =>
                     player.player_name
-            ) || [];
+            ) ||
+        [];
 
 
     document.getElementById(
         "builder-team-name"
     ).value =
         currentFantasyTeam
-            ?.team_name || "";
+            ?.team_name ||
+        "";
 
 
     document.getElementById(
@@ -4784,7 +3478,8 @@ function renderBuilderSquad() {
             .filter(Boolean);
 
 
-    let html = "";
+    let html =
+        "";
 
 
     for (
@@ -4808,26 +3503,25 @@ function renderBuilderSquad() {
                     <div>
 
                         <div class="squad-player-name">
+
                             ${escapeHtml(
                                 player.name
                             )}
+
                         </div>
+
 
                         <div class="squad-player-info">
 
                             ${player.value}m
-
                             •
-                            
                             ${player.ehb.toLocaleString(
                                 undefined,
                                 {
                                     maximumFractionDigits:1
                                 }
                             )} EHB
-
                             •
-
                             ${player.total.toLocaleString(
                                 undefined,
                                 {
@@ -4941,17 +3635,19 @@ function addBuilderPlayer(
     const spent =
         builderPlayers
             .map(
-                item =>
-                    getPlayer(item)
+                selectedName =>
+                    getPlayer(
+                        selectedName
+                    )
             )
             .filter(Boolean)
             .reduce(
                 (
                     total,
-                    item
+                    selectedPlayer
                 ) =>
                     total +
-                    item.value,
+                    selectedPlayer.value,
                 0
             );
 
@@ -4963,7 +3659,7 @@ function addBuilderPlayer(
     ) {
 
         showBuilderMessage(
-            `${player.name} would put you over the ${CONFIG.FANTASY_BUDGET}m budget.`,
+            `${player.name} would put your team over the ${CONFIG.FANTASY_BUDGET}m budget.`,
             "error"
         );
 
@@ -5000,7 +3696,7 @@ function removeBuilderPlayer(
 
 function updateBuilderStats() {
 
-    const players =
+    const selected =
         builderPlayers
             .map(
                 name =>
@@ -5010,7 +3706,7 @@ function updateBuilderStats() {
 
 
     const spent =
-        players.reduce(
+        selected.reduce(
             (
                 total,
                 player
@@ -5054,7 +3750,7 @@ function updateBuilderStats() {
 
 function showBuilderMessage(
     message,
-    type
+    type = ""
 ) {
 
     const element =
@@ -5141,9 +3837,8 @@ async function saveFantasyTeam() {
 
 
     if (
-        !teamNameValid(
-            teamName
-        )
+        teamName.length < 2 ||
+        teamName.length > 30
     ) {
 
         showBuilderMessage(
@@ -5170,7 +3865,7 @@ async function saveFantasyTeam() {
     }
 
 
-    const players =
+    const selected =
         builderPlayers
             .map(
                 name =>
@@ -5179,8 +3874,22 @@ async function saveFantasyTeam() {
             .filter(Boolean);
 
 
+    if (
+        selected.length !== 5
+    ) {
+
+        showBuilderMessage(
+            "One or more selected PvMers could not be found in the player data.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
     const spent =
-        players.reduce(
+        selected.reduce(
             (
                 total,
                 player
@@ -5215,6 +3924,7 @@ async function saveFantasyTeam() {
     button.disabled =
         true;
 
+
     button.textContent =
         "Saving...";
 
@@ -5243,11 +3953,13 @@ async function saveFantasyTeam() {
                         "fantasy_teams"
                     )
                     .insert({
+
                         owner_id:
                             currentSession.user.id,
 
                         team_name:
                             teamName
+
                     })
                     .select()
                     .single();
@@ -5334,7 +4046,7 @@ async function saveFantasyTeam() {
 
 
         /*
-            REPLACE PLAYER SELECTIONS
+            Replace the five players.
         */
 
         const {
@@ -5405,6 +4117,11 @@ async function saveFantasyTeam() {
         renderDailyScores();
 
 
+        await renderHomeLeaderboard();
+
+        await renderFullTeamLeaderboard();
+
+
         showBuilderMessage(
             "Team saved successfully.",
             "success"
@@ -5428,7 +4145,7 @@ async function saveFantasyTeam() {
     ) {
 
         console.error(
-            "Saving fantasy team failed:",
+            "Fantasy team save failed:",
             error
         );
 
@@ -5454,9 +4171,8 @@ async function saveFantasyTeam() {
 
 
 /* =========================================================
-   PLAYER BUILDER SEARCH
+   PLAYER BUILDER
 ========================================================= */
-
 
 function renderPlayerBuilder() {
 
@@ -5469,9 +4185,7 @@ function renderPlayerBuilder() {
     if (
         !container
     ) {
-
         return;
-
     }
 
 
@@ -5526,10 +4240,13 @@ function renderPlayerBuilder() {
                             <div>
 
                                 <div class="available-player-name">
+
                                     ${escapeHtml(
                                         player.name
                                     )}
+
                                 </div>
+
 
                                 <div class="available-player-meta">
 
@@ -5541,7 +4258,7 @@ function renderPlayerBuilder() {
                                     )} EHB
 
                                     •
-                                    
+
                                     ${player.points.toLocaleString(
                                         undefined,
                                         {
@@ -5555,7 +4272,9 @@ function renderPlayerBuilder() {
 
 
                             <div class="player-price">
+
                                 ${player.value}m
+
                             </div>
 
 
@@ -5574,11 +4293,13 @@ function renderPlayerBuilder() {
                                         : ""
                                 }
                             >
+
                                 ${
                                     selected
                                         ? "Selected"
                                         : "Add"
                                 }
+
                             </button>
 
 
@@ -5619,7 +4340,6 @@ function renderPlayerBuilder() {
    HOME
 ========================================================= */
 
-
 function getMyDisplayTeam() {
 
     if (
@@ -5629,9 +4349,7 @@ function getMyDisplayTeam() {
         return {
 
             name:
-                currentProfile
-                    ? `${currentProfile.username}'s Team`
-                    : "Your Team",
+                "Your Team",
 
             players:
                 [],
@@ -5694,22 +4412,22 @@ function getMyDisplayTeam() {
 
 function renderHome() {
 
-    const day =
-        getCurrentDay();
-
-
     document.getElementById(
         "current-boss"
     ).textContent =
         getCurrentBoss();
 
 
+    const currentDay =
+        getCurrentDay();
+
+
     document.getElementById(
         "current-day"
     ).textContent =
-        day === 0
+        currentDay === 0
             ? "EVENT STARTS 20 SEPTEMBER 2026"
-            : `DAY ${day} / ${CONFIG.EVENT_DAYS}`;
+            : `DAY ${currentDay} / ${CONFIG.EVENT_DAYS}`;
 
 
     const team =
@@ -5727,22 +4445,18 @@ function renderHome() {
     document.getElementById(
         "hero-team-points"
     ).textContent =
-        currentSession
-            ? team.totalPoints.toLocaleString(
-                undefined,
-                {
-                    maximumFractionDigits:2
-                }
-            )
-            : "0";
+        team.totalPoints.toLocaleString(
+            undefined,
+            {
+                maximumFractionDigits:2
+            }
+        );
 
 
     document.getElementById(
         "hero-team-value"
     ).textContent =
-        currentSession
-            ? `${team.totalValue}m`
-            : "0m";
+        `${team.totalValue}m`;
 
 
     document.getElementById(
@@ -5778,34 +4492,14 @@ function renderHome() {
         `${team.totalValue}m`;
 
 
-    if (
+    document.getElementById(
+        "team-meta"
+    ).textContent =
         !currentSession
-    ) {
-
-        document.getElementById(
-            "team-meta"
-        ).textContent =
-            "Login to create your fantasy team";
-
-
-    } else if (
-        !currentFantasyTeam
-    ) {
-
-        document.getElementById(
-            "team-meta"
-        ).textContent =
-            "No team created yet";
-
-
-    } else {
-
-        document.getElementById(
-            "team-meta"
-        ).textContent =
-            `${team.players.length} / 5 players`;
-
-    }
+            ? "Login to create your fantasy team"
+            : !currentFantasyTeam
+                ? "No team created yet"
+                : `${team.players.length} / 5 players`;
 
 
     const container =
@@ -5917,9 +4611,11 @@ function renderHome() {
                     >
 
                         <div class="player-name">
+
                             ${escapeHtml(
                                 player.name
                             )}
+
                         </div>
 
 
@@ -6024,7 +4720,8 @@ function updateBudgetDisplay(
                 (
                     spent /
                     CONFIG.FANTASY_BUDGET
-                ) * 100
+                ) *
+                100
             )
         );
 
@@ -6052,7 +4749,6 @@ function updateBudgetDisplay(
 /* =========================================================
    DAILY SCORES
 ========================================================= */
-
 
 function renderDailyScores() {
 
@@ -6102,21 +4798,15 @@ function renderDailyScores() {
         }
 
 
-        let boss =
-            `Day ${i + 1}`;
-
-
-        if (
+        const boss =
             fantasyData.length
-        ) {
-
-            boss =
-                normalise(
-                    fantasyData[0][i + 5]
+                ? normalise(
+                    fantasyData[0][
+                        i + 5
+                    ]
                 ) ||
-                `Day ${i + 1}`;
-
-        }
+                `Day ${i + 1}`
+                : `Day ${i + 1}`;
 
 
         days.push({
@@ -6187,7 +4877,6 @@ function renderDailyScores() {
    TEAM LEADERBOARD
 ========================================================= */
 
-
 async function getTeamLeaderboardData() {
 
     const {
@@ -6241,30 +4930,6 @@ async function getTeamLeaderboardData() {
                     .filter(Boolean);
 
 
-                const points =
-                    players.reduce(
-                        (
-                            total,
-                            player
-                        ) =>
-                            total +
-                            player.total,
-                        0
-                    );
-
-
-                const value =
-                    players.reduce(
-                        (
-                            total,
-                            player
-                        ) =>
-                            total +
-                            player.value,
-                        0
-                    );
-
-
                 return {
 
                     id:
@@ -6273,9 +4938,27 @@ async function getTeamLeaderboardData() {
                     name:
                         team.team_name,
 
-                    points,
+                    points:
+                        players.reduce(
+                            (
+                                total,
+                                player
+                            ) =>
+                                total +
+                                player.total,
+                            0
+                        ),
 
-                    value,
+                    value:
+                        players.reduce(
+                            (
+                                total,
+                                player
+                            ) =>
+                                total +
+                                player.value,
+                            0
+                        ),
 
                     playerCount:
                         players.length
@@ -6299,8 +4982,7 @@ function sortTeams(
         ) => {
 
             /*
-                Primary:
-                highest points
+                Highest points first.
             */
 
             if (
@@ -6317,20 +4999,10 @@ function sortTeams(
 
 
             /*
-                Tie breaker:
+                If tied:
                 natural alphabetical order.
 
-                This means:
-
-                Team 2
-                Team 10
-                Team 19
-
-                rather than:
-
-                Team 10
-                Team 19
-                Team 2
+                Team 2 comes before Team 10.
             */
 
             return a.name.localeCompare(
@@ -6529,7 +5201,6 @@ async function renderFullTeamLeaderboard() {
                                 "
                             >
                                 ${team.playerCount} / 5 players
-
                             </div>
 
                         </div>
@@ -6554,151 +5225,8 @@ async function renderFullTeamLeaderboard() {
 
 
 /* =========================================================
-   PVM LEADERBOARD
+   MY TEAM
 ========================================================= */
-
-
-function renderPvMLeaderboard() {
-
-    const container =
-        document.getElementById(
-            "pvm-leaderboard"
-        );
-
-
-    if (
-        !container
-    ) {
-        return;
-    }
-
-
-    const search =
-        normalise(
-            document.getElementById(
-                "pvm-search"
-            )?.value
-        ).toLowerCase();
-
-
-    const players =
-        getPvMLeaderboard()
-            .filter(
-                player =>
-                    !search ||
-                    player.name
-                        .toLowerCase()
-                        .includes(
-                            search
-                        )
-            );
-
-
-    if (
-        !players.length
-    ) {
-
-        container.innerHTML =
-            `<div class="empty">No players found.</div>`;
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        players
-            .map(
-                (
-                    player,
-                    index
-                ) => `
-
-                    <div
-                        class="lb-row"
-                        data-player="${escapeHtml(
-                            player.name
-                        )}"
-                    >
-
-                        <div class="lb-rank">
-                            ${index + 1}
-                        </div>
-
-
-                        <div>
-
-                            <div class="lb-name">
-                                ${escapeHtml(
-                                    player.name
-                                )}
-                            </div>
-
-
-                            <div
-                                style="
-                                    color:var(--muted);
-                                    font-size:10px;
-                                    margin-top:3px;
-                                "
-                            >
-                                ${player.ehb.toLocaleString(
-                                    undefined,
-                                    {
-                                        maximumFractionDigits:1
-                                    }
-                                )} EHB
-                                •
-                                ${player.value}m
-                            </div>
-
-                        </div>
-
-
-                        <div class="lb-points">
-                            ${player.points.toLocaleString(
-                                undefined,
-                                {
-                                    maximumFractionDigits:2
-                                }
-                            )}
-                        </div>
-
-                    </div>
-
-                `
-            )
-            .join("");
-
-
-    container
-        .querySelectorAll(
-            "[data-player]"
-        )
-        .forEach(
-            row => {
-
-                row.addEventListener(
-                    "click",
-                    () => {
-
-                        showPlayer(
-                            row.dataset.player
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-}
-
-
-/* =========================================================
-   MY TEAM PAGE
-========================================================= */
-
 
 function renderMyTeam() {
 
@@ -6778,7 +5306,7 @@ function renderMyTeam() {
 
 
                 <div style="margin-bottom:14px">
-                    Pick five PvMers and build your team.
+                    Pick five PvMers using your 250m budget.
                 </div>
 
 
@@ -7032,13 +5560,14 @@ function renderMyTeam() {
    PLAYER MODAL
 ========================================================= */
 
-
 function showPlayer(
     name
 ) {
 
     const player =
-        getPlayer(name);
+        getPlayer(
+            name
+        );
 
 
     if (
@@ -7106,21 +5635,25 @@ function showPlayer(
                     <div class="daily-row">
 
                         <span>
+
                             Day ${index + 1}
                             •
                             ${escapeHtml(
                                 day.boss
                             )}
+
                         </span>
 
 
                         <strong>
+
                             ${day.points.toLocaleString(
                                 undefined,
                                 {
                                     maximumFractionDigits:2
                                 }
                             )}
+
                         </strong>
 
                     </div>
@@ -7169,7 +5702,6 @@ function closeModal(
 /* =========================================================
    EVENT
 ========================================================= */
-
 
 function getCurrentDay() {
 
@@ -7312,38 +5844,42 @@ function formatCountdown(
     }
 
 
-    const seconds =
+    const totalSeconds =
         Math.floor(
-            milliseconds / 1000
+            milliseconds /
+            1000
         );
 
 
     const days =
         Math.floor(
-            seconds / 86400
+            totalSeconds /
+            86400
         );
 
 
     const hours =
         Math.floor(
             (
-                seconds %
+                totalSeconds %
                 86400
-            ) / 3600
+            ) /
+            3600
         );
 
 
     const minutes =
         Math.floor(
             (
-                seconds %
+                totalSeconds %
                 3600
-            ) / 60
+            ) /
+            60
         );
 
 
-    const secs =
-        seconds %
+    const seconds =
+        totalSeconds %
         60;
 
 
@@ -7363,7 +5899,7 @@ function formatCountdown(
     return (
         `${String(hours).padStart(2,"0")}:` +
         `${String(minutes).padStart(2,"0")}:` +
-        `${String(secs).padStart(2,"0")}`
+        `${String(seconds).padStart(2,"0")}`
     );
 
 }
@@ -7392,9 +5928,8 @@ function updateCountdown() {
 
 
 /* =========================================================
-   NAVIGATION
+   NAV
 ========================================================= */
-
 
 function showPage(
     page
@@ -7454,16 +5989,23 @@ function showPage(
     };
 
 
-    navMap[
-        page
-    ] &&
+    const navId =
+        navMap[
+            page
+        ];
+
+
+    if (
+        navId
+    ) {
+
         document.getElementById(
-            navMap[
-                page
-            ]
+            navId
         )?.classList.add(
             "active"
         );
+
+    }
 
 
     if (
@@ -7508,7 +6050,6 @@ function showPage(
    REFRESH
 ========================================================= */
 
-
 async function manualRefresh() {
 
     const button =
@@ -7520,6 +6061,7 @@ async function manualRefresh() {
     button.disabled =
         true;
 
+
     button.textContent =
         "Refreshing...";
 
@@ -7527,6 +6069,8 @@ async function manualRefresh() {
     try {
 
         await loadData();
+
+        await refreshAuthState();
 
         await renderHomeLeaderboard();
 
@@ -7547,9 +6091,8 @@ async function manualRefresh() {
 
 
 /* =========================================================
-   STARTUP
+   START
 ========================================================= */
-
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -7564,6 +6107,8 @@ document.addEventListener(
         await renderFullTeamLeaderboard();
 
         renderPvMLeaderboard();
+
+        renderDailyScores();
 
         updateCountdown();
 
@@ -7580,7 +6125,6 @@ document.addEventListener(
 /* =========================================================
    GLOBALS
 ========================================================= */
-
 
 window.openAuth =
     openAuth;
@@ -7630,10 +6174,7 @@ window.renderPvMLeaderboard =
 window.renderPlayerBuilder =
     renderPlayerBuilder;
 
-
 </script>
 
-
 </body>
-
 </html>
