@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -38,9 +40,21 @@
             font-family: Arial, Helvetica, sans-serif;
             color: var(--text);
             background:
-                radial-gradient(circle at 50% -10%, rgba(216,137,50,.16), transparent 35%),
-                radial-gradient(circle at 10% 50%, rgba(80,100,120,.08), transparent 30%),
-                linear-gradient(180deg, #0b0e12 0%, #080a0d 100%);
+                radial-gradient(
+                    circle at 50% -10%,
+                    rgba(216,137,50,.16),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 10% 50%,
+                    rgba(80,100,120,.08),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    180deg,
+                    #0b0e12 0%,
+                    #080a0d 100%
+                );
             min-height: 100vh;
         }
 
@@ -51,8 +65,15 @@
             pointer-events: none;
             opacity: .12;
             background-image:
-                linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+                linear-gradient(
+                    rgba(255,255,255,.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.025) 1px,
+                    transparent 1px
+                );
             background-size: 32px 32px;
         }
 
@@ -96,9 +117,15 @@
             border-radius: 10px;
             display: grid;
             place-items: center;
-            background: linear-gradient(145deg, #d9953e, #754317);
+            background: linear-gradient(
+                145deg,
+                #d9953e,
+                #754317
+            );
             border: 1px solid #e6a552;
-            box-shadow: 0 0 22px rgba(216,137,50,.2);
+            box-shadow:
+                0 0 22px
+                rgba(216,137,50,.2);
             font-size: 20px;
         }
 
@@ -182,7 +209,11 @@
         }
 
         .btn.primary {
-            background: linear-gradient(180deg, #d9913c, #a76220);
+            background: linear-gradient(
+                180deg,
+                #d9913c,
+                #a76220
+            );
             border-color: #e3a052;
             color: white;
             font-weight: 700;
@@ -201,7 +232,9 @@
 
         .hero {
             display: grid;
-            grid-template-columns: minmax(0,1.7fr) minmax(300px,.8fr);
+            grid-template-columns:
+                minmax(0,1.7fr)
+                minmax(300px,.8fr);
             gap: 18px;
             margin-bottom: 18px;
         }
@@ -209,7 +242,11 @@
         .hero-main,
         .hero-side {
             background:
-                linear-gradient(145deg, rgba(255,255,255,.035), rgba(255,255,255,.01)),
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.035),
+                    rgba(255,255,255,.01)
+                ),
                 var(--panel);
             border: 1px solid var(--border);
             border-radius: 14px;
@@ -280,7 +317,9 @@
 
         .hero-stat {
             padding: 13px 0;
-            border-bottom: 1px solid rgba(255,255,255,.07);
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.07);
         }
 
         .hero-stat:last-child {
@@ -302,7 +341,9 @@
 
         .layout {
             display: grid;
-            grid-template-columns: minmax(0,1fr) 360px;
+            grid-template-columns:
+                minmax(0,1fr)
+                360px;
             gap: 18px;
         }
 
@@ -315,7 +356,9 @@
 
         .panel-header {
             padding: 16px 18px;
-            border-bottom: 1px solid var(--border);
+            border-bottom:
+                1px solid
+                var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -374,7 +417,8 @@
 
         .player-grid {
             display: grid;
-            grid-template-columns: repeat(5,minmax(0,1fr));
+            grid-template-columns:
+                repeat(5,minmax(0,1fr));
             gap: 12px;
         }
 
@@ -384,7 +428,10 @@
             border-radius: 11px;
             padding: 16px;
             cursor: pointer;
-            transition: transform .15s ease, border-color .15s ease, background .15s ease;
+            transition:
+                transform .15s ease,
+                border-color .15s ease,
+                background .15s ease;
         }
 
         .player-card:hover {
@@ -407,7 +454,9 @@
             justify-content: space-between;
             gap: 8px;
             padding: 7px 0;
-            border-top: 1px solid rgba(255,255,255,.06);
+            border-top:
+                1px solid
+                rgba(255,255,255,.06);
             font-size: 12px;
         }
 
@@ -425,7 +474,12 @@
 
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg,#9b5a20,#e0a14b);
+            background:
+                linear-gradient(
+                    90deg,
+                    #9b5a20,
+                    #e0a14b
+                );
             border-radius: inherit;
             width: 0;
         }
@@ -445,11 +499,16 @@
 
         .lb-row {
             display: grid;
-            grid-template-columns: 34px minmax(0,1fr) auto;
+            grid-template-columns:
+                34px
+                minmax(0,1fr)
+                auto;
             align-items: center;
             gap: 8px;
             padding: 12px 16px;
-            border-bottom: 1px solid rgba(255,255,255,.055);
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.055);
         }
 
         .lb-rank {
@@ -525,8 +584,10 @@
 
         .status.error {
             color: #ff9d9d;
-            border-color: rgba(216,91,91,.35);
-            background: rgba(216,91,91,.06);
+            border-color:
+                rgba(216,91,91,.35);
+            background:
+                rgba(216,91,91,.06);
         }
 
         .status.success {
@@ -559,7 +620,9 @@
 
         .builder-layout {
             display: grid;
-            grid-template-columns: minmax(300px,.8fr) minmax(0,1.2fr);
+            grid-template-columns:
+                minmax(300px,.8fr)
+                minmax(0,1.2fr);
             gap: 18px;
         }
 
@@ -604,9 +667,12 @@
 
         .squad-slot {
             min-height: 78px;
-            border: 1px dashed #3c4651;
+            border:
+                1px dashed
+                #3c4651;
             border-radius: 10px;
-            background: rgba(255,255,255,.015);
+            background:
+                rgba(255,255,255,.015);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -633,11 +699,16 @@
 
         .available-player {
             display: grid;
-            grid-template-columns: minmax(0,1fr) auto auto;
+            grid-template-columns:
+                minmax(0,1fr)
+                auto
+                auto;
             align-items: center;
             gap: 10px;
             padding: 11px 13px;
-            border-bottom: 1px solid rgba(255,255,255,.055);
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.055);
         }
 
         .available-player-name {
@@ -663,11 +734,13 @@
             margin-top: 18px;
         }
 
-        /* Account/team */
+        /* Account */
 
         .account-team-card {
             display: grid;
-            grid-template-columns: minmax(0,1fr) auto;
+            grid-template-columns:
+                minmax(0,1fr)
+                auto;
             gap: 18px;
             align-items: center;
             background: var(--panel-2);
@@ -693,7 +766,7 @@
             justify-content: flex-end;
         }
 
-        /* Forms/modal */
+        /* Modal */
 
         .modal-backdrop {
             position: fixed;
@@ -718,12 +791,16 @@
             background: var(--panel);
             border: 1px solid var(--border);
             border-radius: 14px;
-            box-shadow: 0 20px 70px rgba(0,0,0,.5);
+            box-shadow:
+                0 20px 70px
+                rgba(0,0,0,.5);
         }
 
         .modal-header {
             padding: 20px;
-            border-bottom: 1px solid var(--border);
+            border-bottom:
+                1px solid
+                var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -779,15 +856,23 @@
         }
 
         .auth-error {
-            background: rgba(216,91,91,.08);
-            border: 1px solid rgba(216,91,91,.35);
-            color: #ff9d9d;
+            background:
+                rgba(216,91,91,.08);
+            border:
+                1px solid
+                rgba(216,91,91,.35);
+            color:
+                #ff9d9d;
         }
 
         .auth-success {
-            background: rgba(99,189,121,.08);
-            border: 1px solid rgba(99,189,121,.35);
-            color: #a7e2b4;
+            background:
+                rgba(99,189,121,.08);
+            border:
+                1px solid
+                rgba(99,189,121,.35);
+            color:
+                #a7e2b4;
         }
 
         .modal-buttons {
@@ -842,10 +927,14 @@
 
         .daily-row {
             display: grid;
-            grid-template-columns: minmax(0,1fr) auto;
+            grid-template-columns:
+                minmax(0,1fr)
+                auto;
             gap: 10px;
             padding: 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,.06);
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.06);
             font-size: 12px;
         }
 
@@ -863,7 +952,8 @@
         @media (max-width:1100px) {
 
             .player-grid {
-                grid-template-columns: repeat(3,1fr);
+                grid-template-columns:
+                    repeat(3,1fr);
             }
 
             .layout {
@@ -871,7 +961,8 @@
             }
 
             .daily-grid {
-                grid-template-columns: repeat(4,1fr);
+                grid-template-columns:
+                    repeat(4,1fr);
             }
 
             .builder-layout {
@@ -887,20 +978,25 @@
             }
 
             .player-grid {
-                grid-template-columns: repeat(2,1fr);
+                grid-template-columns:
+                    repeat(2,1fr);
             }
 
             .modal-stats {
-                grid-template-columns: repeat(2,1fr);
+                grid-template-columns:
+                    repeat(2,1fr);
             }
 
             .topbar-inner {
-                align-items: flex-start;
-                flex-direction: column;
+                align-items:
+                    flex-start;
+                flex-direction:
+                    column;
             }
 
             .account-area {
-                justify-content: flex-start;
+                justify-content:
+                    flex-start;
             }
 
             .account-team-card {
@@ -916,7 +1012,8 @@
             }
 
             .daily-grid {
-                grid-template-columns: repeat(2,1fr);
+                grid-template-columns:
+                    repeat(2,1fr);
             }
 
             .builder-summary {
@@ -924,7 +1021,9 @@
             }
 
             .available-player {
-                grid-template-columns: minmax(0,1fr) auto;
+                grid-template-columns:
+                    minmax(0,1fr)
+                    auto;
             }
 
             .player-price {
@@ -956,6 +1055,7 @@
             <div class="brand-icon">
                 ⚔
             </div>
+
 
             <div>
 
@@ -1053,10 +1153,9 @@
     </div>
 
 
-
-    <!-- =========================
+    <!-- =====================================
          HOMEPAGE
-    ========================== -->
+    ====================================== -->
 
     <section
         id="page-home"
@@ -1114,6 +1213,7 @@
                         Your Team
                     </div>
 
+
                     <div
                         id="hero-team-name"
                         class="hero-stat-value"
@@ -1129,6 +1229,7 @@
                     <div class="hero-stat-label">
                         Team Points
                     </div>
+
 
                     <div
                         id="hero-team-points"
@@ -1146,6 +1247,7 @@
                         Team Value
                     </div>
 
+
                     <div
                         id="hero-team-value"
                         class="hero-stat-value"
@@ -1158,9 +1260,7 @@
 
             </div>
 
-
         </div>
-
 
 
         <div class="layout">
@@ -1174,6 +1274,7 @@
 
                     <div class="panel-header">
 
+
                         <div>
 
                             <div
@@ -1183,9 +1284,8 @@
                                 Your Team
                             </div>
 
-                            <div
-                                class="panel-subtitle"
-                            >
+
+                            <div class="panel-subtitle">
                                 Your selected fantasy team
                             </div>
 
@@ -1198,6 +1298,7 @@
                                 Total Points
                             </div>
 
+
                             <div
                                 id="team-total"
                                 class="team-total"
@@ -1207,6 +1308,7 @@
 
                         </div>
 
+
                     </div>
 
 
@@ -1215,11 +1317,13 @@
 
                         <div class="team-heading">
 
+
                             <div>
 
                                 <h1 id="team-title-large">
                                     Your Team
                                 </h1>
+
 
                                 <div
                                     id="team-meta"
@@ -1237,6 +1341,7 @@
                                     Total Value
                                 </div>
 
+
                                 <div
                                     id="team-value"
                                     class="team-total"
@@ -1245,6 +1350,7 @@
                                 </div>
 
                             </div>
+
 
                         </div>
 
@@ -1267,8 +1373,10 @@
                                 id="budget-text"
                                 style="
                                     font-size:13px;
-                                    margin:5px 0 8px;
-                                    color:var(--muted)
+                                    margin:
+                                        5px 0 8px;
+                                    color:
+                                        var(--muted)
                                 "
                             >
                                 0m / 250m used
@@ -1291,7 +1399,10 @@
                                     Spent
                                 </span>
 
-                                <span id="budget-remaining">
+
+                                <span
+                                    id="budget-remaining"
+                                >
                                     250m remaining
                                 </span>
 
@@ -1303,8 +1414,8 @@
 
                     </div>
 
-                </div>
 
+                </div>
 
 
                 <div
@@ -1315,11 +1426,13 @@
 
                     <div class="panel-header">
 
+
                         <div>
 
                             <div class="panel-title">
                                 Daily Team Scores
                             </div>
+
 
                             <div class="panel-subtitle">
                                 Your team's points from each day
@@ -1327,23 +1440,26 @@
 
                         </div>
 
+
                     </div>
 
 
                     <div class="panel-body">
+
 
                         <div
                             id="daily-grid"
                             class="daily-grid"
                         ></div>
 
+
                     </div>
+
 
                 </div>
 
 
             </div>
-
 
 
             <aside>
@@ -1354,17 +1470,20 @@
 
                     <div class="panel-header">
 
+
                         <div>
 
                             <div class="panel-title">
                                 Team Leaderboard
                             </div>
 
+
                             <div class="panel-subtitle">
                                 All fantasy teams
                             </div>
 
                         </div>
+
 
                     </div>
 
@@ -1399,10 +1518,9 @@
     </section>
 
 
-
-    <!-- =========================
+    <!-- =====================================
          TEAM LEADERBOARD
-    ========================== -->
+    ====================================== -->
 
     <section
         id="page-teams"
@@ -1421,11 +1539,13 @@
                         Team Leaderboard
                     </div>
 
+
                     <div class="panel-subtitle">
                         Every fantasy team
                     </div>
 
                 </div>
+
 
             </div>
 
@@ -1460,10 +1580,9 @@
     </section>
 
 
-
-    <!-- =========================
+    <!-- =====================================
          PVM LEADERBOARD
-    ========================== -->
+    ====================================== -->
 
     <section
         id="page-pvm"
@@ -1482,11 +1601,13 @@
                         PvM Leaderboard
                     </div>
 
+
                     <div class="panel-subtitle">
                         Individual fantasy player performance
                     </div>
 
                 </div>
+
 
             </div>
 
@@ -1521,10 +1642,9 @@
     </section>
 
 
-
-    <!-- =========================
+    <!-- =====================================
          MY TEAM
-    ========================== -->
+    ====================================== -->
 
     <section
         id="page-myteam"
@@ -1543,11 +1663,13 @@
                         My Team
                     </div>
 
+
                     <div class="panel-subtitle">
                         Manage your Fantasy PvM team
                     </div>
 
                 </div>
+
 
             </div>
 
@@ -1555,13 +1677,7 @@
             <div
                 id="myteam-content"
                 class="panel-body"
-            >
-
-                <div class="empty">
-                    Loading...
-                </div>
-
-            </div>
+            ></div>
 
 
         </div>
@@ -1570,10 +1686,9 @@
     </section>
 
 
-
-    <!-- =========================
+    <!-- =====================================
          TEAM BUILDER
-    ========================== -->
+    ====================================== -->
 
     <section
         id="page-builder"
@@ -1592,11 +1707,13 @@
                         Build Your Fantasy Team
                     </div>
 
+
                     <div class="panel-subtitle">
                         Pick exactly five PvMers within your budget
                     </div>
 
                 </div>
+
 
             </div>
 
@@ -1630,7 +1747,6 @@
                 </div>
 
 
-
                 <div class="builder-summary">
 
 
@@ -1639,6 +1755,7 @@
                         <div class="builder-stat-label">
                             Budget
                         </div>
+
 
                         <div
                             id="builder-budget"
@@ -1656,6 +1773,7 @@
                             Spent
                         </div>
 
+
                         <div
                             id="builder-spent"
                             class="builder-stat-value"
@@ -1672,6 +1790,7 @@
                             Remaining
                         </div>
 
+
                         <div
                             id="builder-remaining"
                             class="builder-stat-value"
@@ -1683,7 +1802,6 @@
 
 
                 </div>
-
 
 
                 <div class="builder-layout">
@@ -1700,8 +1818,12 @@
                                     Your Squad
                                 </div>
 
+
                                 <div class="panel-subtitle">
-                                    <span id="builder-count">0</span> / 5
+                                    <span id="builder-count">
+                                        0
+                                    </span>
+                                    / 5
                                 </div>
 
                             </div>
@@ -1721,7 +1843,10 @@
                             <div
                                 id="builder-message"
                                 class="status"
-                                style="display:none;margin-top:15px"
+                                style="
+                                    display:none;
+                                    margin-top:15px
+                                "
                             ></div>
 
 
@@ -1754,17 +1879,18 @@
                     </div>
 
 
-
                     <div class="panel">
 
 
                         <div class="panel-header">
+
 
                             <div style="width:100%">
 
                                 <div class="panel-title">
                                     Available PvMers
                                 </div>
+
 
                                 <div
                                     class="panel-subtitle"
@@ -1783,6 +1909,7 @@
                                 >
 
                             </div>
+
 
                         </div>
 
@@ -1821,9 +1948,9 @@
 
 
 
-<!-- =========================
+<!-- =====================================
      AUTH MODAL
-========================== -->
+====================================== -->
 
 <div
     id="auth-modal"
@@ -1835,6 +1962,7 @@
 
 
         <div class="modal-header">
+
 
             <div
                 id="auth-modal-title"
@@ -1850,6 +1978,7 @@
             >
                 ×
             </button>
+
 
         </div>
 
@@ -1871,6 +2000,7 @@
 
             <div class="form-group">
 
+
                 <label class="form-label">
                     Username
                 </label>
@@ -1887,13 +2017,17 @@
 
 
                 <div class="form-help">
-                    3–20 characters: letters, numbers, underscores and hyphens.
+                    3–20 characters:
+                    letters, numbers,
+                    underscores and hyphens.
                 </div>
+
 
             </div>
 
 
             <div class="form-group">
+
 
                 <label class="form-label">
                     Password
@@ -1908,6 +2042,7 @@
                     placeholder="Password"
                 >
 
+
             </div>
 
 
@@ -1916,6 +2051,7 @@
                 class="form-group"
                 style="display:none"
             >
+
 
                 <label class="form-label">
                     Confirm Password
@@ -1930,10 +2066,12 @@
                     placeholder="Confirm password"
                 >
 
+
             </div>
 
 
             <div class="modal-buttons">
+
 
                 <button
                     id="auth-submit"
@@ -1943,10 +2081,12 @@
                     Login
                 </button>
 
+
             </div>
 
 
             <div class="switch-auth">
+
 
                 <span id="auth-switch-text">
                     Don't have an account?
@@ -1959,6 +2099,7 @@
                 >
                     Sign up
                 </button>
+
 
             </div>
 
@@ -1973,9 +2114,9 @@
 
 
 
-<!-- =========================
+<!-- =====================================
      PLAYER MODAL
-========================== -->
+====================================== -->
 
 <div
     id="player-modal"
@@ -1992,6 +2133,7 @@
 
         <div class="modal-header">
 
+
             <div
                 id="modal-name"
                 class="modal-title"
@@ -2007,6 +2149,7 @@
                 ×
             </button>
 
+
         </div>
 
 
@@ -2021,6 +2164,7 @@
                     <div class="modal-stat-label">
                         EHB
                     </div>
+
 
                     <div
                         id="modal-ehb"
@@ -2038,6 +2182,7 @@
                         Value
                     </div>
 
+
                     <div
                         id="modal-value"
                         class="modal-stat-value"
@@ -2054,6 +2199,7 @@
                         Total
                     </div>
 
+
                     <div
                         id="modal-total"
                         class="modal-stat-value"
@@ -2069,6 +2215,7 @@
                     <div class="modal-stat-label">
                         Monthly EHB
                     </div>
+
 
                     <div
                         id="modal-monthly"
@@ -2125,7 +2272,9 @@ const CONFIG = {
         "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNWJQcW3ItSg9HrvQ3D_hmvXU0aayM1QFup05lFLCbIvhzfMWBT0wum8f8BRVz0_ryo4X6mEmRDu6s/pub?gid=1220418834&single=true&output=csv",
 
     EVENT_START:
-        new Date("2026-09-20T19:00:00+01:00"),
+        new Date(
+            "2026-09-20T19:00:00+01:00"
+        ),
 
     EVENT_DAYS:
         7,
@@ -2409,7 +2558,48 @@ async function loadCSV(
 
 
 /* =========================================================
-   LOAD DATA
+   STATUS
+========================================================= */
+
+function setStatus(
+    message,
+    type = ""
+) {
+
+    const element =
+        document.getElementById(
+            "load-status"
+        );
+
+
+    if (!element) {
+        return;
+    }
+
+
+    element.textContent =
+        message;
+
+
+    element.className =
+        "status";
+
+
+    if (
+        type
+    ) {
+
+        element.classList.add(
+            type
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DATA
 ========================================================= */
 
 async function loadData() {
@@ -2428,11 +2618,10 @@ async function loadData() {
             );
 
 
-        renderHome();
-
-        renderPvMLeaderboard();
-
-        renderDailyScores();
+        setStatus(
+            "Fantasy PvM data loaded successfully.",
+            "success"
+        );
 
 
         document.getElementById(
@@ -2441,11 +2630,11 @@ async function loadData() {
             ` • Last updated ${new Date().toLocaleTimeString()}`;
 
 
-        setStatus(
-            "Fantasy PvM data loaded successfully.",
-            "success"
-        );
+        renderHome();
 
+        renderPvMLeaderboard();
+
+        renderDailyScores();
 
     } catch (
         error
@@ -2643,8 +2832,64 @@ function getPvMLeaderboard() {
 
 
 /* =========================================================
-   AUTH UI
+   AUTH
 ========================================================= */
+
+function clearAuthMessages() {
+
+    document.getElementById(
+        "auth-error"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "auth-success"
+    ).style.display =
+        "none";
+
+}
+
+
+function showAuthError(
+    message
+) {
+
+    const element =
+        document.getElementById(
+            "auth-error"
+        );
+
+
+    element.textContent =
+        message;
+
+
+    element.style.display =
+        "block";
+
+}
+
+
+function showAuthSuccess(
+    message
+) {
+
+    const element =
+        document.getElementById(
+            "auth-success"
+        );
+
+
+    element.textContent =
+        message;
+
+
+    element.style.display =
+        "block";
+
+}
+
 
 function openAuth(
     mode = "login"
@@ -2746,26 +2991,6 @@ function updateAuthModal() {
 }
 
 
-function clearAuthMessages() {
-
-    document.getElementById(
-        "auth-error"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "auth-success"
-    ).style.display =
-        "none";
-
-}
-
-
-/* =========================================================
-   SIGN UP / LOGIN
-========================================================= */
-
 async function submitAuth() {
 
     clearAuthMessages();
@@ -2815,11 +3040,11 @@ async function submitAuth() {
 
 
     if (
-        !password
+        password.length < 8
     ) {
 
         showAuthError(
-            "Enter a password."
+            "Password must be at least 8 characters."
         );
 
         return;
@@ -2835,19 +3060,6 @@ async function submitAuth() {
             document.getElementById(
                 "auth-confirm"
             ).value;
-
-
-        if (
-            password.length < 8
-        ) {
-
-            showAuthError(
-                "Password must be at least 8 characters."
-            );
-
-            return;
-
-        }
 
 
         if (
@@ -2881,16 +3093,17 @@ async function submitAuth() {
 }
 
 
+/*
+    SIGN UP
+
+    This version contains the automatic-login
+    fallback that was missing before.
+*/
+
 async function signUp(
     username,
     password
 ) {
-
-    /*
-        Username is stored in Supabase metadata.
-        The database trigger created earlier takes
-        that metadata and creates public.profiles.
-    */
 
     const email =
         usernameEmail(
@@ -2927,7 +3140,7 @@ async function signUp(
     ) {
 
         console.error(
-            "Signup failed:",
+            "Signup error:",
             error
         );
 
@@ -2955,33 +3168,70 @@ async function signUp(
 
 
     /*
-        Profile creation is handled by the
-        database trigger.
+        With email confirmation disabled,
+        Supabase normally returns a session.
 
-        We deliberately DO NOT insert into
-        profiles here.
+        If it doesn't, immediately sign in
+        using the same credentials.
     */
 
-
-    currentSession =
+    let session =
         data.session;
 
 
-    /*
-        If Supabase returns a session immediately,
-        refresh everything.
-    */
-
     if (
-        currentSession
+        !session
     ) {
 
-        await refreshAuthState();
+        console.log(
+            "Signup returned no session. Attempting automatic login..."
+        );
 
-        closeAuth();
 
-        showPage(
-            "myteam"
+        const {
+            data: loginData,
+            error: loginError
+        } =
+            await supabaseClient.auth.signInWithPassword({
+
+                email,
+
+                password
+
+            });
+
+
+        if (
+            loginError
+        ) {
+
+            console.error(
+                "Automatic login failed:",
+                loginError
+            );
+
+
+            showAuthError(
+                `Account created, but automatic login failed: ${loginError.message}`
+            );
+
+            return;
+
+        }
+
+
+        session =
+            loginData.session;
+
+    }
+
+
+    if (
+        !session
+    ) {
+
+        showAuthError(
+            "Account created, but Supabase did not create a login session."
         );
 
         return;
@@ -2989,14 +3239,56 @@ async function signUp(
     }
 
 
+    currentSession =
+        session;
+
+
     /*
-        Normally this should not happen with
-        email confirmation disabled, but leave
-        a clear message if it does.
+        Give the auth trigger a moment to create
+        the profile, then load it.
     */
 
-    showAuthSuccess(
-        "Account created. Please log in."
+    await loadProfile();
+
+
+    /*
+        In case the trigger has not completed by
+        the first request, retry once.
+    */
+
+    if (
+        !currentProfile
+    ) {
+
+        await new Promise(
+            resolve =>
+                setTimeout(
+                    resolve,
+                    400
+                )
+        );
+
+
+        await loadProfile();
+
+    }
+
+
+    await loadMyFantasyTeam();
+
+
+    updateAccountArea();
+
+    renderHome();
+
+    renderMyTeam();
+
+
+    closeAuth();
+
+
+    showPage(
+        "myteam"
     );
 
 }
@@ -3031,7 +3323,7 @@ async function signIn(
     ) {
 
         console.error(
-            "Login failed:",
+            "Login error:",
             error
         );
 
@@ -3049,7 +3341,16 @@ async function signIn(
         data.session;
 
 
-    await refreshAuthState();
+    await loadProfile();
+
+    await loadMyFantasyTeam();
+
+
+    updateAccountArea();
+
+    renderHome();
+
+    renderMyTeam();
 
 
     closeAuth();
@@ -3064,7 +3365,45 @@ async function signIn(
 
 async function signOutUser() {
 
-    await supabaseClient.auth.signOut();
+    const {
+        error
+    } =
+        await supabaseClient.auth.signOut();
+
+
+    if (
+        error
+    ) {
+
+        console.error(
+            "Logout error:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    currentSession =
+        null;
+
+    currentProfile =
+        null;
+
+    currentFantasyTeam =
+        null;
+
+
+    updateAccountArea();
+
+    renderHome();
+
+    renderMyTeam();
+
+    showPage(
+        "home"
+    );
 
 }
 
@@ -3110,8 +3449,6 @@ async function refreshAuthState() {
 
     renderMyTeam();
 
-    renderDailyScores();
-
 }
 
 
@@ -3149,8 +3486,6 @@ supabaseClient.auth.onAuthStateChange(
         renderHome();
 
         renderMyTeam();
-
-        renderDailyScores();
 
     }
 );
@@ -3197,7 +3532,7 @@ async function loadProfile() {
     ) {
 
         console.error(
-            "Profile load failed:",
+            "Profile load error:",
             error
         );
 
@@ -3277,7 +3612,7 @@ function updateAccountArea() {
 
 
 /* =========================================================
-   FANTASY TEAM DATABASE
+   MY TEAM FROM SUPABASE
 ========================================================= */
 
 async function loadMyFantasyTeam() {
@@ -3317,7 +3652,7 @@ async function loadMyFantasyTeam() {
     ) {
 
         console.error(
-            "Fantasy team load failed:",
+            "Fantasy team load error:",
             teamError
         );
 
@@ -3371,7 +3706,7 @@ async function loadMyFantasyTeam() {
     ) {
 
         console.error(
-            "Fantasy team players load failed:",
+            "Fantasy team players load error:",
             playerError
         );
 
@@ -3469,7 +3804,7 @@ function renderBuilderSquad() {
         );
 
 
-    const selected =
+    const players =
         builderPlayers
             .map(
                 name =>
@@ -3489,7 +3824,7 @@ function renderBuilderSquad() {
     ) {
 
         const player =
-            selected[i];
+            players[i];
 
 
         if (
@@ -3514,14 +3849,18 @@ function renderBuilderSquad() {
                         <div class="squad-player-info">
 
                             ${player.value}m
+
                             •
+
                             ${player.ehb.toLocaleString(
                                 undefined,
                                 {
                                     maximumFractionDigits:1
                                 }
                             )} EHB
+
                             •
+
                             ${player.total.toLocaleString(
                                 undefined,
                                 {
@@ -3635,19 +3974,19 @@ function addBuilderPlayer(
     const spent =
         builderPlayers
             .map(
-                selectedName =>
+                playerName =>
                     getPlayer(
-                        selectedName
+                        playerName
                     )
             )
             .filter(Boolean)
             .reduce(
                 (
                     total,
-                    selectedPlayer
+                    selected
                 ) =>
                     total +
-                    selectedPlayer.value,
+                    selected.value,
                 0
             );
 
@@ -3696,7 +4035,7 @@ function removeBuilderPlayer(
 
 function updateBuilderStats() {
 
-    const selected =
+    const players =
         builderPlayers
             .map(
                 name =>
@@ -3706,7 +4045,7 @@ function updateBuilderStats() {
 
 
     const spent =
-        selected.reduce(
+        players.reduce(
             (
                 total,
                 player
@@ -3812,6 +4151,10 @@ function showBuilderMessage(
 }
 
 
+/* =========================================================
+   SAVE TEAM
+========================================================= */
+
 async function saveFantasyTeam() {
 
     if (
@@ -3879,7 +4222,7 @@ async function saveFantasyTeam() {
     ) {
 
         showBuilderMessage(
-            "One or more selected PvMers could not be found in the player data.",
+            "One or more selected PvMers could not be found.",
             "error"
         );
 
@@ -3924,20 +4267,18 @@ async function saveFantasyTeam() {
     button.disabled =
         true;
 
-
     button.textContent =
         "Saving...";
 
 
     try {
 
-
         let team =
             currentFantasyTeam;
 
 
         /*
-            CREATE TEAM
+            CREATE
         */
 
         if (
@@ -3973,11 +4314,17 @@ async function saveFantasyTeam() {
                     error.code === "23505"
                 ) {
 
+                    /*
+                        Could be either the owner
+                        or the team name.
+                    */
+
                     throw new Error(
-                        "That team name is already taken."
+                        "That team name is already taken, or you already have a fantasy team."
                     );
 
                 }
+
 
                 throw error;
 
@@ -3992,7 +4339,7 @@ async function saveFantasyTeam() {
 
 
             /*
-                UPDATE EXISTING TEAM
+                UPDATE
             */
 
             const {
@@ -4034,6 +4381,7 @@ async function saveFantasyTeam() {
 
                 }
 
+
                 throw error;
 
             }
@@ -4046,7 +4394,7 @@ async function saveFantasyTeam() {
 
 
         /*
-            Replace the five players.
+            Replace players
         */
 
         const {
@@ -4116,7 +4464,6 @@ async function saveFantasyTeam() {
 
         renderDailyScores();
 
-
         await renderHomeLeaderboard();
 
         await renderFullTeamLeaderboard();
@@ -4145,7 +4492,7 @@ async function saveFantasyTeam() {
     ) {
 
         console.error(
-            "Fantasy team save failed:",
+            "Save team failed:",
             error
         );
 
@@ -4302,7 +4649,6 @@ function renderPlayerBuilder() {
 
                             </button>
 
-
                         </div>
 
                     `;
@@ -4337,7 +4683,7 @@ function renderPlayerBuilder() {
 
 
 /* =========================================================
-   HOME
+   TEAM DISPLAY
 ========================================================= */
 
 function getMyDisplayTeam() {
@@ -4418,16 +4764,16 @@ function renderHome() {
         getCurrentBoss();
 
 
-    const currentDay =
+    const day =
         getCurrentDay();
 
 
     document.getElementById(
         "current-day"
     ).textContent =
-        currentDay === 0
+        day === 0
             ? "EVENT STARTS 20 SEPTEMBER 2026"
-            : `DAY ${currentDay} / ${CONFIG.EVENT_DAYS}`;
+            : `DAY ${day} / ${CONFIG.EVENT_DAYS}`;
 
 
     const team =
@@ -4448,7 +4794,8 @@ function renderHome() {
         team.totalPoints.toLocaleString(
             undefined,
             {
-                maximumFractionDigits:2
+                maximumFractionDigits:
+                    2
             }
         );
 
@@ -4481,7 +4828,8 @@ function renderHome() {
         team.totalPoints.toLocaleString(
             undefined,
             {
-                maximumFractionDigits:2
+                maximumFractionDigits:
+                    2
             }
         );
 
@@ -4553,6 +4901,9 @@ function renderHome() {
         );
 
 
+        renderDailyScores();
+
+
         return;
 
     }
@@ -4593,6 +4944,9 @@ function renderHome() {
         );
 
 
+        renderDailyScores();
+
+
         return;
 
     }
@@ -4625,6 +4979,7 @@ function renderHome() {
                                 Value
                             </span>
 
+
                             <strong>
                                 ${player.value}m
                             </strong>
@@ -4637,6 +4992,7 @@ function renderHome() {
                             <span>
                                 Points
                             </span>
+
 
                             <strong>
                                 ${player.total.toLocaleString(
@@ -4655,6 +5011,7 @@ function renderHome() {
                             <span>
                                 EHB
                             </span>
+
 
                             <strong>
                                 ${player.ehb.toLocaleString(
@@ -4699,6 +5056,9 @@ function renderHome() {
     updateBudgetDisplay(
         team.totalValue
     );
+
+
+    renderDailyScores();
 
 }
 
@@ -4747,7 +5107,7 @@ function updateBudgetDisplay(
 
 
 /* =========================================================
-   DAILY SCORES
+   DAILY
 ========================================================= */
 
 function renderDailyScores() {
@@ -4787,6 +5147,7 @@ function renderDailyScores() {
         ) {
 
             if (
+                player.daily &&
                 player.daily[i]
             ) {
 
@@ -4831,14 +5192,18 @@ function renderDailyScores() {
                     <div class="daily-card">
 
                         <div class="daily-day">
+
                             DAY ${item.day}
+
                         </div>
 
 
                         <div class="daily-boss">
+
                             ${escapeHtml(
                                 item.boss
                             )}
+
                         </div>
 
 
@@ -4856,12 +5221,14 @@ function renderDailyScores() {
 
 
                         <div class="daily-points">
+
                             ${item.total.toLocaleString(
                                 undefined,
                                 {
                                     maximumFractionDigits:2
                                 }
                             )}
+
                         </div>
 
                     </div>
@@ -4901,7 +5268,7 @@ async function getTeamLeaderboardData() {
     ) {
 
         console.error(
-            "Team leaderboard failed:",
+            "Team leaderboard error:",
             error
         );
 
@@ -4981,10 +5348,6 @@ function sortTeams(
             b
         ) => {
 
-            /*
-                Highest points first.
-            */
-
             if (
                 b.points !==
                 a.points
@@ -4999,10 +5362,17 @@ function sortTeams(
 
 
             /*
-                If tied:
-                natural alphabetical order.
+                Natural alphabetical sorting:
 
-                Team 2 comes before Team 10.
+                Team 2
+                Team 10
+                Team 19
+
+                rather than:
+
+                Team 10
+                Team 19
+                Team 2
             */
 
             return a.name.localeCompare(
@@ -5099,12 +5469,14 @@ async function renderHomeLeaderboard() {
 
 
                         <div class="lb-points">
+
                             ${team.points.toLocaleString(
                                 undefined,
                                 {
                                     maximumFractionDigits:2
                                 }
                             )}
+
                         </div>
 
                     </div>
@@ -5180,16 +5552,20 @@ async function renderFullTeamLeaderboard() {
                     <div class="lb-row">
 
                         <div class="lb-rank">
+
                             ${index + 1}
+
                         </div>
 
 
                         <div>
 
                             <div class="lb-name">
+
                                 ${escapeHtml(
                                     team.name
                                 )}
+
                             </div>
 
 
@@ -5200,19 +5576,24 @@ async function renderFullTeamLeaderboard() {
                                     margin-top:3px;
                                 "
                             >
-                                ${team.playerCount} / 5 players
+
+                                ${team.playerCount}
+                                / 5 players
+
                             </div>
 
                         </div>
 
 
                         <div class="lb-points">
+
                             ${team.points.toLocaleString(
                                 undefined,
                                 {
                                     maximumFractionDigits:2
                                 }
                             )}
+
                         </div>
 
                     </div>
@@ -5225,7 +5606,7 @@ async function renderFullTeamLeaderboard() {
 
 
 /* =========================================================
-   MY TEAM
+   MY TEAM PAGE
 ========================================================= */
 
 function renderMyTeam() {
@@ -5265,7 +5646,9 @@ function renderMyTeam() {
 
 
                 <div style="margin-bottom:14px">
-                    Your account permanently owns your team.
+
+                    Your account owns your fantasy team.
+
                 </div>
 
 
@@ -5306,7 +5689,10 @@ function renderMyTeam() {
 
 
                 <div style="margin-bottom:14px">
-                    Pick five PvMers using your 250m budget.
+
+                    Pick five PvMers using your
+                    ${CONFIG.FANTASY_BUDGET}m budget.
+
                 </div>
 
 
@@ -5365,6 +5751,7 @@ function renderMyTeam() {
 
         <div class="account-team-card">
 
+
             <div>
 
                 <div class="account-team-title">
@@ -5399,6 +5786,7 @@ function renderMyTeam() {
 
             </div>
 
+
         </div>
 
 
@@ -5407,11 +5795,13 @@ function renderMyTeam() {
             style="margin-top:18px"
         >
 
+
             <div class="builder-stat">
 
                 <div class="builder-stat-label">
                     Budget
                 </div>
+
 
                 <div class="builder-stat-value">
                     ${CONFIG.FANTASY_BUDGET}m
@@ -5426,6 +5816,7 @@ function renderMyTeam() {
                     Spent
                 </div>
 
+
                 <div class="builder-stat-value">
                     ${value}m
                 </div>
@@ -5439,16 +5830,20 @@ function renderMyTeam() {
                     Points
                 </div>
 
+
                 <div class="builder-stat-value">
+
                     ${points.toLocaleString(
                         undefined,
                         {
                             maximumFractionDigits:2
                         }
                     )}
+
                 </div>
 
             </div>
+
 
         </div>
 
@@ -5467,9 +5862,11 @@ function renderMyTeam() {
                         >
 
                             <div class="player-name">
+
                                 ${escapeHtml(
                                     player.name
                                 )}
+
                             </div>
 
 
@@ -5478,6 +5875,7 @@ function renderMyTeam() {
                                 <span>
                                     Value
                                 </span>
+
 
                                 <strong>
                                     ${player.value}m
@@ -5492,13 +5890,16 @@ function renderMyTeam() {
                                     Points
                                 </span>
 
+
                                 <strong>
+
                                     ${player.total.toLocaleString(
                                         undefined,
                                         {
                                             maximumFractionDigits:2
                                         }
                                     )}
+
                                 </strong>
 
                             </div>
@@ -5510,13 +5911,16 @@ function renderMyTeam() {
                                     EHB
                                 </span>
 
+
                                 <strong>
+
                                     ${player.ehb.toLocaleString(
                                         undefined,
                                         {
                                             maximumFractionDigits:1
                                         }
                                     )}
+
                                 </strong>
 
                             </div>
@@ -5637,7 +6041,9 @@ function showPlayer(
                         <span>
 
                             Day ${index + 1}
+
                             •
+
                             ${escapeHtml(
                                 day.boss
                             )}
@@ -5928,125 +6334,6 @@ function updateCountdown() {
 
 
 /* =========================================================
-   NAV
-========================================================= */
-
-function showPage(
-    page
-) {
-
-    document
-        .querySelectorAll(
-            ".page-section"
-        )
-        .forEach(
-            section => {
-
-                section.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
-
-    document.getElementById(
-        `page-${page}`
-    )?.classList.add(
-        "active"
-    );
-
-
-    document
-        .querySelectorAll(
-            ".nav button"
-        )
-        .forEach(
-            button => {
-
-                button.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
-
-    const navMap = {
-
-        home:
-            "nav-home",
-
-        teams:
-            "nav-teams",
-
-        pvm:
-            "nav-pvm",
-
-        myteam:
-            "nav-myteam"
-
-    };
-
-
-    const navId =
-        navMap[
-            page
-        ];
-
-
-    if (
-        navId
-    ) {
-
-        document.getElementById(
-            navId
-        )?.classList.add(
-            "active"
-        );
-
-    }
-
-
-    if (
-        page === "myteam"
-    ) {
-
-        renderMyTeam();
-
-    }
-
-
-    if (
-        page === "builder"
-    ) {
-
-        renderBuilder();
-
-    }
-
-
-    if (
-        page === "teams"
-    ) {
-
-        renderFullTeamLeaderboard();
-
-    }
-
-
-    if (
-        page === "pvm"
-    ) {
-
-        renderPvMLeaderboard();
-
-    }
-
-}
-
-
-/* =========================================================
    REFRESH
 ========================================================= */
 
@@ -6060,7 +6347,6 @@ async function manualRefresh() {
 
     button.disabled =
         true;
-
 
     button.textContent =
         "Refreshing...";
@@ -6123,7 +6409,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   GLOBALS
+   GLOBALS FOR HTML BUTTONS
 ========================================================= */
 
 window.openAuth =
